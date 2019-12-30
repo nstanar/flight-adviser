@@ -1,4 +1,4 @@
-package com.htec.user_management;
+package com.htec.city_management;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,8 +9,8 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
  * <p>
  * Main class.
  */
-@SpringBootApplication(scanBasePackages = {"com.htec.user_management", "com.htec.domain_starter.*"})
-@EntityScan(basePackages = {"com.htec.user_management", "com.htec.domain_starter.*"})
+@SpringBootApplication(scanBasePackages = {"com.htec.city_management", "com.htec.domain_starter.*"})
+@EntityScan(basePackages = {"com.htec.city_management", "com.htec.domain_starter.*"})
 public class Application {
 
     /**

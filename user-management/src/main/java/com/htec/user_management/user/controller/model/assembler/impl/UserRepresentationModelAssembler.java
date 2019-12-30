@@ -1,7 +1,7 @@
-package com.htec.user_management.user.controller.representation_model.assembler.impl;
+package com.htec.user_management.user.controller.model.assembler.impl;
 
 import com.htec.user_management.user.controller.UserController;
-import com.htec.user_management.user.controller.representation_model.UserRepresentationModel;
+import com.htec.user_management.user.controller.model.UserModel;
 import com.htec.user_management.user.service.dto.UserDto;
 import lombok.NoArgsConstructor;
 import org.springframework.hateoas.Link;
@@ -12,21 +12,22 @@ import org.springframework.stereotype.Component;
 /**
  * @author Nikola Stanar
  * <p>
- * Assembler for {@link UserDto} --> {@link UserRepresentationModel}.
+ * Assembler for {@link UserDto} to {@link UserModel}.
  */
 @Component
 @NoArgsConstructor
-public class UserRepresentationModelAssembler implements RepresentationModelAssembler<UserDto, UserRepresentationModel> {
+public class UserRepresentationModelAssembler implements RepresentationModelAssembler<UserDto, UserModel> {
 
     /**
      * Assembles user representation model from user dto.
      *
      * @param dto User dto to be used in assembly process.
      * @return User representation model.
+     * @see RepresentationModelAssembler#toModel(Object)
      */
     @Override
-    public UserRepresentationModel toModel(final UserDto dto) {
-        final UserRepresentationModel userRepresentationModel = UserRepresentationModel.builder()
+    public UserModel toModel(final UserDto dto) {
+        final UserModel userModel = UserModel.builder()
                 .firstName(dto.getFirstName())
                 .lastName(dto.getLastName())
                 .username(dto.getUsername())
@@ -37,8 +38,8 @@ public class UserRepresentationModelAssembler implements RepresentationModelAsse
                 WebMvcLinkBuilder.methodOn(UserController.class).findBy(dto.getId())
         )
                 .withSelfRel();
-        userRepresentationModel.add(selfLink);
+        userModel.add(selfLink);
 
-        return userRepresentationModel;
+        return userModel;
     }
 }

@@ -31,6 +31,8 @@ public class UserDtoConverterImpl implements UserDtoConverter {
     private final PasswordEncoder passwordEncoder;
 
     /**
+     * Converts user entity to dto.
+     *
      * @param entity Entity to be converted.
      * @return Check {@link UserDto}.
      * @see UserDtoConverter#from(BaseEntity)
@@ -47,6 +49,8 @@ public class UserDtoConverterImpl implements UserDtoConverter {
     }
 
     /**
+     * Converts user dto to entity.
+     *
      * @param dto DTO to be converted.
      * @return Check {@link User}.
      * @see UserDtoConverter#from(BaseDto)
@@ -57,6 +61,8 @@ public class UserDtoConverterImpl implements UserDtoConverter {
     }
 
     /**
+     * Converts to user entity from dto and existing entity.
+     *
      * @param dto            DTO to be converted.
      * @param existingEntity Existing ENTITY.
      * @return Check {@link User}.

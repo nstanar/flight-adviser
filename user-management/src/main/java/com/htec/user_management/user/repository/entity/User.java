@@ -1,6 +1,7 @@
 package com.htec.user_management.user.repository.entity;
 
 import com.htec.domain_starter.repository.entity.BaseEntity;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,6 +23,7 @@ import javax.persistence.UniqueConstraint;
 @Getter
 @Setter
 @NoArgsConstructor
+@EqualsAndHashCode(exclude = {"password"}, callSuper = false)
 public class User extends BaseEntity {
 
     /**

@@ -1,9 +1,7 @@
 package com.htec.user_management.user.service.dto;
 
 import com.htec.domain_starter.service.dto.BaseDto;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -17,6 +15,8 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString(exclude = {"password"})
+@EqualsAndHashCode(exclude = {"password"}, callSuper = false)
 public class UserDto extends BaseDto {
 
     /**
@@ -43,6 +43,7 @@ public class UserDto extends BaseDto {
      */
     @NotEmpty
     @Size(min = 6, max = 20)
+    //TODO: apply pattern for password
     private char[] password;
 
 }

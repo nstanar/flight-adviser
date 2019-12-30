@@ -49,14 +49,23 @@ public class UserServiceImpl implements UserService {
      */
     private final MessageSource messageSource;
 
+    /**
+     * Finds page of users.
+     *
+     * @param pageable Check {@link Pageable}.
+     * @return Page of users.
+     */
     @Override
     @Transactional(readOnly = true)
     public Page<UserDto> findAll(@NotNull final Pageable pageable) {
+        log.info("Fetching users with request: {}", pageable);
         return repository.findAll(pageable)
                 .map(dtoConverter::from);
     }
 
     /**
+     * Finds user by id.
+     *
      * @param id User's id.
      * @return User having id.
      * @see UserService#findBy(Long)
@@ -64,17 +73,21 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public Optional<UserDto> findBy(@NotNull final Long id) {
+        log.info("Fetching user of id {}.", id);
         return repository.findById(id)
                 .map(dtoConverter::from);
     }
 
     /**
+     * Creates user from dto.
+     *
      * @param user User that is about to be created.
      * @return Created user.
      * @see UserService#create(UserDto)
      */
     @Override
     public UserDto create(@NotNull @Valid final UserDto user) {
+        log.info("Creating user: {}", user);
         /* Check if username already exists. */
         final Optional<User> optionalExistingUser = repository.findByUsername(user.getUsername());
         if (optionalExistingUser.isPresent()) {
@@ -84,6 +97,7 @@ public class UserServiceImpl implements UserService {
 
         final User userEntity = dtoConverter.from(user);
         final User createdUser = repository.save(userEntity);
+        log.info("User successfully created and given id {}.", createdUser.getId());
         return dtoConverter.from(createdUser);
     }
 

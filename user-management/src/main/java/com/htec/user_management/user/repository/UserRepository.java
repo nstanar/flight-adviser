@@ -13,6 +13,12 @@ import java.util.Optional;
  */
 public interface UserRepository extends JpaRepository<User, Long> {
 
+    /**
+     * Finds user by username.
+     *
+     * @param username Username.
+     * @return Optional user.
+     */
     @Transactional(readOnly = true)
     Optional<User> findByUsername(final String username);
 

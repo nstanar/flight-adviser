@@ -29,8 +29,7 @@ public class ControllerAdvice {
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ExceptionRepresentationModel handle(final NotFoundException exception) {
-        log.info(exception.getMessage(), exception);
-        return createFrom(exception.getMessage());
+        return createAndLogFrom(exception);
     }
 
     /**
@@ -42,8 +41,7 @@ public class ControllerAdvice {
     @ExceptionHandler(BusinessValidationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ExceptionRepresentationModel handle(final BusinessValidationException exception) {
-        log.info(exception.getMessage(), exception);
-        return createFrom(exception.getMessage());
+        return createAndLogFrom(exception);
     }
 
     /**
@@ -55,19 +53,24 @@ public class ControllerAdvice {
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ExceptionRepresentationModel handle(final ConstraintViolationException exception) {
-        log.info(exception.getMessage(), exception);
-        return createFrom(exception.getMessage());
+        return createAndLogFrom(exception);
     }
 
     /**
      * Creates {@link ExceptionRepresentationModel}.
      *
-     * @param exceptionMessage Exception message.
+     * @param exception Exception.
      * @return Check {@link ExceptionRepresentationModel}.
      */
-    private ExceptionRepresentationModel createFrom(final String exceptionMessage) {
+    private ExceptionRepresentationModel createAndLogFrom(final RuntimeException exception) {
+        final String message = exception.getMessage();
+        if (log.isDebugEnabled()) {
+            log.debug(message, exception);
+        } else {
+            log.info(message);
+        }
         return ExceptionRepresentationModel.builder()
-                .message(exceptionMessage)
+                .message(message)
                 .build();
     }
 

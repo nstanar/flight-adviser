@@ -1,4 +1,4 @@
-package com.htec.user_management.user.controller.representation_model;
+package com.htec.user_management.user.controller.model;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import org.springframework.hateoas.RepresentationModel;
  */
 @Getter
 @Builder
-public class UserRepresentationModel extends RepresentationModel<UserRepresentationModel> {
+public class UserModel extends RepresentationModel<UserModel> {
 
     /**
      * User's first name.
