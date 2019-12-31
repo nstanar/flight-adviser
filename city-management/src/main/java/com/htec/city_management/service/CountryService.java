@@ -49,7 +49,7 @@ public interface CountryService {
      * @param pageable   Check {@link Pageable}.
      * @return Page of countries matching name prefix.
      */
-    Page<CountryDto> findWhereNameStartsWith(final String namePrefix, @NotNull final Pageable pageable);
+    Page<CountryDto> findBy(final String namePrefix, @NotNull final Pageable pageable);
 
     /**
      * Finds page of cities belonging to country.

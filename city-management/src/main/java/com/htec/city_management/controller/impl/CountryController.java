@@ -1,4 +1,4 @@
-package com.htec.city_management.controller;
+package com.htec.city_management.controller.impl;
 
 import com.htec.city_management.controller.model.CityModel;
 import com.htec.city_management.controller.model.CountryModel;
@@ -67,9 +67,9 @@ public class CountryController {
      * @return Page of countries.
      */
     @GetMapping
-    public ResponseEntity<PagedModel<EntityModel<CountryModel>>> findWhereNameStartsWith(@RequestParam(required = false) final String namePrefix, final Pageable pageable, final PagedResourcesAssembler<CountryModel> pagedResourcesAssembler) {
+    public ResponseEntity<PagedModel<EntityModel<CountryModel>>> findAllBy(@RequestParam(required = false) final String namePrefix, final Pageable pageable, final PagedResourcesAssembler<CountryModel> pagedResourcesAssembler) {
         final Page<CountryModel> countries = countryService
-                .findWhereNameStartsWith(namePrefix, pageable)
+                .findBy(namePrefix, pageable)
                 .map(countryModelAssembler::toModel);
 
         return ResponseEntity.ok(pagedResourcesAssembler.toModel(countries));
@@ -102,7 +102,7 @@ public class CountryController {
     @PostMapping
     public ResponseEntity<Void> create(@RequestBody final CountryDto country) {
         final Long id = countryService.create(country);
-        final URI location = linkTo(methodOn(this.getClass()).findBy(id)).toUri();
+        final URI location = linkTo(methodOn(getClass()).findBy(id)).toUri();
         return ResponseEntity.created(location).build();
     }
 
@@ -131,15 +131,18 @@ public class CountryController {
      * @return 201 with locations header.
      */
     @PostMapping("/{countryId}/cities")
-    public ResponseEntity<Void> addOwningAssociationBetween(@PathVariable final Long countryId, final CityDto city) {
+    public ResponseEntity<Void> addOwningAssociationBetween(@PathVariable final Long countryId, @RequestBody final CityDto city) {
         final Optional<CityDto> optionalCity = countryService.addOwningAssociationBetween(countryId, city);
         if (optionalCity.isEmpty()) {
             final String message = messageSource.getMessage(COUNTRY_DOES_NOT_EXIST, new Object[]{countryId}, getLocale());
             throw new NotFoundException(message);
         }
 
-        //TODO: add locations header when city controller is done
-        return ResponseEntity.noContent().build();
+        final URI location = linkTo(methodOn
+                (CityController.class).findBy(optionalCity.get().getId())
+        ).toUri();
+
+        return ResponseEntity.created(location).build();
     }
 
 }

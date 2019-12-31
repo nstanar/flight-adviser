@@ -1,6 +1,7 @@
 package com.htec.city_management.service.dto.converter.impl;
 
 import com.htec.city_management.repository.entity.City;
+import com.htec.city_management.repository.entity.Country;
 import com.htec.city_management.service.dto.CityDto;
 import com.htec.city_management.service.dto.converter.CityDtoConverter;
 import org.springframework.stereotype.Component;
@@ -29,6 +30,9 @@ public class CityDtoConverterImpl implements CityDtoConverter {
         dto.setId(entity.getId());
         dto.setName(entity.getName());
         dto.setDescription(entity.getDescription());
+        final Country country = entity.getCountry();
+        dto.setCountryId(country.getId());
+        dto.setCountryName(country.getName());
         return dto;
     }
 

@@ -1,6 +1,6 @@
 package com.htec.user_management.user.controller.model.assembler.impl;
 
-import com.htec.user_management.user.controller.UserController;
+import com.htec.user_management.user.controller.impl.UserController;
 import com.htec.user_management.user.controller.model.UserModel;
 import com.htec.user_management.user.service.dto.UserDto;
 import lombok.NoArgsConstructor;

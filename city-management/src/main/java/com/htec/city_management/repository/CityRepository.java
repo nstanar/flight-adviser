@@ -23,7 +23,7 @@ public interface CityRepository extends JpaRepository<City, Long> {
      */
     @Transactional(readOnly = true)
     @Query("SELECT c FROM City c " +
-            "WHERE :name filter IS NULL OR c.name LIKE :nameFilter")
+            "WHERE :nameFilter IS NULL OR LOWER(c.name) LIKE :nameFilter")
     Page<City> findAllBy(@Param("nameFilter") final String nameFilter, final Pageable pageable);
 
     @Transactional(readOnly = true)

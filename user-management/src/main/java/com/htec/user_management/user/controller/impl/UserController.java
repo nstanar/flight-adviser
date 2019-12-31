@@ -1,4 +1,4 @@
-package com.htec.user_management.user.controller;
+package com.htec.user_management.user.controller.impl;
 
 import com.htec.domain_starter.controller.exception.NotFoundException;
 import com.htec.user_management.user.controller.model.UserModel;

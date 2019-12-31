@@ -1,5 +1,6 @@
 package com.htec.city_management.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.htec.domain_starter.service.dto.BaseDto;
 import lombok.*;
 
@@ -32,5 +33,17 @@ public class CityDto extends BaseDto {
     //TODO: adjust this after varchar lenght is set
     @Size(min = 20)
     private String description;
+
+    /**
+     * Id of the country city resides in.
+     */
+    @JsonIgnore
+    private Long countryId;
+
+    /**
+     * Name of the country city resides in.
+     */
+    @JsonIgnore
+    private String countryName;
 
 }

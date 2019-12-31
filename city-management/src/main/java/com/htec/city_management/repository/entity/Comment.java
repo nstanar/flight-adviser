@@ -5,9 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * @author Nikola Stanar
@@ -32,6 +30,10 @@ public class Comment extends BaseEntity {
      */
     @Column(nullable = false)
     private String description;
+
+    @ManyToOne
+    @JoinColumn(name = "city_id", nullable = false)
+    private City city;
 
     //TODO: add auditing
 

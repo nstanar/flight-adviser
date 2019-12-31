@@ -11,6 +11,7 @@ import com.htec.city_management.service.dto.converter.CityDtoConverter;
 import com.htec.city_management.service.dto.converter.CountryDtoConverter;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -68,6 +69,7 @@ public class CountryServiceImpl implements CountryService {
     @Override
     @Transactional(readOnly = true)
     public Optional<CountryDto> findBy(final Long id) {
+        log.info("Fetching details for country of id {}.", id);
         return countryRepository
                 .findById(id)
                 .map(countryDtoConverter::from);
@@ -118,14 +120,20 @@ public class CountryServiceImpl implements CountryService {
      * @param namePrefix Name prefix.
      * @param pageable   Check {@link Pageable}.
      * @return Page of countries.
-     * @see CountryService#findWhereNameStartsWith(String, Pageable)
+     * @see CountryService#findBy(String, Pageable)
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<CountryDto> findWhereNameStartsWith(final String namePrefix, final @NotNull Pageable pageable) {
-        //TODO: TEST sending empty prefix
-        log.info("Fetching page {} of countries matching name prefix {}", pageable, namePrefix);
-        final String nameFilter = namePrefix + "%";
+    public Page<CountryDto> findBy(final String namePrefix, final @NotNull Pageable pageable) {
+        log.info("Fetching {} of countries matching name prefix {}.", pageable, namePrefix);
+
+        /* It is ok to allow one letter name prefix in this situation.
+           Biggest count for countries starting with the same letter is 27 for letter 's'
+        */
+        final String nameFilter = StringUtils.isNotBlank(namePrefix)
+                ? namePrefix.toLowerCase() + "%"
+                : null;
+
         return countryRepository
                 .findAllBy(nameFilter, pageable)
                 .map(countryDtoConverter::from);
@@ -138,7 +146,10 @@ public class CountryServiceImpl implements CountryService {
      * @param pageable  Check pageable.
      * @return Page of cities belonging to country;
      */
+    @Override
+    @Transactional(readOnly = true)
     public Page<CityDto> findAllBy(final Long countryId, final Pageable pageable) {
+        log.info("Fetching {} of cities for country of id {}.", pageable, countryId);
         return cityRepository
                 .findAllBy(countryId, pageable)
                 .map(cityDtoConverter::from);

@@ -24,6 +24,6 @@ public interface CountryRepository extends JpaRepository<Country, Long> {
      */
     @Transactional(readOnly = true)
     @Query("SELECT c from Country c " +
-            "WHERE :name filter IS NULL OR c.name LIKE :nameFilter")
+            "WHERE :nameFilter IS NULL OR LOWER(c.name) LIKE :nameFilter")
     Page<Country> findAllBy(@Param("nameFilter") final String nameFilter, final Pageable pageable);
 }

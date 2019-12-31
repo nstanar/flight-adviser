@@ -26,6 +26,7 @@
         <domain-starter.version>1.0.0-SNAPSHOT</domain-starter.version>
 
         <!-- Other -->
+        <apache-commons.version>3.9</apache-commons.version>
         <git-commit.version>2.2.6</git-commit.version>
     </properties>
 
@@ -37,12 +38,21 @@
 
     <dependencyManagement>
         <dependencies>
+
             <!-- HTEC -->
             <dependency>
                 <groupId>com.htec</groupId>
                 <artifactId>domain-starter</artifactId>
                 <version>${domain-starter.version}</version>
             </dependency>
+
+            <!-- Other -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${apache-commons.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

@@ -12,8 +12,12 @@ import lombok.NoArgsConstructor;
 public final class HypermediaRelNames {
 
     /**
-     * Defines users relation.
+     * Defines "having cities" relation.
      */
     public static final String HAVING_CITIES_REL_NAME = "havingCities";
 
+    /**
+     * Defines "of country' relation.
+     */
+    public static final String OF_COUNTRY_REL_NAME = "ofCountry";
 }

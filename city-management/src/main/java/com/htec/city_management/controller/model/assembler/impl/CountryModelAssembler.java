@@ -1,16 +1,19 @@
 package com.htec.city_management.controller.model.assembler.impl;
 
-import com.htec.city_management.controller.CountryController;
+import com.htec.city_management.controller.impl.CountryController;
 import com.htec.city_management.controller.model.CountryModel;
 import com.htec.city_management.service.dto.CountryDto;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Component;
 
 import static com.htec.city_management.common.constants.HypermediaRelNames.HAVING_CITIES_REL_NAME;
+import static com.htec.domain_starter.controller.util.ControllerLinkBuilder.buildFrom;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -38,17 +41,19 @@ public class CountryModelAssembler implements RepresentationModelAssembler<Count
 
         final Long countryId = dto.getId();
 
-        /* Add self link. */
+        // Add self link.
         final Link selfLink = linkTo(methodOn(
                 CountryController.class).findBy(countryId)
         ).withSelfRel();
+
         model.add(selfLink);
 
-        /* Add cities link. */
-        //TODO: Check how this serializes with pageable.
-        final Link citiesLink = linkTo(methodOn(
-                CountryController.class).findAllBy(countryId, Pageable.unpaged(), new PagedResourcesAssembler<>(null, null))
-        ).withRel(HAVING_CITIES_REL_NAME);
+        // Add cities link.
+        final WebMvcLinkBuilder citiesLinkBuilder = linkTo(methodOn
+                (CountryController.class).findAllBy(countryId, Pageable.unpaged(), new PagedResourcesAssembler<>(null, null))
+        );
+        final Link citiesLink = buildFrom(HAVING_CITIES_REL_NAME, citiesLinkBuilder, PageRequest.of(0, 20));
+
         model.add(citiesLink);
 
         return model;
