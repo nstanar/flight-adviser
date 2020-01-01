@@ -2,18 +2,15 @@ package com.htec.city_management.controller.impl;
 
 import com.htec.city_management.controller.model.CityModel;
 import com.htec.city_management.controller.model.assembler.impl.CityModelAssembler;
+import com.htec.city_management.repository.entity.City;
 import com.htec.city_management.service.CityService;
-import com.htec.domain_starter.controller.exception.NotFoundException;
+import com.htec.city_management.service.dto.CityDto;
+import com.htec.domain_starter.controller.SearchableController;
+import com.htec.domain_starter.service.SearchableService;
 import lombok.AllArgsConstructor;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import static com.htec.city_management.common.constants.MessageSourceKeys.CITY_DOES_NOT_EXIST;
 
 /**
  * @author Nikola Stanar
@@ -23,7 +20,7 @@ import static com.htec.city_management.common.constants.MessageSourceKeys.CITY_D
 @RestController
 @RequestMapping("/cities")
 @AllArgsConstructor
-public class CityController {
+public class CityController implements SearchableController<CityModel, CityDto, City> {
 
     /**
      * City service.
@@ -36,19 +33,25 @@ public class CityController {
     private final CityModelAssembler cityModelAssembler;
 
     /**
-     * Message source.
+     * Gets searchable service.
+     *
+     * @return Searchable service.
+     * @see SearchableController#getService()
      */
-    private final MessageSource messageSource;
+    @Override
+    public SearchableService<CityDto, City> getService() {
+        return cityService;
+    }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<CityModel> findBy(@PathVariable final Long id) {
-        return cityService.findBy(id)
-                .map(cityModelAssembler::toModel)
-                .map(ResponseEntity::ok)
-                .orElseThrow(() -> {
-                    final String exceptionMessage = messageSource.getMessage(CITY_DOES_NOT_EXIST, new Object[]{id}, LocaleContextHolder.getLocale());
-                    return new NotFoundException(exceptionMessage);
-                });
+    /**
+     * Gets model assembler.
+     *
+     * @return Model assembler.
+     * @see SearchableController#getModelAssembler()
+     */
+    @Override
+    public RepresentationModelAssembler<CityDto, CityModel> getModelAssembler() {
+        return cityModelAssembler;
     }
 
 }

@@ -1,14 +1,14 @@
 package com.htec.city_management.service;
 
+import com.htec.city_management.repository.entity.Country;
 import com.htec.city_management.service.dto.CityDto;
 import com.htec.city_management.service.dto.CountryDto;
+import com.htec.domain_starter.service.SearchableService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.Collection;
 import java.util.Optional;
 
 /**
@@ -16,40 +16,7 @@ import java.util.Optional;
  * <p>
  * Service for operations over country.
  */
-public interface CountryService {
-
-    /**
-     * Finds optional country.
-     *
-     * @param id id of the country.
-     * @return Optional country.
-     */
-    Optional<CountryDto> findBy(final Long id);
-
-    /**
-     * Creates country from dto.
-     *
-     * @param country Dto holding content that is about to be created.
-     * @return Id of the created country.
-     */
-    Long create(@NotNull @Valid final CountryDto country);
-
-    /**
-     * Creates countries from dtoS.
-     *
-     * @param countries DtoS holding content that is about to be created.
-     */
-    void create(@NotEmpty final Collection<@NotNull @Valid CountryDto> countries);
-
-    /**
-     * Finds page of countries matching name prefix.
-     * If empty prefix is ignored.
-     *
-     * @param namePrefix Name prefix.
-     * @param pageable   Check {@link Pageable}.
-     * @return Page of countries matching name prefix.
-     */
-    Page<CountryDto> findBy(final String namePrefix, @NotNull final Pageable pageable);
+public interface CountryService extends SearchableService<CountryDto, Country> {
 
     /**
      * Finds page of cities belonging to country.

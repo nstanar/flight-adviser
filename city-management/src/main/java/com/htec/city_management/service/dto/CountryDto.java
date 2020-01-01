@@ -14,7 +14,7 @@ import javax.validation.constraints.NotBlank;
 @Setter
 @NoArgsConstructor
 @ToString
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode
 public class CountryDto extends BaseDto {
 
     /**

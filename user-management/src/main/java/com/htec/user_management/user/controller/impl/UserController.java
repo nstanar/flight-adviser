@@ -1,26 +1,17 @@
 package com.htec.user_management.user.controller.impl;
 
-import com.htec.domain_starter.controller.exception.NotFoundException;
+import com.htec.domain_starter.controller.CrudController;
+import com.htec.domain_starter.controller.SearchableController;
+import com.htec.domain_starter.service.CrudService;
 import com.htec.user_management.user.controller.model.UserModel;
 import com.htec.user_management.user.controller.model.assembler.impl.UserRepresentationModelAssembler;
+import com.htec.user_management.user.repository.entity.User;
 import com.htec.user_management.user.service.UserService;
 import com.htec.user_management.user.service.dto.UserDto;
 import lombok.AllArgsConstructor;
-import org.springframework.context.MessageSource;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.PagedModel;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.net.URI;
-
-import static com.htec.user_management.common.constants.MessageSourceKeys.USER_DOES_NOT_EXIST;
-import static org.springframework.context.i18n.LocaleContextHolder.getLocale;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import org.springframework.hateoas.server.RepresentationModelAssembler;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author Nikola Stanar
@@ -30,7 +21,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 @RequestMapping(value = "/users")
 @AllArgsConstructor
-public class UserController {
+public class UserController implements CrudController<UserModel, UserDto, User> {
 
     /**
      * Service.
@@ -43,58 +34,26 @@ public class UserController {
     private final UserRepresentationModelAssembler assembler;
 
     /**
-     * Message source
-     */
-    private final MessageSource messageSource;
-
-    /**
-     * Finds page of users.
+     * Gets searchable service.
      *
-     * @param pageable                Check {@link Pageable}.
-     * @param pagedResourcesAssembler Check {@link PagedResourcesAssembler}.
-     * @return Paged collection of users.
+     * @return Searchable service.
+     * @see SearchableController#getService()
      */
-    @GetMapping
-    public ResponseEntity<PagedModel<EntityModel<UserModel>>> findAll(final Pageable pageable, final PagedResourcesAssembler<UserModel> pagedResourcesAssembler) {
-        final Page<UserModel> users = service.findAll(pageable)
-                .map(assembler::toModel);
-
-        return ResponseEntity.ok(pagedResourcesAssembler.toModel(users));
+    @Override
+    public CrudService<UserDto, User> getService() {
+        return service;
     }
 
     /**
-     * Finds user by id.
+     * Gets model assembler.
      *
-     * @param id User's id.
-     * @return User representation model.
+     * @return Model assembler.
+     * @see SearchableController#getModelAssembler()
      */
-    @GetMapping("/{id}")
-    public ResponseEntity<UserModel> findBy(@PathVariable final Long id) {
-        return service.findBy(id)
-                .map(assembler::toModel)
-                .map(ResponseEntity::ok)
-                .orElseThrow(() -> {
-                    final String message = messageSource.getMessage(USER_DOES_NOT_EXIST, new Object[]{id}, getLocale());
-                    return new NotFoundException(message);
-                });
+    @Override
+    public RepresentationModelAssembler<UserDto, UserModel> getModelAssembler() {
+        return assembler;
     }
 
-    /**
-     * Creates user from a request content.
-     *
-     * @param user User that is about to be created.
-     * @return 201 with location header.
-     */
-    @PostMapping
-    public ResponseEntity<?> create(@RequestBody final UserDto user) {
-        final UserDto createdUser = service.create(user);
-
-        final URI location = linkTo(methodOn(
-                this.getClass()).findBy(createdUser.getId())
-        ).toUri();
-
-
-        return ResponseEntity.created(location).build();
-    }
 
 }

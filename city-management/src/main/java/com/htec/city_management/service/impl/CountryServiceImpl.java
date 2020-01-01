@@ -9,9 +9,11 @@ import com.htec.city_management.service.dto.CityDto;
 import com.htec.city_management.service.dto.CountryDto;
 import com.htec.city_management.service.dto.converter.CityDtoConverter;
 import com.htec.city_management.service.dto.converter.CountryDtoConverter;
+import com.htec.domain_starter.repository.SearchableRepository;
+import com.htec.domain_starter.service.SearchableService;
+import com.htec.domain_starter.service.dto.converter.DtoConverter;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,12 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.Collection;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * @author Nikola Stanar
@@ -37,6 +35,7 @@ import java.util.stream.Collectors;
 @Validated
 @Slf4j
 @AllArgsConstructor
+//TODO: if there is time, introduce AOP for cross-cutting concerns like logging.
 public class CountryServiceImpl implements CountryService {
 
     /**
@@ -58,86 +57,6 @@ public class CountryServiceImpl implements CountryService {
      * Dto converter for city.
      */
     private final CityDtoConverter cityDtoConverter;
-
-    /**
-     * Finds optional country by id.
-     *
-     * @param id id of the country.
-     * @return Optional country.
-     * @see CountryService#findBy(Long)
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public Optional<CountryDto> findBy(final Long id) {
-        log.info("Fetching details for country of id {}.", id);
-        return countryRepository
-                .findById(id)
-                .map(countryDtoConverter::from);
-    }
-
-    /**
-     * Creates country from dto.
-     *
-     * @param country Dto holding content that is about to be created.
-     * @return Id of the created country.
-     * @see CountryService#create(CountryDto)
-     */
-    @Override
-    public Long create(final @NotNull @Valid CountryDto country) {
-        log.info("Creating country :{}", country);
-        final Country countryEntity = countryDtoConverter.from(country);
-        final Country createdEntity = countryRepository.save(countryEntity);
-        final Long id = createdEntity.getId();
-        log.info("Country successfully created and given id {}.", id);
-        return id;
-    }
-
-    /**
-     * Creates countries for collection of dtoS.
-     *
-     * @param countries DtoS holding content that is about to be created.
-     * @see CountryService#create(Collection)
-     */
-    @Override
-    public void create(final @NotEmpty Collection<@NotNull @Valid CountryDto> countries) {
-        //TODO: add bulk insert
-        final long startTime = System.currentTimeMillis();
-        final int size = countries.size();
-        log.info("Creating collection of {} countries.", size);
-        final Set<Country> countriesToBeCreated = countries
-                .stream()
-                .map(countryDtoConverter::from)
-                .collect(Collectors.toSet());
-        countryRepository.saveAll(countriesToBeCreated);
-        final long endTime = System.currentTimeMillis();
-        log.info("{} countries successfully created after {} ms.", size, endTime - startTime);
-    }
-
-    /**
-     * Finds page of countries matching name prefix.
-     * If empty prefix is ignored.
-     *
-     * @param namePrefix Name prefix.
-     * @param pageable   Check {@link Pageable}.
-     * @return Page of countries.
-     * @see CountryService#findBy(String, Pageable)
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public Page<CountryDto> findBy(final String namePrefix, final @NotNull Pageable pageable) {
-        log.info("Fetching {} of countries matching name prefix {}.", pageable, namePrefix);
-
-        /* It is ok to allow one letter name prefix in this situation.
-           Biggest count for countries starting with the same letter is 27 for letter 's'
-        */
-        final String nameFilter = StringUtils.isNotBlank(namePrefix)
-                ? namePrefix.toLowerCase() + "%"
-                : null;
-
-        return countryRepository
-                .findAllBy(nameFilter, pageable)
-                .map(countryDtoConverter::from);
-    }
 
     /**
      * Finds page of cities belonging to country.
@@ -179,5 +98,27 @@ public class CountryServiceImpl implements CountryService {
             log.info("Country does not exist, thus city cannot be added.");
         }
         return optionalCity;
+    }
+
+    /**
+     * Gets dto converter.
+     *
+     * @return Check {@link DtoConverter}.
+     * @see SearchableService#getDtoConverter()
+     */
+    @Override
+    public DtoConverter<CountryDto, Country> getDtoConverter() {
+        return countryDtoConverter;
+    }
+
+    /**
+     * Gets searchable repository.
+     *
+     * @return Check {@link SearchableRepository}.
+     * @see SearchableService#getRepository()
+     */
+    @Override
+    public SearchableRepository<Country> getRepository() {
+        return countryRepository;
     }
 }

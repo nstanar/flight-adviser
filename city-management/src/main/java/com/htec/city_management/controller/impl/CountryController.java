@@ -4,10 +4,13 @@ import com.htec.city_management.controller.model.CityModel;
 import com.htec.city_management.controller.model.CountryModel;
 import com.htec.city_management.controller.model.assembler.impl.CityModelAssembler;
 import com.htec.city_management.controller.model.assembler.impl.CountryModelAssembler;
+import com.htec.city_management.repository.entity.Country;
 import com.htec.city_management.service.CountryService;
 import com.htec.city_management.service.dto.CityDto;
 import com.htec.city_management.service.dto.CountryDto;
+import com.htec.domain_starter.controller.SearchableController;
 import com.htec.domain_starter.controller.exception.NotFoundException;
+import com.htec.domain_starter.service.SearchableService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
@@ -15,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +40,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 @RequestMapping("/countries")
 @AllArgsConstructor
-public class CountryController {
+public class CountryController implements SearchableController<CountryModel, CountryDto, Country> {
 
     /**
      * Country service.
@@ -57,54 +61,6 @@ public class CountryController {
      * Message source.
      */
     private final MessageSource messageSource;
-
-    /**
-     * Finds by of countries matching name prefix (if present).
-     *
-     * @param namePrefix              Name prefix of the country.
-     * @param pageable                Check {@link Pageable}.
-     * @param pagedResourcesAssembler Check {@link PagedResourcesAssembler}.
-     * @return Page of countries.
-     */
-    @GetMapping
-    public ResponseEntity<PagedModel<EntityModel<CountryModel>>> findAllBy(@RequestParam(required = false) final String namePrefix, final Pageable pageable, final PagedResourcesAssembler<CountryModel> pagedResourcesAssembler) {
-        final Page<CountryModel> countries = countryService
-                .findBy(namePrefix, pageable)
-                .map(countryModelAssembler::toModel);
-
-        return ResponseEntity.ok(pagedResourcesAssembler.toModel(countries));
-    }
-
-    /**
-     * Finds country by id.
-     *
-     * @param id Id of the country,
-     * @return Country.
-     */
-    @GetMapping("/{id}")
-    public ResponseEntity<CountryModel> findBy(@PathVariable final Long id) {
-        return countryService
-                .findBy(id)
-                .map(countryModelAssembler::toModel)
-                .map(ResponseEntity::ok)
-                .orElseThrow(() -> {
-                    final String message = messageSource.getMessage(COUNTRY_DOES_NOT_EXIST, new Object[]{id}, getLocale());
-                    return new NotFoundException(message);
-                });
-    }
-
-    /**
-     * Creates country from request body.
-     *
-     * @param country Request body.
-     * @return 201 with location header.
-     */
-    @PostMapping
-    public ResponseEntity<Void> create(@RequestBody final CountryDto country) {
-        final Long id = countryService.create(country);
-        final URI location = linkTo(methodOn(getClass()).findBy(id)).toUri();
-        return ResponseEntity.created(location).build();
-    }
 
     /**
      * Finds page of cities belonging to country.
@@ -143,6 +99,28 @@ public class CountryController {
         ).toUri();
 
         return ResponseEntity.created(location).build();
+    }
+
+    /**
+     * Gets searchable service.
+     *
+     * @return Searchable service.
+     * @see SearchableController#getService()
+     */
+    @Override
+    public SearchableService<CountryDto, Country> getService() {
+        return countryService;
+    }
+
+    /**
+     * Gets model assembler.
+     *
+     * @return Model assembler.
+     * @see SearchableController#getModelAssembler()
+     */
+    @Override
+    public RepresentationModelAssembler<CountryDto, CountryModel> getModelAssembler() {
+        return countryModelAssembler;
     }
 
 }

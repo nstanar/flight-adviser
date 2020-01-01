@@ -1,16 +1,19 @@
 package com.htec.city_management.service.impl;
 
 import com.htec.city_management.repository.CityRepository;
+import com.htec.city_management.repository.entity.City;
 import com.htec.city_management.service.CityService;
 import com.htec.city_management.service.dto.CityDto;
 import com.htec.city_management.service.dto.converter.CityDtoConverter;
+import com.htec.domain_starter.repository.SearchableRepository;
+import com.htec.domain_starter.service.SearchableService;
+import com.htec.domain_starter.service.dto.converter.Convertible;
+import com.htec.domain_starter.service.dto.converter.DtoConverter;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-
-import java.util.Optional;
 
 /**
  * @author Nikola Stanar
@@ -36,18 +39,24 @@ public class CityServiceImpl implements CityService {
     private final CityDtoConverter cityDtoConverter;
 
     /**
-     * Finds optional city by id.
+     * Gets dto converter.
      *
-     * @param id Id of the city.
-     * @return Optional city.
-     * @see CityService#findBy(Long)
+     * @return Check {@link DtoConverter}.
+     * @see Convertible#getDtoConverter()
      */
     @Override
-    @Transactional(readOnly = true)
-    public Optional<CityDto> findBy(final Long id) {
-        return cityRepository
-                .findById(id)
-                .map(cityDtoConverter::from);
+    public DtoConverter<CityDto, City> getDtoConverter() {
+        return cityDtoConverter;
     }
 
+    /**
+     * Gets searchable repository.
+     *
+     * @return Check {@link SearchableRepository}.
+     * @see SearchableService#getRepository()
+     */
+    @Override
+    public SearchableRepository<City> getRepository() {
+        return cityRepository;
+    }
 }

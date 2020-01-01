@@ -1,5 +1,9 @@
 package com.htec.user_management.user.service.impl;
 
+import com.htec.domain_starter.service.CrudService;
+import com.htec.domain_starter.service.dto.BaseDto;
+import com.htec.domain_starter.service.dto.converter.Convertible;
+import com.htec.domain_starter.service.dto.converter.DtoConverter;
 import com.htec.domain_starter.service.validation.exception.BusinessValidationException;
 import com.htec.user_management.user.repository.UserRepository;
 import com.htec.user_management.user.repository.entity.User;
@@ -9,8 +13,7 @@ import com.htec.user_management.user.service.dto.converter.UserDtoConverter;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -50,44 +53,15 @@ public class UserServiceImpl implements UserService {
     private final MessageSource messageSource;
 
     /**
-     * Finds page of users.
-     *
-     * @param pageable Check {@link Pageable}.
-     * @return Page of users.
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public Page<UserDto> findAll(@NotNull final Pageable pageable) {
-        log.info("Fetching users with request: {}", pageable);
-        return repository.findAll(pageable)
-                .map(dtoConverter::from);
-    }
-
-    /**
-     * Finds user by id.
-     *
-     * @param id User's id.
-     * @return User having id.
-     * @see UserService#findBy(Long)
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public Optional<UserDto> findBy(@NotNull final Long id) {
-        log.info("Fetching user of id {}.", id);
-        return repository.findById(id)
-                .map(dtoConverter::from);
-    }
-
-    /**
      * Creates user from dto.
      *
      * @param user User that is about to be created.
      * @return Created user.
-     * @see UserService#create(UserDto)
+     * @see CrudService#create(BaseDto)
      */
     @Override
-    public UserDto create(@NotNull @Valid final UserDto user) {
-        log.info("Creating user: {}", user);
+    //TODO: revise how to deal with uniqueness, since it is a cross cutting concern.
+    public Long create(@NotNull @Valid final UserDto user) {
         /* Check if username already exists. */
         final Optional<User> optionalExistingUser = repository.findByUsername(user.getUsername());
         if (optionalExistingUser.isPresent()) {
@@ -96,9 +70,30 @@ public class UserServiceImpl implements UserService {
         }
 
         final User userEntity = dtoConverter.from(user);
-        final User createdUser = repository.save(userEntity);
-        log.info("User successfully created and given id {}.", createdUser.getId());
-        return dtoConverter.from(createdUser);
+        return repository
+                .save(userEntity)
+                .getId();
     }
 
+    /**
+     * Gets searchable repository.
+     *
+     * @return Check {@link JpaRepository}.
+     * @see CrudService#getRepository()
+     */
+    @Override
+    public JpaRepository<User, Long> getRepository() {
+        return repository;
+    }
+
+    /**
+     * Gets dto converter.
+     *
+     * @return Check {@link DtoConverter}.
+     * @see Convertible#getDtoConverter()
+     */
+    @Override
+    public DtoConverter<UserDto, User> getDtoConverter() {
+        return dtoConverter;
+    }
 }

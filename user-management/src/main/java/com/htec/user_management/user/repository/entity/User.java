@@ -23,7 +23,7 @@ import javax.persistence.UniqueConstraint;
 @Getter
 @Setter
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = {"password"}, callSuper = false)
+@EqualsAndHashCode(exclude = {"password"})
 public class User extends BaseEntity {
 
     /**
