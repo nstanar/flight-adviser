@@ -4,6 +4,7 @@ import com.htec.domain_starter.repository.entity.AuditedEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 
@@ -13,6 +14,7 @@ import javax.persistence.*;
  * Entity class representing comment.
  */
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table
 @Getter
 @Setter

@@ -1,4 +1,4 @@
-package com.htec.city_management.common.configuration;
+package com.htec.domain_starter.common.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,11 +14,12 @@ import java.util.Optional;
  */
 @Configuration
 @EnableJpaAuditing(auditorAwareRef = "auditorAware")
-//TODO: extract this and make it work with session context after auth and resource server are made.
-public class PersistenceConfiguration {
+//TODO: Make it work with session context after auth and resource server are made.
+public class AuditConfiguration {
 
     @Bean
     public AuditorAware<String> auditorAware() {
         return () -> Optional.of("unknown");
     }
+    
 }
