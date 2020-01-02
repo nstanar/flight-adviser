@@ -6,8 +6,6 @@ import com.htec.city_management.service.CityService;
 import com.htec.city_management.service.dto.CityDto;
 import com.htec.city_management.service.dto.converter.CityDtoConverter;
 import com.htec.domain_starter.repository.SearchableRepository;
-import com.htec.domain_starter.service.SearchableService;
-import com.htec.domain_starter.service.dto.converter.Convertible;
 import com.htec.domain_starter.service.dto.converter.DtoConverter;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +40,7 @@ public class CityServiceImpl implements CityService {
      * Gets dto converter.
      *
      * @return Check {@link DtoConverter}.
-     * @see Convertible#getDtoConverter()
+     * @see CityService#getDtoConverter()
      */
     @Override
     public DtoConverter<CityDto, City> getDtoConverter() {
@@ -53,7 +51,7 @@ public class CityServiceImpl implements CityService {
      * Gets searchable repository.
      *
      * @return Check {@link SearchableRepository}.
-     * @see SearchableService#getRepository()
+     * @see CityService#getRepository()
      */
     @Override
     public SearchableRepository<City> getRepository() {

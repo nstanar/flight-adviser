@@ -1,9 +1,11 @@
 package com.htec.domain_starter.controller;
 
 import com.htec.domain_starter.controller.exception.NotFoundException;
+import com.htec.domain_starter.controller.validation.exception.handler.ControllerAdvice;
 import com.htec.domain_starter.repository.entity.BaseEntity;
 import com.htec.domain_starter.service.CrudService;
 import com.htec.domain_starter.service.dto.BaseDto;
+import com.htec.domain_starter.service.validation.exception.BusinessValidationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -12,11 +14,9 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.ConstraintViolationException;
 import java.net.URI;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -42,9 +42,9 @@ public interface CrudController<MODEL extends RepresentationModel<MODEL>, DTO ex
      * @return Page of model entities.
      */
     @GetMapping
-    default ResponseEntity<PagedModel<EntityModel<MODEL>>> findAll(final Pageable pageable, final PagedResourcesAssembler<MODEL> pagedResourcesAssembler) {
+    default ResponseEntity<PagedModel<EntityModel<MODEL>>> find(final Pageable pageable, final PagedResourcesAssembler<MODEL> pagedResourcesAssembler) {
         final Page<MODEL> modelEntities = getService()
-                .findAll(pageable)
+                .find(pageable)
                 .map(getModelAssembler()::toModel);
 
         return ResponseEntity.ok(pagedResourcesAssembler.toModel(modelEntities));
@@ -54,7 +54,8 @@ public interface CrudController<MODEL extends RepresentationModel<MODEL>, DTO ex
      * Finds model entity by id.
      *
      * @param id Id of the model entity,
-     * @return Model entity.
+     * @return Model entity or 404 with exception message.
+     * @see ControllerAdvice#handle(NotFoundException)
      */
     @GetMapping("/{id}")
     default ResponseEntity<MODEL> findBy(@PathVariable final Long id) {
@@ -63,6 +64,7 @@ public interface CrudController<MODEL extends RepresentationModel<MODEL>, DTO ex
                 .map(getModelAssembler()::toModel)
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> {
+                    //TODO: extract this as a message key
                     final String message = String.format(RESOURCE_DOES_NOT_EXIST_MESSAGE_TEMPLATE, id);
                     return new NotFoundException(message);
                 });
@@ -72,13 +74,54 @@ public interface CrudController<MODEL extends RepresentationModel<MODEL>, DTO ex
      * Creates model entity from request body.
      *
      * @param dto Request body.
-     * @return 201 with location header.
+     * @return 201 with location header if successful; otherwise 400 with exception message.
+     * @see ControllerAdvice#handle(BusinessValidationException)
+     * @see ControllerAdvice#handle(ConstraintViolationException)
      */
     @PostMapping
-    default ResponseEntity<Void> create(@RequestBody final DTO dto) {
-        final Long id = getService().create(dto);
+    default ResponseEntity<Void> createFrom(@RequestBody final DTO dto) {
+        final Long id = getService().createFrom(dto).getId();
         final URI location = linkTo(methodOn(getClass()).findBy(id)).toUri();
         return ResponseEntity.created(location).build();
+    }
+
+    /**
+     * Updates model entity with given id from the request body content.
+     *
+     * @param id  Id of the model entity.
+     * @param dto Request body.
+     * @return 204 if successful; otherwise one of (404, 400) with exception message.
+     * @see ControllerAdvice#handle(BusinessValidationException)
+     * @see ControllerAdvice#handle(ConstraintViolationException)
+     */
+    @PutMapping("/{id}")
+    default ResponseEntity<?> updateFrom(@PathVariable final Long id, @RequestBody final DTO dto) {
+        return getService()
+                .updateFrom(id, dto)
+                .map(getModelAssembler()::toModel)
+                .map(model -> ResponseEntity.noContent().build())
+                .orElseThrow(() -> {
+                    //TODO: extract this as a message key
+                    final String message = String.format(RESOURCE_DOES_NOT_EXIST_MESSAGE_TEMPLATE, id);
+                    return new NotFoundException(message);
+                });
+    }
+
+    /**
+     * Deletes model entity having given id.
+     *
+     * @param id Id of the model entity.
+     * @return 204 if successful; otherwise 404 with exception message.
+     * @see ControllerAdvice#handle(NotFoundException)
+     */
+    @DeleteMapping("/{id}")
+    default ResponseEntity<?> deleteBy(@PathVariable final Long id) {
+        if (getService().deleteBy(id)) {
+            return ResponseEntity.noContent().build();
+        } else {
+            final String message = String.format(RESOURCE_DOES_NOT_EXIST_MESSAGE_TEMPLATE, id);
+            throw new NotFoundException(message);
+        }
     }
 
     /**

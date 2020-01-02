@@ -32,6 +32,9 @@ public class CityController implements SearchableController<CityModel, CityDto, 
      */
     private final CityModelAssembler cityModelAssembler;
 
+
+    //TODO: add comments relation here
+
     /**
      * Gets searchable service.
      *

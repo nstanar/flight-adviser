@@ -50,7 +50,7 @@ public class CountryModelAssembler implements RepresentationModelAssembler<Count
 
         // Add cities link.
         final WebMvcLinkBuilder citiesLinkBuilder = linkTo(methodOn
-                (CountryController.class).findAllBy(countryId, Pageable.unpaged(), new PagedResourcesAssembler<>(null, null))
+                (CountryController.class).findBy(countryId, Pageable.unpaged(), new PagedResourcesAssembler<>(null, null))
         );
         final Link citiesLink = buildFrom(HAVING_CITIES_REL_NAME, citiesLinkBuilder, PageRequest.of(0, 20));
 

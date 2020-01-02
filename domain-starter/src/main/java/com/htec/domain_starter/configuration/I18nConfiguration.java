@@ -16,6 +16,7 @@ import java.util.Locale;
  * Internationalization configuration.
  */
 @Configuration
+//TODO: conditional on present file
 public class I18nConfiguration {
 
     /**

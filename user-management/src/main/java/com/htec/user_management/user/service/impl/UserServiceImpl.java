@@ -57,11 +57,11 @@ public class UserServiceImpl implements UserService {
      *
      * @param user User that is about to be created.
      * @return Created user.
-     * @see CrudService#create(BaseDto)
+     * @see CrudService#createFrom(BaseDto)
      */
     @Override
     //TODO: revise how to deal with uniqueness, since it is a cross cutting concern.
-    public Long create(@NotNull @Valid final UserDto user) {
+    public UserDto createFrom(@NotNull @Valid final UserDto user) {
         /* Check if username already exists. */
         final Optional<User> optionalExistingUser = repository.findByUsername(user.getUsername());
         if (optionalExistingUser.isPresent()) {
@@ -70,9 +70,9 @@ public class UserServiceImpl implements UserService {
         }
 
         final User userEntity = dtoConverter.from(user);
-        return repository
-                .save(userEntity)
-                .getId();
+        final User createdUser = repository
+                .save(userEntity);
+        return dtoConverter.from(createdUser);
     }
 
     /**

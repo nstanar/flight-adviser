@@ -10,7 +10,6 @@ import com.htec.city_management.service.dto.CountryDto;
 import com.htec.city_management.service.dto.converter.CityDtoConverter;
 import com.htec.city_management.service.dto.converter.CountryDtoConverter;
 import com.htec.domain_starter.repository.SearchableRepository;
-import com.htec.domain_starter.service.SearchableService;
 import com.htec.domain_starter.service.dto.converter.DtoConverter;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -80,31 +79,31 @@ public class CountryServiceImpl implements CountryService {
      * @param countryId Id of the country.
      * @param city      City to be added.
      * @return Optional city created if country exists.
-     * @see CountryService#addOwningAssociationBetween(Long, CityDto)
+     * @see CountryService#createAndAssignFrom(Long, CityDto)
      */
     @Override
-    public Optional<CityDto> addOwningAssociationBetween(final @NotNull Long countryId, final @NotNull @Valid CityDto city) {
-        Optional<CityDto> optionalCity = Optional.empty();
+    public Optional<CityDto> createAndAssignFrom(final @NotNull Long countryId, final @NotNull @Valid CityDto city) {
         log.info("Adding city {} to country of id {}.", city, countryId);
-        final Optional<Country> optionalCountry = countryRepository.findById(countryId);
-        if (optionalCountry.isPresent()) {
-            final Country country = optionalCountry.get();
-            final City cityToBeCreated = cityDtoConverter.from(city);
-            cityToBeCreated.setCountry(country);
-            final City createdCity = cityRepository.save(cityToBeCreated);
-            log.info("City successfully added to country and given id {}.", createdCity.getId());
-            optionalCity = Optional.of(cityDtoConverter.from(createdCity));
-        } else {
-            log.info("Country does not exist, thus city cannot be added.");
-        }
-        return optionalCity;
+        return countryRepository.findById(countryId)
+                .map(country -> {
+                    final City cityToBeCreated = cityDtoConverter.from(city);
+                    cityToBeCreated.setCountry(country);
+                    final City createdCity = cityRepository.save(cityToBeCreated);
+                    log.info("City successfully added to country and given id {}.", createdCity.getId());
+                    return createdCity;
+                })
+                .map(cityDtoConverter::from)
+                .or(() -> {
+                    log.info("Country does not exist, thus city cannot be added.");
+                    return Optional.empty();
+                });
     }
 
     /**
      * Gets dto converter.
      *
      * @return Check {@link DtoConverter}.
-     * @see SearchableService#getDtoConverter()
+     * @see CountryService#getDtoConverter()
      */
     @Override
     public DtoConverter<CountryDto, Country> getDtoConverter() {
@@ -115,7 +114,7 @@ public class CountryServiceImpl implements CountryService {
      * Gets searchable repository.
      *
      * @return Check {@link SearchableRepository}.
-     * @see SearchableService#getRepository()
+     * @see CountryService#getRepository()
      */
     @Override
     public SearchableRepository<Country> getRepository() {

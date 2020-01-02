@@ -6,6 +6,7 @@ import com.htec.domain_starter.service.dto.converter.Convertible;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
@@ -30,7 +31,8 @@ public interface CrudService<DTO extends BaseDto, ENTITY extends BaseEntity> ext
      * @param pageable Check {@link Pageable}.
      * @return Page of DTOs.
      */
-    default Page<DTO> findAll(final Pageable pageable) {
+    @Transactional(readOnly = true)
+    default Page<DTO> find(final Pageable pageable) {
         return getRepository()
                 .findAll(pageable)
                 .map(getDtoConverter()::from);
@@ -42,6 +44,7 @@ public interface CrudService<DTO extends BaseDto, ENTITY extends BaseEntity> ext
      * @param id ID of the DTO.
      * @return Optional DTO.
      */
+    @Transactional(readOnly = true)
     default Optional<DTO> findBy(@NotNull final Long id) {
         return getRepository()
                 .findById(id)
@@ -54,11 +57,42 @@ public interface CrudService<DTO extends BaseDto, ENTITY extends BaseEntity> ext
      * @param dto Dto holding content that is about to be created.
      * @return Id of the created dto.
      */
-    default Long create(@NotNull @Valid final DTO dto) {
+    @Transactional
+    default DTO createFrom(@NotNull @Valid final DTO dto) {
         final ENTITY entity = getDtoConverter().from(dto);
-        return getRepository()
-                .save(entity)
-                .getId();
+        final ENTITY createdEntity = getRepository()
+                .save(entity);
+        return getDtoConverter().from(createdEntity);
+    }
+
+    /**
+     * Update DTO from method argument.
+     *
+     * @param id  Id of the dto.
+     * @param dto DTO holding update content.
+     * @return Optional updated DTO if id exist, else empty.
+     */
+    @Transactional
+    default Optional<DTO> updateFrom(@NotNull final Long id, @NotNull @Valid final DTO dto) {
+        final Optional<ENTITY> optionalEntity = getRepository().findById(id);
+        return optionalEntity
+                .map(entity -> getDtoConverter().from(dto, entity))
+                .map(getDtoConverter()::from);
+    }
+
+    /**
+     * Deletes DTO by id.
+     *
+     * @param id Id of the DTO.
+     * @return true if found; otherwise false.
+     */
+    @Transactional
+    default boolean deleteBy(final Long id) {
+        final boolean exists = getRepository().existsById(id);
+        if (exists) {
+            getRepository().deleteById(id);
+        }
+        return exists;
     }
 
     /**
@@ -67,7 +101,8 @@ public interface CrudService<DTO extends BaseDto, ENTITY extends BaseEntity> ext
      * @param dtoS Stream of dtoS holding content that is about to be created.
      */
     //TODO: extract this.
-    default void create(final @NotEmpty Collection<@NotNull @Valid DTO> dtoS) {
+    @Transactional
+    default void createFrom(final @NotEmpty Collection<@NotNull @Valid DTO> dtoS) {
         final Set<ENTITY> entities = dtoS
                 .stream()
                 .map(getDtoConverter()::from)

@@ -20,4 +20,9 @@ public final class HypermediaRelNames {
      * Defines "of country' relation.
      */
     public static final String OF_COUNTRY_REL_NAME = "ofCountry";
+
+    /**
+     * Defines "for city" relation.
+     */
+    public static final String FOR_CITY_REL_NAME = "forCity";
 }

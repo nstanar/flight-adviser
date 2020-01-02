@@ -44,7 +44,7 @@ public class RootController {
 
         // Add users link.
         final WebMvcLinkBuilder usersLinkBuilder = linkTo(methodOn
-                (UserController.class).findAll(Pageable.unpaged(), new PagedResourcesAssembler<>(null, null))
+                (UserController.class).find(Pageable.unpaged(), new PagedResourcesAssembler<>(null, null))
         );
         final Link usersLink = buildFrom(USERS_REL_NAME, usersLinkBuilder, PageRequest.of(0, 20));
         rootRepresentationModel.add(usersLink);

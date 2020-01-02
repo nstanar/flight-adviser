@@ -34,6 +34,6 @@ public interface CountryService extends SearchableService<CountryDto, Country> {
      * @param city      City to be added.
      * @return Optional city created if country exists.
      */
-    Optional<CityDto> addOwningAssociationBetween(@NotNull final Long countryId, @NotNull @Valid final CityDto city);
+    Optional<CityDto> createAndAssignFrom(@NotNull final Long countryId, @NotNull @Valid final CityDto city);
 
 }

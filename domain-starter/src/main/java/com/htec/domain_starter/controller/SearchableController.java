@@ -3,7 +3,6 @@ package com.htec.domain_starter.controller;
 import com.htec.domain_starter.repository.entity.BaseEntity;
 import com.htec.domain_starter.service.SearchableService;
 import com.htec.domain_starter.service.dto.BaseDto;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -30,18 +29,10 @@ public interface SearchableController<MODEL extends RepresentationModel<MODEL>, 
      * @return Page of model entities.
      */
     @GetMapping("/search")
-    default ResponseEntity<PagedModel<EntityModel<MODEL>>> findAllBy(@RequestParam(required = false) final String namePrefix, final Pageable pageable, final PagedResourcesAssembler<MODEL> pagedResourcesAssembler) {
-        final Page<MODEL> modelEntities;
-
-        if (StringUtils.isNotBlank(namePrefix)) {
-            modelEntities = getService()
-                    .findBy(namePrefix, pageable)
-                    .map(getModelAssembler()::toModel);
-        } else {
-            modelEntities = getService()
-                    .findAll(pageable)
-                    .map(getModelAssembler()::toModel);
-        }
+    default ResponseEntity<PagedModel<EntityModel<MODEL>>> findBy(@RequestParam(required = false) final String namePrefix, final Pageable pageable, final PagedResourcesAssembler<MODEL> pagedResourcesAssembler) {
+        final Page<MODEL> modelEntities = getService()
+                .findBy(namePrefix, pageable)
+                .map(getModelAssembler()::toModel);
 
         return ResponseEntity.ok(pagedResourcesAssembler.toModel(modelEntities));
 

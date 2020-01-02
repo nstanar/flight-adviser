@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Searchable repository.
  */
 @NoRepositoryBean
+//TODO: if time left, make it generic with criteria API
 public interface SearchableRepository<ENTITY extends BaseEntity> extends JpaRepository<ENTITY, Long> {
 
     /**
