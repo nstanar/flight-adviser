@@ -15,7 +15,7 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
+@ToString(exclude = {"countryId", "countryName"})
 @EqualsAndHashCode
 public class CityDto extends BaseDto {
 

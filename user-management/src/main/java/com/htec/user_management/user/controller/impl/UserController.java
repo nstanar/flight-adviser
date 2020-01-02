@@ -9,6 +9,7 @@ import com.htec.user_management.user.repository.entity.User;
 import com.htec.user_management.user.service.UserService;
 import com.htec.user_management.user.service.dto.UserDto;
 import lombok.AllArgsConstructor;
+import org.springframework.context.MessageSource;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,6 +35,11 @@ public class UserController implements CrudController<UserModel, UserDto, User> 
     private final UserRepresentationModelAssembler assembler;
 
     /**
+     * Message source.
+     */
+    private final MessageSource messageSource;
+
+    /**
      * Gets searchable service.
      *
      * @return Searchable service.
@@ -55,5 +61,15 @@ public class UserController implements CrudController<UserModel, UserDto, User> 
         return assembler;
     }
 
+    /**
+     * Gets message source.
+     *
+     * @return Message source.
+     * @see SearchableController#getMessageSource()
+     */
+    @Override
+    public MessageSource getMessageSource() {
+        return messageSource;
+    }
 
 }

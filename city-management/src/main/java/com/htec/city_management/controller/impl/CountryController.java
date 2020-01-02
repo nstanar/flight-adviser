@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
-import static com.htec.city_management.common.constants.MessageSourceKeys.COUNTRY_DOES_NOT_EXIST;
+import static com.htec.domain_starter.common.constants.MessageSourceKeys.RESOURCE_DOES_NOT_EXIST;
 import static org.springframework.context.i18n.LocaleContextHolder.getLocale;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -35,7 +35,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
  * <p>
  * Rest controller exposing API operations over country.
  * <p>
- * //TODO: add validation messages, check uniquenes of city and country, revise indexes
+ * //TODO: check uniquenes of city and country, revise indexes
  */
 @RestController
 @RequestMapping("/countries")
@@ -73,7 +73,7 @@ public class CountryController implements SearchableController<CountryModel, Cou
     @GetMapping("/{countryId}/cities")
     public ResponseEntity<PagedModel<EntityModel<CityModel>>> findBy(@PathVariable final Long countryId, final Pageable pageable, final PagedResourcesAssembler<CityModel> pagedResourcesAssembler) {
         final Page<CityModel> cities = countryService
-                .findAllBy(countryId, pageable)
+                .findBy(countryId, pageable)
                 .map(cityModelAssembler::toModel);
 
         return ResponseEntity.ok(pagedResourcesAssembler.toModel(cities));
@@ -97,7 +97,7 @@ public class CountryController implements SearchableController<CountryModel, Cou
                     return ResponseEntity.created(location).build();
                 })
                 .orElseThrow(() -> {
-                    final String message = messageSource.getMessage(COUNTRY_DOES_NOT_EXIST, new Object[]{countryId}, getLocale());
+                    final String message = messageSource.getMessage(RESOURCE_DOES_NOT_EXIST, new Object[]{countryId}, getLocale());
                     return new NotFoundException(message);
                 });
     }
@@ -122,6 +122,17 @@ public class CountryController implements SearchableController<CountryModel, Cou
     @Override
     public RepresentationModelAssembler<CountryDto, CountryModel> getModelAssembler() {
         return countryModelAssembler;
+    }
+
+    /**
+     * Gets message source.
+     *
+     * @return Message source.
+     * @see SearchableController#getMessageSource()
+     */
+    @Override
+    public MessageSource getMessageSource() {
+        return messageSource;
     }
 
 }

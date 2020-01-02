@@ -1,6 +1,6 @@
 package com.htec.city_management.repository.entity;
 
-import com.htec.domain_starter.repository.entity.BaseEntity;
+import com.htec.domain_starter.repository.entity.AuditedEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,7 +17,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Comment extends BaseEntity {
+public class Comment extends AuditedEntity {
 
     /**
      * Title of the comment;
@@ -31,10 +31,10 @@ public class Comment extends BaseEntity {
     @Column(nullable = false)
     private String description;
 
+    /**
+     * City comment belongs to.
+     */
     @ManyToOne
     @JoinColumn(name = "city_id", nullable = false)
     private City city;
-
-    //TODO: add auditing
-
 }

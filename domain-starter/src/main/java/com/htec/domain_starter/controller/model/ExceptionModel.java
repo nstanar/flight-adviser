@@ -1,4 +1,4 @@
-package com.htec.domain_starter.controller.representation_model;
+package com.htec.domain_starter.controller.model;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +10,7 @@ import lombok.Getter;
  */
 @Getter
 @Builder
-public class ExceptionRepresentationModel {
+public class ExceptionModel {
 
     /**
      * Message describing exception.

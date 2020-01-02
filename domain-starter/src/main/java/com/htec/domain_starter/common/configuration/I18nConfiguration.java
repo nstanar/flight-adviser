@@ -1,4 +1,4 @@
-package com.htec.domain_starter.configuration;
+package com.htec.domain_starter.common.configuration;
 
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;

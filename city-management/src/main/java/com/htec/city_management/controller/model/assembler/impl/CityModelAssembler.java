@@ -9,7 +9,7 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
-import static com.htec.city_management.common.constants.HypermediaRelNames.OF_COUNTRY_REL_NAME;
+import static com.htec.city_management.common.constants.HypermediaRelNames.OF_COUNTRY;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -48,7 +48,7 @@ public class CityModelAssembler implements RepresentationModelAssembler<CityDto,
 
         final Link countryLink = linkTo(methodOn
                 (CountryController.class).findBy(dto.getCountryId())
-        ).withRel(OF_COUNTRY_REL_NAME);
+        ).withRel(OF_COUNTRY);
 
         cityModel.add(countryLink);
 

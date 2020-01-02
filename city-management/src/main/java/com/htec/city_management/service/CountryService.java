@@ -25,7 +25,7 @@ public interface CountryService extends SearchableService<CountryDto, Country> {
      * @param pageable  Check pageable.
      * @return Page of cities belonging to country;
      */
-    Page<CityDto> findAllBy(Long countryId, Pageable pageable);
+    Page<CityDto> findBy(@NotNull final Long countryId, @NotNull final Pageable pageable);
 
     /**
      * Adds city to the country of certain id.

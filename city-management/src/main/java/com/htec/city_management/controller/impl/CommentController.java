@@ -6,8 +6,10 @@ import com.htec.city_management.repository.entity.Comment;
 import com.htec.city_management.service.CommentService;
 import com.htec.city_management.service.dto.CommentDto;
 import com.htec.domain_starter.controller.CrudController;
+import com.htec.domain_starter.controller.SearchableController;
 import com.htec.domain_starter.service.CrudService;
 import lombok.AllArgsConstructor;
+import org.springframework.context.MessageSource;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,6 +35,11 @@ public class CommentController implements CrudController<CommentModel, CommentDt
     private final CommentModelAssembler commentModelAssembler;
 
     /**
+     * Message source.
+     */
+    private final MessageSource messageSource;
+
+    /**
      * Gets CRUD service.
      *
      * @return CRUD service.
@@ -52,6 +59,17 @@ public class CommentController implements CrudController<CommentModel, CommentDt
     @Override
     public RepresentationModelAssembler<CommentDto, CommentModel> getModelAssembler() {
         return commentModelAssembler;
+    }
+
+    /**
+     * Gets message source.
+     *
+     * @return Message source.
+     * @see SearchableController#getMessageSource()
+     */
+    @Override
+    public MessageSource getMessageSource() {
+        return messageSource;
     }
 
 }

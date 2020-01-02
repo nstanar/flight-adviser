@@ -9,7 +9,7 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
-import static com.htec.city_management.common.constants.HypermediaRelNames.FOR_CITY_REL_NAME;
+import static com.htec.city_management.common.constants.HypermediaRelNames.FOR_CITY;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -33,6 +33,10 @@ public class CommentModelAssembler implements RepresentationModelAssembler<Comme
         final CommentModel commentModel = CommentModel.builder()
                 .title(dto.getTitle())
                 .description(dto.getDescription())
+                .createdBy(dto.getCreatedBy())
+                .createdDate(dto.getCreatedDate())
+                .modifiedBy(dto.getModifiedBy())
+                .modifiedDate(dto.getModifiedDate())
                 .build();
 
         // Add self link.
@@ -45,7 +49,7 @@ public class CommentModelAssembler implements RepresentationModelAssembler<Comme
         // Add city link.
         final Link cityLink = linkTo(methodOn
                 (CityController.class).findBy(dto.getCityId())
-        ).withRel(FOR_CITY_REL_NAME);
+        ).withRel(FOR_CITY);
 
         commentModel.add(cityLink);
 

@@ -6,6 +6,7 @@ import com.htec.city_management.service.dto.converter.CommentDtoConverter;
 import com.htec.domain_starter.repository.entity.BaseEntity;
 import com.htec.domain_starter.service.dto.BaseDto;
 import com.htec.domain_starter.service.dto.converter.DtoConverter;
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
@@ -19,6 +20,7 @@ import javax.validation.constraints.NotNull;
  */
 @Component
 @Validated
+@NoArgsConstructor
 public class CommentDtoConverterImpl implements CommentDtoConverter {
 
     /**
@@ -35,6 +37,10 @@ public class CommentDtoConverterImpl implements CommentDtoConverter {
         dto.setTitle(entity.getTitle());
         dto.setDescription(entity.getDescription());
         dto.setCityId(entity.getCity().getId());
+        dto.setCreatedBy(entity.getCreatedBy());
+        dto.setCreatedDate(entity.getCreatedDate());
+        dto.setModifiedBy(entity.getModifiedBy());
+        dto.setModifiedDate(entity.getModifiedDate());
         return dto;
     }
 

@@ -6,6 +6,7 @@ import com.htec.domain_starter.repository.entity.BaseEntity;
 import com.htec.domain_starter.service.CrudService;
 import com.htec.domain_starter.service.dto.BaseDto;
 import com.htec.domain_starter.service.validation.exception.BusinessValidationException;
+import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.ConstraintViolationException;
 import java.net.URI;
 
+import static com.htec.domain_starter.common.constants.MessageSourceKeys.RESOURCE_DOES_NOT_EXIST;
+import static org.springframework.context.i18n.LocaleContextHolder.getLocale;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -28,11 +31,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
  * Crud controller exposing API operations over MODEl.
  */
 public interface CrudController<MODEL extends RepresentationModel<MODEL>, DTO extends BaseDto, ENTITY extends BaseEntity> {
-
-    /**
-     * Message template for non-existing resource.
-     */
-    String RESOURCE_DOES_NOT_EXIST_MESSAGE_TEMPLATE = "Resource of id %d does not exist.";
 
     /**
      * Finds page of model entities matching name prefix (if present).
@@ -64,8 +62,7 @@ public interface CrudController<MODEL extends RepresentationModel<MODEL>, DTO ex
                 .map(getModelAssembler()::toModel)
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> {
-                    //TODO: extract this as a message key
-                    final String message = String.format(RESOURCE_DOES_NOT_EXIST_MESSAGE_TEMPLATE, id);
+                    final String message = getMessageSource().getMessage(RESOURCE_DOES_NOT_EXIST, new Object[]{id}, getLocale());
                     return new NotFoundException(message);
                 });
     }
@@ -101,8 +98,7 @@ public interface CrudController<MODEL extends RepresentationModel<MODEL>, DTO ex
                 .map(getModelAssembler()::toModel)
                 .map(model -> ResponseEntity.noContent().build())
                 .orElseThrow(() -> {
-                    //TODO: extract this as a message key
-                    final String message = String.format(RESOURCE_DOES_NOT_EXIST_MESSAGE_TEMPLATE, id);
+                    final String message = getMessageSource().getMessage(RESOURCE_DOES_NOT_EXIST, new Object[]{id}, getLocale());
                     return new NotFoundException(message);
                 });
     }
@@ -119,7 +115,7 @@ public interface CrudController<MODEL extends RepresentationModel<MODEL>, DTO ex
         if (getService().deleteBy(id)) {
             return ResponseEntity.noContent().build();
         } else {
-            final String message = String.format(RESOURCE_DOES_NOT_EXIST_MESSAGE_TEMPLATE, id);
+            final String message = getMessageSource().getMessage(RESOURCE_DOES_NOT_EXIST, new Object[]{id}, getLocale());
             throw new NotFoundException(message);
         }
     }
@@ -137,5 +133,12 @@ public interface CrudController<MODEL extends RepresentationModel<MODEL>, DTO ex
      * @return Model assembler.
      */
     RepresentationModelAssembler<DTO, MODEL> getModelAssembler();
+
+    /**
+     * Gets message source.
+     *
+     * @return Message source.
+     */
+    MessageSource getMessageSource();
 
 }

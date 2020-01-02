@@ -1,7 +1,7 @@
 package com.htec.domain_starter.controller.validation.exception.handler;
 
 import com.htec.domain_starter.controller.exception.NotFoundException;
-import com.htec.domain_starter.controller.representation_model.ExceptionRepresentationModel;
+import com.htec.domain_starter.controller.model.ExceptionModel;
 import com.htec.domain_starter.service.validation.exception.BusinessValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -24,11 +24,11 @@ public class ControllerAdvice {
      * Handles {@link NotFoundException}.
      *
      * @param exception Check {@link NotFoundException}.
-     * @return Check. {@link ExceptionRepresentationModel}
+     * @return Check. {@link ExceptionModel}
      */
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ExceptionRepresentationModel handle(final NotFoundException exception) {
+    public ExceptionModel handle(final NotFoundException exception) {
         return createAndLogFrom(exception);
     }
 
@@ -36,11 +36,11 @@ public class ControllerAdvice {
      * Handles {@link BusinessValidationException}.
      *
      * @param exception Check {@link BusinessValidationException}
-     * @return Check {@link ExceptionRepresentationModel}.
+     * @return Check {@link ExceptionModel}.
      */
     @ExceptionHandler(BusinessValidationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionRepresentationModel handle(final BusinessValidationException exception) {
+    public ExceptionModel handle(final BusinessValidationException exception) {
         return createAndLogFrom(exception);
     }
 
@@ -48,28 +48,28 @@ public class ControllerAdvice {
      * Handles {@link ConstraintViolationException}.
      *
      * @param exception Check {@link ConstraintViolationException}.
-     * @return Check {@link ExceptionRepresentationModel}.
+     * @return Check {@link ExceptionModel}.
      */
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionRepresentationModel handle(final ConstraintViolationException exception) {
+    public ExceptionModel handle(final ConstraintViolationException exception) {
         return createAndLogFrom(exception);
     }
 
     /**
-     * Creates {@link ExceptionRepresentationModel}.
+     * Creates {@link ExceptionModel}.
      *
      * @param exception Exception.
-     * @return Check {@link ExceptionRepresentationModel}.
+     * @return Check {@link ExceptionModel}.
      */
-    private ExceptionRepresentationModel createAndLogFrom(final RuntimeException exception) {
+    private ExceptionModel createAndLogFrom(final RuntimeException exception) {
         final String message = exception.getMessage();
         if (log.isDebugEnabled()) {
             log.debug(message, exception);
         } else {
             log.info(message);
         }
-        return ExceptionRepresentationModel.builder()
+        return ExceptionModel.builder()
                 .message(message)
                 .build();
     }

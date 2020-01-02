@@ -12,7 +12,7 @@ import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Component;
 
-import static com.htec.city_management.common.constants.HypermediaRelNames.HAVING_CITIES_REL_NAME;
+import static com.htec.city_management.common.constants.HypermediaRelNames.HAVING_CITIES;
 import static com.htec.domain_starter.controller.util.ControllerLinkBuilder.buildFrom;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -52,7 +52,7 @@ public class CountryModelAssembler implements RepresentationModelAssembler<Count
         final WebMvcLinkBuilder citiesLinkBuilder = linkTo(methodOn
                 (CountryController.class).findBy(countryId, Pageable.unpaged(), new PagedResourcesAssembler<>(null, null))
         );
-        final Link citiesLink = buildFrom(HAVING_CITIES_REL_NAME, citiesLinkBuilder, PageRequest.of(0, 20));
+        final Link citiesLink = buildFrom(HAVING_CITIES, citiesLinkBuilder, PageRequest.of(0, 20));
 
         model.add(citiesLink);
 

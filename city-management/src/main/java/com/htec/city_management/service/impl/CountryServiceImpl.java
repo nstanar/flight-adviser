@@ -66,10 +66,10 @@ public class CountryServiceImpl implements CountryService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<CityDto> findAllBy(final Long countryId, final Pageable pageable) {
+    public Page<CityDto> findBy(@NotNull final Long countryId, @NotNull final Pageable pageable) {
         log.info("Fetching {} of cities for country of id {}.", pageable, countryId);
         return cityRepository
-                .findAllBy(countryId, pageable)
+                .findAllByCountryId(countryId, pageable)
                 .map(cityDtoConverter::from);
     }
 
@@ -92,11 +92,7 @@ public class CountryServiceImpl implements CountryService {
                     log.info("City successfully added to country and given id {}.", createdCity.getId());
                     return createdCity;
                 })
-                .map(cityDtoConverter::from)
-                .or(() -> {
-                    log.info("Country does not exist, thus city cannot be added.");
-                    return Optional.empty();
-                });
+                .map(cityDtoConverter::from);
     }
 
     /**

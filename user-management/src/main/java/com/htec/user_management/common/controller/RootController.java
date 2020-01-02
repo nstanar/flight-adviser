@@ -1,6 +1,6 @@
 package com.htec.user_management.common.controller;
 
-import com.htec.domain_starter.controller.representation_model.RootRepresentationModel;
+import com.htec.domain_starter.controller.model.RootModel;
 import com.htec.user_management.user.controller.impl.UserController;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -34,11 +34,11 @@ public class RootController {
     /**
      * Returns root representation model.
      *
-     * @return Check {@link RootRepresentationModel}.
+     * @return Check {@link RootModel}.
      */
     @GetMapping
-    public ResponseEntity<RootRepresentationModel> get() {
-        final RootRepresentationModel rootRepresentationModel = RootRepresentationModel.builder()
+    public ResponseEntity<RootModel> get() {
+        final RootModel rootModel = RootModel.builder()
                 .description(API_NAME)
                 .build();
 
@@ -47,9 +47,9 @@ public class RootController {
                 (UserController.class).find(Pageable.unpaged(), new PagedResourcesAssembler<>(null, null))
         );
         final Link usersLink = buildFrom(USERS_REL_NAME, usersLinkBuilder, PageRequest.of(0, 20));
-        rootRepresentationModel.add(usersLink);
+        rootModel.add(usersLink);
 
-        return ResponseEntity.ok(rootRepresentationModel);
+        return ResponseEntity.ok(rootModel);
     }
 
 }

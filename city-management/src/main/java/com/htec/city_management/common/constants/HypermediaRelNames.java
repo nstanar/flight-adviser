@@ -14,15 +14,15 @@ public final class HypermediaRelNames {
     /**
      * Defines "having cities" relation.
      */
-    public static final String HAVING_CITIES_REL_NAME = "havingCities";
+    public static final String HAVING_CITIES = "havingCities";
 
     /**
      * Defines "of country' relation.
      */
-    public static final String OF_COUNTRY_REL_NAME = "ofCountry";
+    public static final String OF_COUNTRY = "ofCountry";
 
     /**
      * Defines "for city" relation.
      */
-    public static final String FOR_CITY_REL_NAME = "forCity";
+    public static final String FOR_CITY = "forCity";
 }

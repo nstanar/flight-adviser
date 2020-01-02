@@ -1,4 +1,4 @@
-package com.htec.domain_starter.controller.representation_model;
+package com.htec.domain_starter.controller.model;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import org.springframework.hateoas.RepresentationModel;
  */
 @Getter
 @Builder
-public class RootRepresentationModel extends RepresentationModel<RootRepresentationModel> {
+public class RootModel extends RepresentationModel<RootModel> {
 
     /**
      * Description.

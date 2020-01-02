@@ -7,6 +7,7 @@ import com.htec.city_management.service.dto.CommentDto;
 import com.htec.city_management.service.dto.converter.CommentDtoConverter;
 import com.htec.domain_starter.service.dto.converter.DtoConverter;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ import org.springframework.validation.annotation.Validated;
 @Service
 @Transactional
 @Validated
+@Slf4j
 @AllArgsConstructor
 public class CommentServiceImpl implements CommentService {
 

@@ -1,10 +1,11 @@
 package com.htec.city_management.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.htec.domain_starter.service.dto.BaseDto;
+import com.htec.domain_starter.service.dto.AuditAwareDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -17,7 +18,8 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @NoArgsConstructor
-public class CommentDto extends BaseDto {
+@ToString(exclude = {"cityId"})
+public class CommentDto extends AuditAwareDto {
 
     /**
      * Title of the comment;
