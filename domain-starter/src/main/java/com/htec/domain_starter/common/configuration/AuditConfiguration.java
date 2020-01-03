@@ -21,5 +21,5 @@ public class AuditConfiguration {
     public AuditorAware<String> auditorAware() {
         return () -> Optional.of("unknown");
     }
-    
+
 }

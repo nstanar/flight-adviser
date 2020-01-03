@@ -104,10 +104,10 @@ public class CityController implements SearchableController<CityModel, CityDto, 
      * Gets searchable service.
      *
      * @return Searchable service.
-     * @see SearchableController#getService()
+     * @see SearchableController#getUserService()
      */
     @Override
-    public SearchableService<CityDto, City> getService() {
+    public SearchableService<CityDto, City> getUserService() {
         return cityService;
     }
 

@@ -2,6 +2,7 @@ package com.htec.user_management.user.service.dto.converter.impl;
 
 import com.htec.domain_starter.repository.entity.BaseEntity;
 import com.htec.domain_starter.service.dto.BaseDto;
+import com.htec.domain_starter.service.util.CharArrayShredder;
 import com.htec.user_management.user.repository.entity.User;
 import com.htec.user_management.user.service.dto.UserDto;
 import com.htec.user_management.user.service.dto.converter.UserDtoConverter;
@@ -11,7 +12,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
-import java.util.Arrays;
 
 import static java.nio.CharBuffer.wrap;
 
@@ -29,6 +29,11 @@ public class UserDtoConverterImpl implements UserDtoConverter {
      * Password encoder.
      */
     private final PasswordEncoder passwordEncoder;
+
+    /**
+     * For password shredding.
+     */
+    private final CharArrayShredder charArrayShredder;
 
     /**
      * Converts user entity to dto.
@@ -74,20 +79,11 @@ public class UserDtoConverterImpl implements UserDtoConverter {
         existingEntity.setLastName(dto.getLastName());
         existingEntity.setUsername(dto.getUsername());
 
-        /* Encode password */
+        // Encode password.
         final char[] password = dto.getPassword();
         existingEntity.setPassword(passwordEncoder.encode(wrap(password)));
-        clearPasswordField(password);
+        charArrayShredder.shred(password);
 
         return existingEntity;
-    }
-
-    /**
-     * Clears password field.
-     *
-     * @param password Password.
-     */
-    private void clearPasswordField(final char[] password) {
-        Arrays.fill(password, '\u0000');
     }
 }

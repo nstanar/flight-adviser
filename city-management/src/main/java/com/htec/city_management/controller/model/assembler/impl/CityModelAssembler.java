@@ -5,11 +5,17 @@ import com.htec.city_management.controller.impl.CountryController;
 import com.htec.city_management.controller.model.CityModel;
 import com.htec.city_management.service.dto.CityDto;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Component;
 
+import static com.htec.city_management.common.constants.HypermediaRelNames.HAVING_COMMENTS;
 import static com.htec.city_management.common.constants.HypermediaRelNames.OF_COUNTRY;
+import static com.htec.domain_starter.controller.util.ControllerLinkBuilder.buildFrom;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -44,13 +50,22 @@ public class CityModelAssembler implements RepresentationModelAssembler<CityDto,
 
         cityModel.add(selfLink);
 
-        // Add country link because of possible properties in future.
+        final Long countryId = dto.getCountryId();
 
+        // Add country link.
         final Link countryLink = linkTo(methodOn
-                (CountryController.class).findBy(dto.getCountryId())
+                (CountryController.class).findBy(countryId)
         ).withRel(OF_COUNTRY);
 
         cityModel.add(countryLink);
+
+        // Add comments link.
+        final WebMvcLinkBuilder commentsLinkBuilder = linkTo(methodOn
+                (CityController.class).findBy(countryId, Pageable.unpaged(), new PagedResourcesAssembler<>(null, null))
+        );
+        final Link commentsLink = buildFrom(HAVING_COMMENTS, commentsLinkBuilder, PageRequest.of(0, 20));
+
+        cityModel.add(commentsLink);
 
         return cityModel;
     }

@@ -97,10 +97,10 @@ public class CityServiceImpl implements CityService {
      * Gets dto converter.
      *
      * @return Check {@link DtoConverter}.
-     * @see CityService#getDtoConverter()
+     * @see CityService#getUserDtoConverter()
      */
     @Override
-    public DtoConverter<CityDto, City> getDtoConverter() {
+    public DtoConverter<CityDto, City> getUserDtoConverter() {
         return cityDtoConverter;
     }
 
@@ -108,10 +108,10 @@ public class CityServiceImpl implements CityService {
      * Gets searchable repository.
      *
      * @return Check {@link SearchableRepository}.
-     * @see CityService#getRepository()
+     * @see CityService#getUserRepository()
      */
     @Override
-    public SearchableRepository<City> getRepository() {
+    public SearchableRepository<City> getUserRepository() {
         return cityRepository;
     }
 }

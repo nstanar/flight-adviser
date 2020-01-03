@@ -30,7 +30,7 @@ public interface SearchableController<MODEL extends RepresentationModel<MODEL>, 
      */
     @GetMapping("/search")
     default ResponseEntity<PagedModel<EntityModel<MODEL>>> findBy(@RequestParam(required = false) final String namePrefix, final Pageable pageable, final PagedResourcesAssembler<MODEL> pagedResourcesAssembler) {
-        final Page<MODEL> modelEntities = getService()
+        final Page<MODEL> modelEntities = getUserService()
                 .findBy(namePrefix, pageable)
                 .map(getModelAssembler()::toModel);
 
@@ -44,6 +44,6 @@ public interface SearchableController<MODEL extends RepresentationModel<MODEL>, 
      * @return Searchable service.
      */
     @Override
-    SearchableService<DTO, ENTITY> getService();
+    SearchableService<DTO, ENTITY> getUserService();
 
 }

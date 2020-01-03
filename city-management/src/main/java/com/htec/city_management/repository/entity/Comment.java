@@ -24,13 +24,13 @@ public class Comment extends AuditedEntity {
     /**
      * Title of the comment;
      */
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private String title;
 
     /**
      * Description of the comment.
      */
-    @Column(nullable = false)
+    @Column(nullable = false, length = 500)
     private String description;
 
     /**

@@ -34,6 +34,4 @@ public class Country extends BaseEntity {
     @OneToMany(mappedBy = "country", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<City> cities;
 
-    //TODO: use schema + data instead of annotation
-
 }

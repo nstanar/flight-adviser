@@ -16,4 +16,8 @@ public final class MessageSourceKeys {
      */
     public static final String USERNAME_ALREADY_EXISTS = "username_already_exists";
 
+    /**
+     * Used to indicate that credentials are invalid.
+     */
+    public static final String INVALID_CREDENTIALS = "invalid_credentials";
 }

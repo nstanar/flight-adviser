@@ -23,26 +23,28 @@ public class UserDto extends BaseDto {
      * User's first name.
      */
     @NotBlank
+    @Size(min = 1, max = 50)
     private String firstName;
 
     /**
      * User's last name.
      */
     @NotBlank
+    @Size(min = 1, max = 50)
     private String lastName;
 
     /**
      * User's username.
      */
     @NotBlank
-    @Size(min = 4, max = 20)
+    @Size(min = 5, max = 50)
     private String username;
 
     /**
      * User's password.
      */
     @NotEmpty
-    @Size(min = 6, max = 20)
+    @Size(min = 6, max = 255)
     //TODO: apply pattern for password
     private char[] password;
 

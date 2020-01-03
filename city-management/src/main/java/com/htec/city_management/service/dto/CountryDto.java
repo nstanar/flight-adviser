@@ -4,6 +4,7 @@ import com.htec.domain_starter.service.dto.BaseDto;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 /**
  * @author Nikola Stanar
@@ -21,7 +22,7 @@ public class CountryDto extends BaseDto {
      * Name of the country.
      */
     @NotBlank
-    //TODO: set max size after varchar length is set
+    @Size(min = 1, max = 255)
     private String name;
 
 }

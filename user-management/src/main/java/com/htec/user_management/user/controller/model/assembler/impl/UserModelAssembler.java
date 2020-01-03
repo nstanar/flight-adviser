@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @NoArgsConstructor
-public class UserRepresentationModelAssembler implements RepresentationModelAssembler<UserDto, UserModel> {
+public class UserModelAssembler implements RepresentationModelAssembler<UserDto, UserModel> {
 
     /**
      * Assembles user representation model from user dto.

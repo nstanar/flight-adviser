@@ -25,16 +25,14 @@ public class CommentDto extends AuditAwareDto {
      * Title of the comment;
      */
     @NotBlank
-    @Size(min = 5)
-    //TODO: comply with varchar lenght
+    @Size(min = 3, max = 50)
     private String title;
 
     /**
      * Description of the comment.
      */
     @NotBlank
-    @Size(min = 10)
-    //TODO: comply with varchar lenght
+    @Size(min = 4, max = 500)
     private String description;
 
     /**

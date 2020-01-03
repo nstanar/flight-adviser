@@ -23,15 +23,14 @@ public class CityDto extends BaseDto {
      * City name.
      */
     @NotBlank
-    //TODO:adjust this after varchar length is set.
+    @Size(min = 1, max = 255)
     private String name;
 
     /**
      * Description of the city.
      */
     @NotBlank
-    //TODO: adjust this after varchar lenght is set
-    @Size(min = 20)
+    @Size(min = 10, max = 1000)
     private String description;
 
     /**

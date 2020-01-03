@@ -38,7 +38,7 @@ public class City extends BaseEntity {
     /**
      * Description of the city.
      */
-    @Column(nullable = false)
+    @Column(nullable = false, length = 1000)
     private String description;
 
     /**

@@ -33,9 +33,9 @@ public interface CrudService<DTO extends BaseDto, ENTITY extends BaseEntity> ext
      */
     @Transactional(readOnly = true)
     default Page<DTO> find(final Pageable pageable) {
-        return getRepository()
+        return getUserRepository()
                 .findAll(pageable)
-                .map(getDtoConverter()::from);
+                .map(getUserDtoConverter()::from);
     }
 
     /**
@@ -46,9 +46,9 @@ public interface CrudService<DTO extends BaseDto, ENTITY extends BaseEntity> ext
      */
     @Transactional(readOnly = true)
     default Optional<DTO> findBy(@NotNull final Long id) {
-        return getRepository()
+        return getUserRepository()
                 .findById(id)
-                .map(getDtoConverter()::from);
+                .map(getUserDtoConverter()::from);
     }
 
     /**
@@ -59,10 +59,10 @@ public interface CrudService<DTO extends BaseDto, ENTITY extends BaseEntity> ext
      */
     @Transactional
     default DTO createFrom(@NotNull @Valid final DTO dto) {
-        final ENTITY entity = getDtoConverter().from(dto);
-        final ENTITY createdEntity = getRepository()
+        final ENTITY entity = getUserDtoConverter().from(dto);
+        final ENTITY createdEntity = getUserRepository()
                 .save(entity);
-        return getDtoConverter().from(createdEntity);
+        return getUserDtoConverter().from(createdEntity);
     }
 
     /**
@@ -74,10 +74,10 @@ public interface CrudService<DTO extends BaseDto, ENTITY extends BaseEntity> ext
      */
     @Transactional
     default Optional<DTO> updateFrom(@NotNull final Long id, @NotNull @Valid final DTO dto) {
-        final Optional<ENTITY> optionalEntity = getRepository().findById(id);
+        final Optional<ENTITY> optionalEntity = getUserRepository().findById(id);
         return optionalEntity
-                .map(entity -> getDtoConverter().from(dto, entity))
-                .map(getDtoConverter()::from);
+                .map(entity -> getUserDtoConverter().from(dto, entity))
+                .map(getUserDtoConverter()::from);
     }
 
     /**
@@ -88,9 +88,9 @@ public interface CrudService<DTO extends BaseDto, ENTITY extends BaseEntity> ext
      */
     @Transactional
     default boolean deleteBy(final Long id) {
-        final boolean exists = getRepository().existsById(id);
+        final boolean exists = getUserRepository().existsById(id);
         if (exists) {
-            getRepository().deleteById(id);
+            getUserRepository().deleteById(id);
         }
         return exists;
     }
@@ -105,9 +105,9 @@ public interface CrudService<DTO extends BaseDto, ENTITY extends BaseEntity> ext
     default void createFrom(final @NotEmpty Collection<@NotNull @Valid DTO> dtoS) {
         final Set<ENTITY> entities = dtoS
                 .stream()
-                .map(getDtoConverter()::from)
+                .map(getUserDtoConverter()::from)
                 .collect(Collectors.toSet());
-        getRepository().saveAll(entities);
+        getUserRepository().saveAll(entities);
     }
 
     /**
@@ -115,6 +115,6 @@ public interface CrudService<DTO extends BaseDto, ENTITY extends BaseEntity> ext
      *
      * @return Check {@link JpaRepository}.
      */
-    JpaRepository<ENTITY, Long> getRepository();
+    JpaRepository<ENTITY, Long> getUserRepository();
 
 }

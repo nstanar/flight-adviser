@@ -16,6 +16,6 @@ public interface Convertible<DTO extends BaseDto, ENTITY extends BaseEntity> {
      *
      * @return Check {@link DtoConverter}.
      */
-    DtoConverter<DTO, ENTITY> getDtoConverter();
+    DtoConverter<DTO, ENTITY> getUserDtoConverter();
 
 }

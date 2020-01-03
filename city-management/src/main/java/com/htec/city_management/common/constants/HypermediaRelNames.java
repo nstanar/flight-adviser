@@ -25,4 +25,9 @@ public final class HypermediaRelNames {
      * Defines "for city" relation.
      */
     public static final String FOR_CITY = "forCity";
+
+    /**
+     * Defines "having comments" relation.
+     */
+    public static final String HAVING_COMMENTS = "havingComments";
 }

@@ -40,10 +40,10 @@ public class CommentServiceImpl implements CommentService {
      * Gets jpa repository.
      *
      * @return Jpa repository.
-     * @see CommentService#getRepository()
+     * @see CommentService#getUserRepository()
      */
     @Override
-    public JpaRepository<Comment, Long> getRepository() {
+    public JpaRepository<Comment, Long> getUserRepository() {
         return commentRepository;
     }
 
@@ -51,10 +51,10 @@ public class CommentServiceImpl implements CommentService {
      * Gets dto converter.
      *
      * @return Dto converter.
-     * @see CommentService#getDtoConverter()
+     * @see CommentService#getUserDtoConverter()
      */
     @Override
-    public DtoConverter<CommentDto, Comment> getDtoConverter() {
+    public DtoConverter<CommentDto, Comment> getUserDtoConverter() {
         return commentDtoConverter;
     }
 }

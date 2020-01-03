@@ -43,10 +43,10 @@ public class CommentController implements CrudController<CommentModel, CommentDt
      * Gets CRUD service.
      *
      * @return CRUD service.
-     * @see CrudController#getService()
+     * @see CrudController#getUserService()
      */
     @Override
-    public CrudService<CommentDto, Comment> getService() {
+    public CrudService<CommentDto, Comment> getUserService() {
         return commentService;
     }
 

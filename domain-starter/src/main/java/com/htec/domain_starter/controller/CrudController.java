@@ -41,7 +41,7 @@ public interface CrudController<MODEL extends RepresentationModel<MODEL>, DTO ex
      */
     @GetMapping
     default ResponseEntity<PagedModel<EntityModel<MODEL>>> find(final Pageable pageable, final PagedResourcesAssembler<MODEL> pagedResourcesAssembler) {
-        final Page<MODEL> modelEntities = getService()
+        final Page<MODEL> modelEntities = getUserService()
                 .find(pageable)
                 .map(getModelAssembler()::toModel);
 
@@ -57,7 +57,7 @@ public interface CrudController<MODEL extends RepresentationModel<MODEL>, DTO ex
      */
     @GetMapping("/{id}")
     default ResponseEntity<MODEL> findBy(@PathVariable final Long id) {
-        return getService()
+        return getUserService()
                 .findBy(id)
                 .map(getModelAssembler()::toModel)
                 .map(ResponseEntity::ok)
@@ -77,7 +77,7 @@ public interface CrudController<MODEL extends RepresentationModel<MODEL>, DTO ex
      */
     @PostMapping
     default ResponseEntity<Void> createFrom(@RequestBody final DTO dto) {
-        final Long id = getService().createFrom(dto).getId();
+        final Long id = getUserService().createFrom(dto).getId();
         final URI location = linkTo(methodOn(getClass()).findBy(id)).toUri();
         return ResponseEntity.created(location).build();
     }
@@ -93,7 +93,7 @@ public interface CrudController<MODEL extends RepresentationModel<MODEL>, DTO ex
      */
     @PutMapping("/{id}")
     default ResponseEntity<?> updateFrom(@PathVariable final Long id, @RequestBody final DTO dto) {
-        return getService()
+        return getUserService()
                 .updateFrom(id, dto)
                 .map(getModelAssembler()::toModel)
                 .map(model -> ResponseEntity.noContent().build())
@@ -112,7 +112,7 @@ public interface CrudController<MODEL extends RepresentationModel<MODEL>, DTO ex
      */
     @DeleteMapping("/{id}")
     default ResponseEntity<?> deleteBy(@PathVariable final Long id) {
-        if (getService().deleteBy(id)) {
+        if (getUserService().deleteBy(id)) {
             return ResponseEntity.noContent().build();
         } else {
             final String message = getMessageSource().getMessage(RESOURCE_DOES_NOT_EXIST, new Object[]{id}, getLocale());
@@ -125,7 +125,7 @@ public interface CrudController<MODEL extends RepresentationModel<MODEL>, DTO ex
      *
      * @return Crud service.
      */
-    CrudService<DTO, ENTITY> getService();
+    CrudService<DTO, ENTITY> getUserService();
 
     /**
      * Gets model assembler.

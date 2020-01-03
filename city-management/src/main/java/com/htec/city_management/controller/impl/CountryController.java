@@ -35,7 +35,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
  * <p>
  * Rest controller exposing API operations over country.
  * <p>
- * //TODO: check uniquenes of city and country, revise indexes
  */
 @RestController
 @RequestMapping("/countries")
@@ -106,10 +105,10 @@ public class CountryController implements SearchableController<CountryModel, Cou
      * Gets searchable service.
      *
      * @return Searchable service.
-     * @see SearchableController#getService()
+     * @see SearchableController#getUserService()
      */
     @Override
-    public SearchableService<CountryDto, Country> getService() {
+    public SearchableService<CountryDto, Country> getUserService() {
         return countryService;
     }
 

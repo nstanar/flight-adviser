@@ -99,10 +99,10 @@ public class CountryServiceImpl implements CountryService {
      * Gets dto converter.
      *
      * @return Check {@link DtoConverter}.
-     * @see CountryService#getDtoConverter()
+     * @see CountryService#getUserDtoConverter()
      */
     @Override
-    public DtoConverter<CountryDto, Country> getDtoConverter() {
+    public DtoConverter<CountryDto, Country> getUserDtoConverter() {
         return countryDtoConverter;
     }
 
@@ -110,10 +110,10 @@ public class CountryServiceImpl implements CountryService {
      * Gets searchable repository.
      *
      * @return Check {@link SearchableRepository}.
-     * @see CountryService#getRepository()
+     * @see CountryService#getUserRepository()
      */
     @Override
-    public SearchableRepository<Country> getRepository() {
+    public SearchableRepository<Country> getUserRepository() {
         return countryRepository;
     }
 }
