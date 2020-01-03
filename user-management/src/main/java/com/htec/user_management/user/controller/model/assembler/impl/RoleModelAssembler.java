@@ -24,7 +24,7 @@ public class RoleModelAssembler implements RepresentationModelAssembler<RoleDto,
     @Override
     public RoleModel toModel(final RoleDto dto) {
         return RoleModel.builder()
-                .name(dto.getName())
+                .name(dto.getValue().getName())
                 .build();
     }
 }

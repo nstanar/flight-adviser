@@ -6,6 +6,8 @@ import com.htec.city_management.service.dto.CommentDto;
 import com.htec.domain_starter.service.SearchableService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -16,6 +18,8 @@ import java.util.Optional;
  * <p>
  * Service for operations over city.
  */
+@Transactional
+@Validated
 public interface CityService extends SearchableService<CityDto, City> {
 
     /**
@@ -25,6 +29,7 @@ public interface CityService extends SearchableService<CityDto, City> {
      * @param pageable Check pageable.
      * @return Page of comments belonging to city;
      */
+    @Transactional(readOnly = true)
     Page<CommentDto> findBy(@NotNull final Long cityId, @NotNull final Pageable pageable);
 
     /**

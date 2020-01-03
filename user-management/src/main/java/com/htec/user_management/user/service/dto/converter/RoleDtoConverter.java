@@ -30,7 +30,7 @@ public class RoleDtoConverter implements DtoConverter<RoleDto, Role> {
     public RoleDto from(@NotNull final Role entity) {
         final RoleDto dto = new RoleDto();
         dto.setId(entity.getId());
-        dto.setName(entity.getName());
+        dto.setValue(RoleDto.Value.valueOf(entity.getName()));
         return dto;
     }
 
@@ -56,7 +56,7 @@ public class RoleDtoConverter implements DtoConverter<RoleDto, Role> {
      */
     @Override
     public Role from(@NotNull final RoleDto dto, @NotNull final Role existingEntity) {
-        existingEntity.setName(dto.getName());
+        existingEntity.setName(dto.getValue().getName());
         return existingEntity;
     }
 }

@@ -1,5 +1,6 @@
 package com.htec.user_management.user.repository.entity;
 
+import com.htec.domain_starter.repository.entity.AuditedEntity;
 import com.htec.domain_starter.repository.entity.BaseEntity;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,7 +22,7 @@ import java.util.Set;
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = "password")
 @ToString(exclude = "password")
-public class User extends BaseEntity implements UserDetails {
+public class User extends AuditedEntity implements UserDetails {
 
     /**
      * User's first name.

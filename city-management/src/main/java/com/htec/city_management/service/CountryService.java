@@ -6,6 +6,8 @@ import com.htec.city_management.service.dto.CountryDto;
 import com.htec.domain_starter.service.SearchableService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -16,6 +18,8 @@ import java.util.Optional;
  * <p>
  * Service for operations over country.
  */
+@Transactional
+@Validated
 public interface CountryService extends SearchableService<CountryDto, Country> {
 
     /**
@@ -25,6 +29,7 @@ public interface CountryService extends SearchableService<CountryDto, Country> {
      * @param pageable  Check pageable.
      * @return Page of cities belonging to country;
      */
+    @Transactional(readOnly = true)
     Page<CityDto> findBy(@NotNull final Long countryId, @NotNull final Pageable pageable);
 
     /**

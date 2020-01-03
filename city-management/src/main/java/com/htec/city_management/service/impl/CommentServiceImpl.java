@@ -10,8 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 
 /**
  * @author Nikola Stanar
@@ -20,8 +18,6 @@ import org.springframework.validation.annotation.Validated;
  * @see CommentService
  */
 @Service
-@Transactional
-@Validated
 @Slf4j
 @AllArgsConstructor
 public class CommentServiceImpl implements CommentService {
@@ -40,10 +36,10 @@ public class CommentServiceImpl implements CommentService {
      * Gets jpa repository.
      *
      * @return Jpa repository.
-     * @see CommentService#getUserRepository()
+     * @see CommentService#getRepository()
      */
     @Override
-    public JpaRepository<Comment, Long> getUserRepository() {
+    public JpaRepository<Comment, Long> getRepository() {
         return commentRepository;
     }
 
@@ -51,10 +47,10 @@ public class CommentServiceImpl implements CommentService {
      * Gets dto converter.
      *
      * @return Dto converter.
-     * @see CommentService#getUserDtoConverter()
+     * @see CommentService#getDtoConverter()
      */
     @Override
-    public DtoConverter<CommentDto, Comment> getUserDtoConverter() {
+    public DtoConverter<CommentDto, Comment> getDtoConverter() {
         return commentDtoConverter;
     }
 }

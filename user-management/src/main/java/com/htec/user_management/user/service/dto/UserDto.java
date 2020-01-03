@@ -1,5 +1,6 @@
 package com.htec.user_management.user.service.dto;
 
+import com.htec.domain_starter.service.dto.AuditAwareDto;
 import com.htec.domain_starter.service.dto.BaseDto;
 import lombok.*;
 
@@ -17,7 +18,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @ToString(exclude = {"password"})
 @EqualsAndHashCode(exclude = {"password"})
-public class UserDto extends BaseDto {
+public class UserDto extends AuditAwareDto {
 
     /**
      * User's first name.

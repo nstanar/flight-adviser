@@ -20,4 +20,9 @@ public final class MessageSourceKeys {
      * Used to indicate that credentials are invalid.
      */
     public static final String INVALID_CREDENTIALS = "invalid_credentials";
+
+    /**
+     * Used to indicate that user does not exist.
+     */
+    public static final String USER_DOES_NOT_EXIST = "user_does_not_exist";
 }

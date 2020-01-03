@@ -4,6 +4,7 @@ import com.htec.user_management.user.repository.UserRepository;
 import com.htec.user_management.user.repository.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Hibernate;
 import org.springframework.context.MessageSource;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -54,7 +55,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             final String message = messageSource.getMessage(INVALID_CREDENTIALS, new Object[]{}, getLocale());
             throw new UsernameNotFoundException(message);
         }
-        return optionalUser.get();
+        final User user = optionalUser.get();
+        Hibernate.initialize(user.getRoles());
+        return user;
     }
 
 }

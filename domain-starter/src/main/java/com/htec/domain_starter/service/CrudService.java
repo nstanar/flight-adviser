@@ -6,7 +6,9 @@ import com.htec.domain_starter.service.dto.converter.Convertible;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
@@ -23,6 +25,8 @@ import java.util.stream.Collectors;
  */
 //TODO: AOP
 //TODO: add bulk insert
+@Transactional
+@Validated
 public interface CrudService<DTO extends BaseDto, ENTITY extends BaseEntity> extends Convertible<DTO, ENTITY> {
 
     /**
@@ -31,11 +35,12 @@ public interface CrudService<DTO extends BaseDto, ENTITY extends BaseEntity> ext
      * @param pageable Check {@link Pageable}.
      * @return Page of DTOs.
      */
+    @PreAuthorize("isAuthenticated()")
     @Transactional(readOnly = true)
     default Page<DTO> find(final Pageable pageable) {
-        return getUserRepository()
+        return getRepository()
                 .findAll(pageable)
-                .map(getUserDtoConverter()::from);
+                .map(getDtoConverter()::from);
     }
 
     /**
@@ -44,11 +49,12 @@ public interface CrudService<DTO extends BaseDto, ENTITY extends BaseEntity> ext
      * @param id ID of the DTO.
      * @return Optional DTO.
      */
+    @PreAuthorize("isAuthenticated()")
     @Transactional(readOnly = true)
     default Optional<DTO> findBy(@NotNull final Long id) {
-        return getUserRepository()
+        return getRepository()
                 .findById(id)
-                .map(getUserDtoConverter()::from);
+                .map(getDtoConverter()::from);
     }
 
     /**
@@ -57,12 +63,12 @@ public interface CrudService<DTO extends BaseDto, ENTITY extends BaseEntity> ext
      * @param dto Dto holding content that is about to be created.
      * @return Id of the created dto.
      */
-    @Transactional
+    @PreAuthorize("isAuthenticated()")
     default DTO createFrom(@NotNull @Valid final DTO dto) {
-        final ENTITY entity = getUserDtoConverter().from(dto);
-        final ENTITY createdEntity = getUserRepository()
+        final ENTITY entity = getDtoConverter().from(dto);
+        final ENTITY createdEntity = getRepository()
                 .save(entity);
-        return getUserDtoConverter().from(createdEntity);
+        return getDtoConverter().from(createdEntity);
     }
 
     /**
@@ -72,27 +78,31 @@ public interface CrudService<DTO extends BaseDto, ENTITY extends BaseEntity> ext
      * @param dto DTO holding update content.
      * @return Optional updated DTO if id exist, else empty.
      */
-    @Transactional
+    //TODO: fix this for comments
+    @PreAuthorize("hasRole('ADMIN')")
     default Optional<DTO> updateFrom(@NotNull final Long id, @NotNull @Valid final DTO dto) {
-        final Optional<ENTITY> optionalEntity = getUserRepository().findById(id);
+        final Optional<ENTITY> optionalEntity = getRepository().findById(id);
         return optionalEntity
-                .map(entity -> getUserDtoConverter().from(dto, entity))
-                .map(getUserDtoConverter()::from);
+                .map(entity -> getRepository().save(getDtoConverter().from(dto, entity)))
+                .map(getDtoConverter()::from);
     }
 
     /**
      * Deletes DTO by id.
      *
      * @param id Id of the DTO.
-     * @return true if found; otherwise false.
+     * @return Optionally deleted DTO if existed.
      */
-    @Transactional
-    default boolean deleteBy(final Long id) {
-        final boolean exists = getUserRepository().existsById(id);
-        if (exists) {
-            getUserRepository().deleteById(id);
+    @PreAuthorize("hasRole('ADMIN')")
+    //TODO: fix this for comments
+    default Optional<DTO> deleteBy(final Long id) {
+        final Optional<ENTITY> optionalEntity = getRepository().findById(id);
+        Optional<DTO> deletedDto = Optional.empty();
+        if (optionalEntity.isPresent()) {
+            deletedDto = Optional.of(getDtoConverter().from(optionalEntity.get()));
+            getRepository().deleteById(id);
         }
-        return exists;
+        return deletedDto;
     }
 
     /**
@@ -100,14 +110,13 @@ public interface CrudService<DTO extends BaseDto, ENTITY extends BaseEntity> ext
      *
      * @param dtoS Stream of dtoS holding content that is about to be created.
      */
-    //TODO: extract this.
-    @Transactional
+    @PreAuthorize("hasRole('ADMIN')")
     default void createFrom(final @NotEmpty Collection<@NotNull @Valid DTO> dtoS) {
         final Set<ENTITY> entities = dtoS
                 .stream()
-                .map(getUserDtoConverter()::from)
+                .map(getDtoConverter()::from)
                 .collect(Collectors.toSet());
-        getUserRepository().saveAll(entities);
+        getRepository().saveAll(entities);
     }
 
     /**
@@ -115,6 +124,6 @@ public interface CrudService<DTO extends BaseDto, ENTITY extends BaseEntity> ext
      *
      * @return Check {@link JpaRepository}.
      */
-    JpaRepository<ENTITY, Long> getUserRepository();
+    JpaRepository<ENTITY, Long> getRepository();
 
 }

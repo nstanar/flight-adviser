@@ -22,4 +22,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Transactional(readOnly = true)
     Optional<User> findByUsername(final String username);
 
+    /**
+     * Deletes user by username.
+     *
+     * @param username User's username.
+     */
+    void deleteByUsername(final String username);
+
 }

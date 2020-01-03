@@ -4,8 +4,6 @@ import com.htec.user_management.user.repository.entity.Role;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 /**
  * @author Nikola Stanar
  * <p>
@@ -14,12 +12,12 @@ import java.util.List;
 public interface RoleRepository extends CrudRepository<Role, Long> {
 
     /**
-     * Finds user roles.
+     * Finds role by name.
      *
-     * @param userId Id of the user.
-     * @return Roles of the user.
+     * @param name Name of the role.
+     * @return Role.
      */
     @Transactional(readOnly = true)
-    List<Role> findAllByUserId(final Long userId);
+    Role findByName(final String name);
 
 }

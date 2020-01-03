@@ -1,4 +1,4 @@
-package com.htec.domain_starter.controller.exception;
+package com.htec.domain_starter.service.validation.exception;
 
 /**
  * @author Nikola Stanar

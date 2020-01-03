@@ -16,8 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -30,8 +28,6 @@ import java.util.Optional;
  * @see CountryService
  */
 @Service
-@Transactional
-@Validated
 @Slf4j
 @AllArgsConstructor
 //TODO: if there is time, introduce AOP for cross-cutting concerns like logging.
@@ -65,7 +61,6 @@ public class CountryServiceImpl implements CountryService {
      * @return Page of cities belonging to country;
      */
     @Override
-    @Transactional(readOnly = true)
     public Page<CityDto> findBy(@NotNull final Long countryId, @NotNull final Pageable pageable) {
         log.info("Fetching {} of cities for country of id {}.", pageable, countryId);
         return cityRepository
@@ -99,10 +94,10 @@ public class CountryServiceImpl implements CountryService {
      * Gets dto converter.
      *
      * @return Check {@link DtoConverter}.
-     * @see CountryService#getUserDtoConverter()
+     * @see CountryService#getDtoConverter()
      */
     @Override
-    public DtoConverter<CountryDto, Country> getUserDtoConverter() {
+    public DtoConverter<CountryDto, Country> getDtoConverter() {
         return countryDtoConverter;
     }
 
@@ -110,10 +105,10 @@ public class CountryServiceImpl implements CountryService {
      * Gets searchable repository.
      *
      * @return Check {@link SearchableRepository}.
-     * @see CountryService#getUserRepository()
+     * @see CountryService#getRepository()
      */
     @Override
-    public SearchableRepository<Country> getUserRepository() {
+    public SearchableRepository<Country> getRepository() {
         return countryRepository;
     }
 }

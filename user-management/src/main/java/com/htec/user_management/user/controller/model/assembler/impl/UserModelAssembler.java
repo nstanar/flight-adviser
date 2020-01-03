@@ -6,8 +6,11 @@ import com.htec.user_management.user.service.dto.UserDto;
 import lombok.NoArgsConstructor;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Component;
+
+import static com.htec.user_management.common.constants.HypermediaRelNames.HAVING_ROLES;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 /**
  * @author Nikola Stanar
@@ -31,14 +34,23 @@ public class UserModelAssembler implements RepresentationModelAssembler<UserDto,
                 .firstName(dto.getFirstName())
                 .lastName(dto.getLastName())
                 .username(dto.getUsername())
+                .createdBy(dto.getCreatedBy())
+                .createdDate(dto.getCreatedDate())
+                .modifiedBy(dto.getModifiedBy())
+                .modifiedDate(dto.getModifiedDate())
                 .build();
 
-        /* Add self link. */
-        final Link selfLink = WebMvcLinkBuilder.linkTo(
-                WebMvcLinkBuilder.methodOn(UserController.class).findBy(dto.getId())
-        )
-                .withSelfRel();
+        // Add self link.
+        final Link selfLink = linkTo(
+                methodOn(UserController.class).findBy(dto.getId())
+        ).withSelfRel();
+
         userModel.add(selfLink);
+
+        // Add roles link.
+        final Link rolesLink = linkTo(
+                methodOn(UserController.class).findRolesBy(dto.getId())
+        ).withRel(HAVING_ROLES);
 
         return userModel;
     }

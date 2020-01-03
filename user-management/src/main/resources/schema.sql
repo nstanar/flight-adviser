@@ -1,13 +1,15 @@
 -- User
 
-create sequence fa_user_id_seq INCREMENT 1 START 1;
-
 CREATE TABLE fa_user(
-    id BIGINT DEFAULT nextval('fa_user_id_seq') PRIMARY KEY,
+    id BIGINT IDENTITY PRIMARY KEY,
     username VARCHAR(50) NOT NULL,
     value_sec VARCHAR(255) NOT NULL,
     first_name VARCHAR(50) NOT NULL,
-    last_name VARCHAR(50) NOT NULL
+    last_name VARCHAR(50) NOT NULL,
+    created_by VARCHAR(50) NOT NULL,
+    created_date BIGINT NOT NULL,
+    modified_by VARCHAR(50) NOT NULL,
+    modified_date BIGINT NOT NULL
 );
 
 ALTER TABLE fa_user
@@ -16,10 +18,9 @@ ALTER TABLE fa_user
 
 -- Role
 
-create sequence fa_role_id_seq INCREMENT 1 START 1;
 
 create TABLE fa_role (
-    id bigint DEFAULT nextval('fa_role_id_seq') PRIMARY KEY,
+    id bigint IDENTITY PRIMARY KEY,
     name character varying(30) NOT NULL
 );
 
@@ -29,12 +30,11 @@ ALTER TABLE fa_role
 
 -- User's role
 
-create sequence fa_user_role_id_seq INCREMENT 1 START 1;
 
 create TABLE fa_user_role(
-    id bigint  DEFAULT nextval('fa_user_role_id_seq') PRIMARY KEY,
-    user_id,
-    role_id
+    id bigint IDENTITY PRIMARY KEY,
+    user_id bigint NOT NULL,
+    role_id bigint NOT NULL
 );
 
 ALTER TABLE fa_user_role

@@ -4,6 +4,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Optional;
 
@@ -14,12 +18,24 @@ import java.util.Optional;
  */
 @Configuration
 @EnableJpaAuditing(auditorAwareRef = "auditorAware")
-//TODO: Make it work with session context after auth and resource server are made.
 public class AuditConfiguration {
 
     @Bean
     public AuditorAware<String> auditorAware() {
-        return () -> Optional.of("unknown");
+        return () -> {
+            final String result;
+            final SecurityContext context = SecurityContextHolder.getContext();
+            final Authentication authentication = context.getAuthentication();
+            final Object principal = authentication.getPrincipal();
+
+            if (principal instanceof UserDetails) {
+                result = ((UserDetails) principal).getUsername();
+            } else {
+                result = (String) principal;
+            }
+
+            return Optional.ofNullable(result);
+        };
     }
 
 }

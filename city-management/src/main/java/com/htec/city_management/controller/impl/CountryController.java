@@ -9,7 +9,7 @@ import com.htec.city_management.service.CountryService;
 import com.htec.city_management.service.dto.CityDto;
 import com.htec.city_management.service.dto.CountryDto;
 import com.htec.domain_starter.controller.SearchableController;
-import com.htec.domain_starter.controller.exception.NotFoundException;
+import com.htec.domain_starter.service.validation.exception.NotFoundException;
 import com.htec.domain_starter.controller.validation.exception.handler.ControllerAdvice;
 import com.htec.domain_starter.service.SearchableService;
 import lombok.AllArgsConstructor;
@@ -105,10 +105,10 @@ public class CountryController implements SearchableController<CountryModel, Cou
      * Gets searchable service.
      *
      * @return Searchable service.
-     * @see SearchableController#getUserService()
+     * @see SearchableController#getService()
      */
     @Override
-    public SearchableService<CountryDto, Country> getUserService() {
+    public SearchableService<CountryDto, Country> getService() {
         return countryService;
     }
 

@@ -16,8 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -30,8 +28,6 @@ import java.util.Optional;
  * Implementation of {@link CityService}.
  */
 @Service
-@Transactional
-@Validated
 @Slf4j
 @AllArgsConstructor
 public class CityServiceImpl implements CityService {
@@ -64,7 +60,6 @@ public class CityServiceImpl implements CityService {
      * @return Page of comments belonging to city;
      * @see CityService#findBy(Long, Pageable)
      */
-    @Transactional(readOnly = true)
     public Page<CommentDto> findBy(@NotNull final Long cityId, @NotNull final Pageable pageable) {
         log.info("Fetching {} of comments for city of id {}.", pageable, cityId);
         return commentRepository
@@ -97,10 +92,10 @@ public class CityServiceImpl implements CityService {
      * Gets dto converter.
      *
      * @return Check {@link DtoConverter}.
-     * @see CityService#getUserDtoConverter()
+     * @see CityService#getDtoConverter()
      */
     @Override
-    public DtoConverter<CityDto, City> getUserDtoConverter() {
+    public DtoConverter<CityDto, City> getDtoConverter() {
         return cityDtoConverter;
     }
 
@@ -108,10 +103,10 @@ public class CityServiceImpl implements CityService {
      * Gets searchable repository.
      *
      * @return Check {@link SearchableRepository}.
-     * @see CityService#getUserRepository()
+     * @see CityService#getRepository()
      */
     @Override
-    public SearchableRepository<City> getUserRepository() {
+    public SearchableRepository<City> getRepository() {
         return cityRepository;
     }
 }

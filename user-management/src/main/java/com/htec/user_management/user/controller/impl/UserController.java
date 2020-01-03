@@ -16,13 +16,10 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -64,10 +61,35 @@ public class UserController implements CrudController<UserModel, UserDto, User> 
     @GetMapping(value = "/me")
     public ResponseEntity<UserModel> findBy(final Principal principal) {
         return userService
-                .findBy(principal.getName())
+                .findByUsername(principal.getName())
                 .map(userModelAssembler::toModel)
                 .map(ResponseEntity::ok)
                 .get();
+    }
+
+    /**
+     * Updates my profile.
+     *
+     * @param dto       Update content.
+     * @param principal Check {@link Principal}.
+     * @return 204.
+     */
+    @PutMapping(value = "/me")
+    public ResponseEntity<?> updateBy(@RequestBody final UserDto dto, final Principal principal) {
+        userService.updateByUsername(principal.getName(), dto);
+        return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * Deletes my profile.
+     *
+     * @param principal Check {@link Principal}.
+     * @return 204.
+     */
+    @DeleteMapping(value = "/me")
+    public ResponseEntity<Void> deleteBy(final Principal principal) {
+        userService.deleteByUsername(principal.getName());
+        return ResponseEntity.noContent().build();
     }
 
     /**
@@ -78,11 +100,11 @@ public class UserController implements CrudController<UserModel, UserDto, User> 
      */
     @GetMapping("/{userId}/roles")
     public ResponseEntity<CollectionModel<EntityModel<RoleModel>>> findRolesBy(@PathVariable final Long userId) {
-        final List<RoleModel> roles = userService
+        final Set<RoleModel> roles = userService
                 .findRolesBy(userId)
                 .stream()
                 .map(roleModelAssembler::toModel)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
 
         return ResponseEntity.ok(CollectionModel.wrap(roles));
     }
@@ -91,10 +113,10 @@ public class UserController implements CrudController<UserModel, UserDto, User> 
      * Gets searchable service.
      *
      * @return Searchable service.
-     * @see SearchableController#getUserService()
+     * @see SearchableController#getService()
      */
     @Override
-    public CrudService<UserDto, User> getUserService() {
+    public CrudService<UserDto, User> getService() {
         return userService;
     }
 

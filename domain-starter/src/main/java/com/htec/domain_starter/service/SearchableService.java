@@ -28,9 +28,9 @@ public interface SearchableService<DTO extends BaseDto, ENTITY extends BaseEntit
      */
     @Transactional(readOnly = true)
     default Page<DTO> findBy(@NotBlank @Size(min = 2) final String namePrefix, @NotNull final Pageable pageable) {
-        return getUserRepository()
+        return getRepository()
                 .findByNameStartingWithIgnoreCase(namePrefix, pageable)
-                .map(getUserDtoConverter()::from);
+                .map(getDtoConverter()::from);
 
     }
 
@@ -40,6 +40,6 @@ public interface SearchableService<DTO extends BaseDto, ENTITY extends BaseEntit
      * @return Check {@link SearchableRepository}.
      */
     @Override
-    SearchableRepository<ENTITY> getUserRepository();
+    SearchableRepository<ENTITY> getRepository();
 
 }

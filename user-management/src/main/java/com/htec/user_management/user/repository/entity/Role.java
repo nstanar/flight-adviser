@@ -5,8 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 
-import javax.persistence.*;
-import java.util.Set;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 /**
  * @author Nikola Stanar
@@ -24,9 +26,6 @@ public class Role extends BaseEntity implements GrantedAuthority {
      */
     @Column(nullable = false, length = 30)
     private String name;
-
-    @ManyToMany(mappedBy = "roles")
-    private Set<User> users;
 
     @Override
     public String getAuthority() {

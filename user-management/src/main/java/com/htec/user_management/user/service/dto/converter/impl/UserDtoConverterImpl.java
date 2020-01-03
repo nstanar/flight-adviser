@@ -50,6 +50,10 @@ public class UserDtoConverterImpl implements UserDtoConverter {
         dto.setLastName(entity.getLastName());
         dto.setUsername(entity.getUsername());
         dto.setPassword(entity.getPassword().toCharArray());
+        dto.setCreatedBy(entity.getCreatedBy());
+        dto.setCreatedDate(entity.getCreatedDate());
+        dto.setModifiedBy(entity.getModifiedBy());
+        dto.setModifiedDate(entity.getModifiedDate());
         return dto;
     }
 

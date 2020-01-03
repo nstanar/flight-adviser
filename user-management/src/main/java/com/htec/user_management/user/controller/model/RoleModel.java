@@ -3,6 +3,7 @@ package com.htec.user_management.user.controller.model;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
 /**
  * @author Nikola Stanar
@@ -11,6 +12,7 @@ import org.springframework.hateoas.RepresentationModel;
  */
 @Getter
 @Builder
+@Relation(collectionRelation = "roles")
 public class RoleModel extends RepresentationModel<RoleModel> {
 
     /**

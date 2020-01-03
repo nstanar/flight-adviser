@@ -16,4 +16,8 @@ public final class HypermediaRelNames {
      */
     public static final String USERS_REL_NAME = "users";
 
+    /**
+     * Defines "having roles" relation.
+     */
+    public static final String HAVING_ROLES = "havingRoles";
 }

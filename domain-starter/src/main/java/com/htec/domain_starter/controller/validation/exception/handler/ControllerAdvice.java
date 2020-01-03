@@ -1,6 +1,6 @@
 package com.htec.domain_starter.controller.validation.exception.handler;
 
-import com.htec.domain_starter.controller.exception.NotFoundException;
+import com.htec.domain_starter.service.validation.exception.NotFoundException;
 import com.htec.domain_starter.controller.model.ExceptionModel;
 import com.htec.domain_starter.service.validation.exception.BusinessValidationException;
 import lombok.extern.slf4j.Slf4j;

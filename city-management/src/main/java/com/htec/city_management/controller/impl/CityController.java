@@ -9,7 +9,7 @@ import com.htec.city_management.service.CityService;
 import com.htec.city_management.service.dto.CityDto;
 import com.htec.city_management.service.dto.CommentDto;
 import com.htec.domain_starter.controller.SearchableController;
-import com.htec.domain_starter.controller.exception.NotFoundException;
+import com.htec.domain_starter.service.validation.exception.NotFoundException;
 import com.htec.domain_starter.controller.validation.exception.handler.ControllerAdvice;
 import com.htec.domain_starter.service.SearchableService;
 import lombok.AllArgsConstructor;
@@ -104,10 +104,10 @@ public class CityController implements SearchableController<CityModel, CityDto, 
      * Gets searchable service.
      *
      * @return Searchable service.
-     * @see SearchableController#getUserService()
+     * @see SearchableController#getService()
      */
     @Override
-    public SearchableService<CityDto, City> getUserService() {
+    public SearchableService<CityDto, City> getService() {
         return cityService;
     }
 
