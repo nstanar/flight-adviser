@@ -1,14 +1,12 @@
 package com.htec.city_management.service.impl;
 
 import com.htec.city_management.repository.CityRepository;
-import com.htec.city_management.repository.CommentRepository;
 import com.htec.city_management.repository.entity.City;
-import com.htec.city_management.repository.entity.Comment;
 import com.htec.city_management.service.CityService;
+import com.htec.city_management.service.CommentService;
 import com.htec.city_management.service.dto.CityDto;
 import com.htec.city_management.service.dto.CommentDto;
 import com.htec.city_management.service.dto.converter.CityDtoConverter;
-import com.htec.city_management.service.dto.converter.CommentDtoConverter;
 import com.htec.domain_starter.repository.SearchableRepository;
 import com.htec.domain_starter.service.dto.converter.DtoConverter;
 import com.htec.domain_starter.service.validation.chain.BusinessValidatorChain;
@@ -37,27 +35,42 @@ public class CityServiceImpl implements CityService {
     /**
      * Jpa repository for city.
      */
-    private final CityRepository cityRepository;
+    private final CityRepository repository;
 
     /**
      * Dto converter for city.
      */
-    private final CityDtoConverter cityDtoConverter;
+    private final CityDtoConverter dtoConverter;
 
     /**
-     * Jpa repository for comment.
+     * Business validator chain for city.
      */
-    private final CommentRepository commentRepository;
+    private final BusinessValidatorChain<CityDto> businessValidatorChain;
 
     /**
-     * Dto converter for comment.
+     * Service for comment.
      */
-    private final CommentDtoConverter commentDtoConverter;
+    private final CommentService commentService;
 
     /**
      * Message source.
      */
     private final MessageSource messageSource;
+
+    /**
+     * Finds page of cities belonging to country of id.
+     *
+     * @param countryId Id of the country.
+     * @param pageable  Check {@link Pageable}.
+     * @return Page of cities.
+     */
+    @Override
+    public Page<CityDto> findAllByCountryId(final @NotNull Long countryId, final @NotNull Pageable pageable) {
+        log.info("Fetching {} of cities for country of id {}.", pageable, countryId);
+        return repository
+                .findAllByCountryId(countryId, pageable)
+                .map(dtoConverter::from);
+    }
 
     /**
      * Finds page of comments belonging to city.
@@ -69,9 +82,7 @@ public class CityServiceImpl implements CityService {
      */
     public Page<CommentDto> findBy(@NotNull final Long cityId, @NotNull final Pageable pageable) {
         log.info("Fetching {} of comments for city of id {}.", pageable, cityId);
-        return commentRepository
-                .findAllByCityId(cityId, pageable)
-                .map(commentDtoConverter::from);
+        return commentService.findAllByCityId(cityId, pageable);
     }
 
     /**
@@ -79,20 +90,13 @@ public class CityServiceImpl implements CityService {
      *
      * @param cityId  Id of the city.
      * @param comment Comment to be added.
-     * @return Optional comment created if city exists.
-     * @see CityService#createAndAssignFrom(Long, CommentDto)
+     * @return Created comment.
+     * @see CityService#createAndAssignTo(Long, CommentDto)
      */
-    public Optional<CommentDto> createAndAssignFrom(@NotNull final Long cityId, @NotNull @Valid final CommentDto comment) {
+    public CommentDto createAndAssignTo(@NotNull final Long cityId, @NotNull @Valid final CommentDto comment) {
         log.info("Adding comment {} to city of id {}.", comment, cityId);
-        return cityRepository.findById(cityId)
-                .map(city -> {
-                    final Comment commentToBeCreated = commentDtoConverter.from(comment);
-                    commentToBeCreated.setCity(city);
-                    final Comment createdComment = commentRepository.save(commentToBeCreated);
-                    log.info("Comment successfully added to city and given id {}.", createdComment.getId());
-                    return createdComment;
-                })
-                .map(commentDtoConverter::from);
+        comment.setCityId(cityId);
+        return commentService.createFrom(comment);
     }
 
     /**
@@ -103,18 +107,18 @@ public class CityServiceImpl implements CityService {
      */
     @Override
     public DtoConverter<CityDto, City> getDtoConverter() {
-        return cityDtoConverter;
+        return dtoConverter;
     }
 
     /**
      * Gets business validator chain.
      *
      * @return Business validator chain.
+     * @see CityService#getBusinessValidatorChain()
      */
     @Override
     public Optional<BusinessValidatorChain<CityDto>> getBusinessValidatorChain() {
-        //TODO: business validator chain here.
-        return Optional.empty();
+        return Optional.ofNullable(businessValidatorChain);
     }
 
     /**
@@ -136,6 +140,6 @@ public class CityServiceImpl implements CityService {
      */
     @Override
     public SearchableRepository<City> getRepository() {
-        return cityRepository;
+        return repository;
     }
 }

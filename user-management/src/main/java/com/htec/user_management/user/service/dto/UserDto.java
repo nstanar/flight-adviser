@@ -15,8 +15,8 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString(exclude = {"password", "newPassword"})
-@EqualsAndHashCode(exclude = {"password", "newPassword"})
+@ToString(exclude = {"password", "retypedPassword"})
+@EqualsAndHashCode(exclude = {"password", "retypedPassword"})
 public class UserDto extends AuditAwareDto {
 
     /**

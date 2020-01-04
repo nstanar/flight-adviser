@@ -2,9 +2,9 @@ package com.htec.user_management.user.service.validation.validator.impl;
 
 import com.htec.domain_starter.service.dto.BaseDto;
 import com.htec.domain_starter.service.validation.exception.BusinessValidationException;
-import com.htec.domain_starter.service.validation.validator.BusinessValidator;
 import com.htec.user_management.user.repository.UserRepository;
 import com.htec.user_management.user.service.dto.UserDto;
+import com.htec.user_management.user.service.validation.UsernameUniquenessValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
@@ -18,11 +18,12 @@ import static org.springframework.context.i18n.LocaleContextHolder.getLocale;
  * @author Nikola Stanar
  * <p>
  * Validates uniqueness of the username.
+ * @see UsernameUniquenessValidator
  */
 @Service
 @Transactional(readOnly = true)
 @AllArgsConstructor
-public class UsernameUniquenessValidator implements BusinessValidator<UserDto> {
+public class UsernameUniquenessValidatorImpl implements UsernameUniquenessValidator {
 
     /**
      * Jpa repository for user.
@@ -43,7 +44,7 @@ public class UsernameUniquenessValidator implements BusinessValidator<UserDto> {
      * Validates that username is unique.
      *
      * @param dto DTO to be validated
-     * @see BusinessValidator#validate(BaseDto)
+     * @see UsernameUniquenessValidator#validate(BaseDto)
      */
     @Override
     public void validate(final @NotNull UserDto dto) {

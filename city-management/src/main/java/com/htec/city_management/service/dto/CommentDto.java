@@ -1,6 +1,5 @@
 package com.htec.city_management.service.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.htec.domain_starter.service.dto.AuditAwareDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,6 +37,5 @@ public class CommentDto extends AuditAwareDto {
     /**
      * Id of the city comment belongs to.
      */
-    @JsonIgnore
     private Long cityId;
 }

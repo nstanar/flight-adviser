@@ -6,12 +6,12 @@ import com.htec.city_management.service.dto.CountryDto;
 import com.htec.domain_starter.service.SearchableService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.Optional;
 
 /**
  * @author Nikola Stanar
@@ -29,6 +29,7 @@ public interface CountryService extends SearchableService<CountryDto, Country> {
      * @param pageable  Check pageable.
      * @return Page of cities belonging to country;
      */
+    @PreAuthorize("isAuthenticated()")
     @Transactional(readOnly = true)
     Page<CityDto> findBy(@NotNull final Long countryId, @NotNull final Pageable pageable);
 
@@ -37,8 +38,9 @@ public interface CountryService extends SearchableService<CountryDto, Country> {
      *
      * @param countryId Id of the country.
      * @param city      City to be added.
-     * @return Optional city created if country exists.
+     * @return Added city.
      */
-    Optional<CityDto> createAndAssignFrom(@NotNull final Long countryId, @NotNull @Valid final CityDto city);
+    @PreAuthorize("hasRole('ADMIN')")
+    CityDto createAndAssignTo(@NotNull final Long countryId, @NotNull @Valid final CityDto city);
 
 }

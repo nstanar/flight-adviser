@@ -10,9 +10,12 @@ import com.htec.domain_starter.service.validation.chain.BusinessValidatorChain;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
 /**
@@ -29,17 +32,32 @@ public class CommentServiceImpl implements CommentService {
     /**
      * Jpa repository for comment.
      */
-    private final CommentRepository commentRepository;
+    private final CommentRepository repository;
 
     /**
      * Dto converter for comment.
      */
-    private final CommentDtoConverter commentDtoConverter;
+    private final CommentDtoConverter dtoConverter;
 
     /**
      * Message source.
      */
     private final MessageSource messageSource;
+
+    /**
+     * Finds page of comments belonging to city.
+     *
+     * @param cityId   City id.
+     * @param pageable Check pageable.
+     * @return Page of comments belonging to city;
+     * @see CommentService#findAllByCityId(Long, Pageable)
+     */
+    @Override
+    public Page<CommentDto> findAllByCityId(final @NotNull Long cityId, final @NotNull Pageable pageable) {
+        return repository
+                .findAllByCityId(cityId, pageable)
+                .map(dtoConverter::from);
+    }
 
     /**
      * Gets business validator chain.
@@ -59,7 +77,7 @@ public class CommentServiceImpl implements CommentService {
      */
     @Override
     public JpaRepository<Comment, Long> getRepository() {
-        return commentRepository;
+        return repository;
     }
 
     /**
@@ -81,6 +99,6 @@ public class CommentServiceImpl implements CommentService {
      */
     @Override
     public DtoConverter<CommentDto, Comment> getDtoConverter() {
-        return commentDtoConverter;
+        return dtoConverter;
     }
 }

@@ -114,7 +114,7 @@ public class Oauth2AuthServerConfiguration extends AuthorizationServerConfigurer
      */
     @Override
     public void configure(final ClientDetailsServiceConfigurer serviceConfigurer) throws Exception {
-        serviceConfigurer.withClientDetails(clientDetailsService());
+        serviceConfigurer.withClientDetails(jdbcClientDetailsService());
     }
 
     /**
@@ -139,7 +139,7 @@ public class Oauth2AuthServerConfiguration extends AuthorizationServerConfigurer
         final DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
         defaultTokenServices.setTokenStore(tokenStore());
         defaultTokenServices.setSupportRefreshToken(true);
-        defaultTokenServices.setClientDetailsService(clientDetailsService());
+        defaultTokenServices.setClientDetailsService(jdbcClientDetailsService());
         defaultTokenServices.setAuthenticationManager(providerManager);
         return defaultTokenServices;
     }
@@ -172,7 +172,7 @@ public class Oauth2AuthServerConfiguration extends AuthorizationServerConfigurer
      * @return Client details service.
      */
     @Bean
-    public ClientDetailsService clientDetailsService() {
+    public ClientDetailsService jdbcClientDetailsService() {
         final JdbcClientDetailsService jdbcClientDetailsService = new JdbcClientDetailsService(dataSource);
         jdbcClientDetailsService.setPasswordEncoder(passwordEncoder);
         return jdbcClientDetailsService;

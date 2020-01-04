@@ -1,8 +1,10 @@
 package com.htec.user_management.user.controller.impl;
 
+import com.htec.domain_starter.common.constants.MessageSourceKeys;
 import com.htec.domain_starter.controller.CrudController;
 import com.htec.domain_starter.controller.SearchableController;
 import com.htec.domain_starter.service.CrudService;
+import com.htec.domain_starter.service.validation.exception.NotFoundException;
 import com.htec.user_management.user.controller.model.RoleModel;
 import com.htec.user_management.user.controller.model.UserModel;
 import com.htec.user_management.user.controller.model.assembler.impl.RoleModelAssembler;
@@ -21,6 +23,8 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static org.springframework.context.i18n.LocaleContextHolder.getLocale;
 
 /**
  * @author Nikola Stanar
@@ -60,11 +64,16 @@ public class UserController implements CrudController<UserModel, UserDto, User> 
      */
     @GetMapping(value = "/me")
     public ResponseEntity<UserModel> findBy(final Principal principal) {
-        return userService
-                .findByUsername(principal.getName())
-                .map(userModelAssembler::toModel)
-                .map(ResponseEntity::ok)
-                .get();
+        if (principal != null) {
+            return userService
+                    .findByUsername(principal.getName())
+                    .map(userModelAssembler::toModel)
+                    .map(ResponseEntity::ok)
+                    .get();
+        } else {
+            final String message = messageSource.getMessage(MessageSourceKeys.RESOURCE_DOES_NOT_EXIST, new Object[]{null}, getLocale());
+            throw new NotFoundException(message);
+        }
     }
 
     /**
@@ -75,9 +84,14 @@ public class UserController implements CrudController<UserModel, UserDto, User> 
      * @return 204.
      */
     @PutMapping(value = "/me")
-    public ResponseEntity<?> updateBy(@RequestBody final UserDto dto, final Principal principal) {
-        userService.updateByUsername(principal.getName(), dto);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Void> updateBy(@RequestBody final UserDto dto, final Principal principal) {
+        if (principal != null) {
+            userService.updateByUsername(principal.getName(), dto);
+            return ResponseEntity.noContent().build();
+        } else {
+            final String message = messageSource.getMessage(MessageSourceKeys.RESOURCE_DOES_NOT_EXIST, new Object[]{null}, getLocale());
+            throw new NotFoundException(message);
+        }
     }
 
     /**
@@ -88,8 +102,13 @@ public class UserController implements CrudController<UserModel, UserDto, User> 
      */
     @DeleteMapping(value = "/me")
     public ResponseEntity<Void> deleteBy(final Principal principal) {
-        userService.deleteByUsername(principal.getName());
-        return ResponseEntity.noContent().build();
+        if (principal != null) {
+            userService.deleteByUsername(principal.getName());
+            return ResponseEntity.noContent().build();
+        } else {
+            final String message = messageSource.getMessage(MessageSourceKeys.RESOURCE_DOES_NOT_EXIST, new Object[]{null}, getLocale());
+            throw new NotFoundException(message);
+        }
     }
 
     /**

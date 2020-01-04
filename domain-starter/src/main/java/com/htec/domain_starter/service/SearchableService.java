@@ -6,6 +6,7 @@ import com.htec.domain_starter.service.dto.BaseDto;
 import com.htec.domain_starter.service.dto.converter.Convertible;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotBlank;
@@ -26,6 +27,7 @@ public interface SearchableService<DTO extends BaseDto, ENTITY extends BaseEntit
      * @param pageable   Check pageable.
      * @return Page of DTOs matching name prefix.
      */
+    @PreAuthorize("isAuthenticated()")
     @Transactional(readOnly = true)
     default Page<DTO> findBy(@NotBlank @Size(min = 2) final String namePrefix, @NotNull final Pageable pageable) {
         return getRepository()

@@ -52,6 +52,8 @@ public class UserModelAssembler implements RepresentationModelAssembler<UserDto,
                 methodOn(UserController.class).findRolesBy(dto.getId())
         ).withRel(HAVING_ROLES);
 
+        userModel.add(rolesLink);
+
         return userModel;
     }
 }

@@ -5,6 +5,7 @@ import com.htec.domain_starter.service.dto.converter.Convertible;
 import com.htec.domain_starter.service.dto.converter.DtoConverter;
 import com.htec.domain_starter.service.validation.chain.BusinessValidatorChain;
 import com.htec.domain_starter.service.validation.exception.NotFoundException;
+import com.htec.domain_starter.service.validation.marker.Create;
 import com.htec.domain_starter.service.validation.marker.Update;
 import com.htec.user_management.auth.service.RevokeTokenService;
 import com.htec.user_management.user.repository.RoleRepository;
@@ -88,6 +89,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public UserDto createFrom(@NotNull @Valid final UserDto user) {
+        businessValidatorChain.validateFor(Create.class, user);
         final User userEntity = userDtoConverter.from(user);
         final Role regularUserRole = roleRepository.findByName(ROLE_REGULAR_USER.getName());
 

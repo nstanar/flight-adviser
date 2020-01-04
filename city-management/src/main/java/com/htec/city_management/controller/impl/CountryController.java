@@ -9,9 +9,9 @@ import com.htec.city_management.service.CountryService;
 import com.htec.city_management.service.dto.CityDto;
 import com.htec.city_management.service.dto.CountryDto;
 import com.htec.domain_starter.controller.SearchableController;
-import com.htec.domain_starter.service.validation.exception.NotFoundException;
 import com.htec.domain_starter.controller.validation.exception.handler.ControllerAdvice;
 import com.htec.domain_starter.service.SearchableService;
+import com.htec.domain_starter.service.validation.exception.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
@@ -25,8 +25,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
-import static com.htec.domain_starter.common.constants.MessageSourceKeys.RESOURCE_DOES_NOT_EXIST;
-import static org.springframework.context.i18n.LocaleContextHolder.getLocale;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -87,18 +85,14 @@ public class CountryController implements SearchableController<CountryModel, Cou
      * @see ControllerAdvice#handle(NotFoundException)
      */
     @PostMapping("/{countryId}/cities")
-    public ResponseEntity<?> createAndAssignFrom(@PathVariable final Long countryId, @RequestBody final CityDto city) {
-        return countryService.createAndAssignFrom(countryId, city)
-                .map(cityDto -> {
-                    final URI location = linkTo(methodOn
-                            (CityController.class).findBy(cityDto.getId())
-                    ).toUri();
-                    return ResponseEntity.created(location).build();
-                })
-                .orElseThrow(() -> {
-                    final String message = messageSource.getMessage(RESOURCE_DOES_NOT_EXIST, new Object[]{countryId}, getLocale());
-                    return new NotFoundException(message);
-                });
+    public ResponseEntity<?> createAndAssignTo(@PathVariable final Long countryId, @RequestBody final CityDto city) {
+        countryService.createAndAssignTo(countryId, city);
+
+        final URI location = linkTo(methodOn
+                (CityController.class).findBy(city.getId())
+        ).toUri();
+
+        return ResponseEntity.created(location).build();
     }
 
     /**

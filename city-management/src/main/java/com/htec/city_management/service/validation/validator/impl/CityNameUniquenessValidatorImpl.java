@@ -2,9 +2,9 @@ package com.htec.city_management.service.validation.validator.impl;
 
 import com.htec.city_management.repository.CityRepository;
 import com.htec.city_management.service.dto.CityDto;
+import com.htec.city_management.service.validation.CityNameUniquenessValidator;
 import com.htec.domain_starter.service.dto.BaseDto;
 import com.htec.domain_starter.service.validation.exception.BusinessValidationException;
-import com.htec.domain_starter.service.validation.validator.BusinessValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
@@ -18,11 +18,12 @@ import static org.springframework.context.i18n.LocaleContextHolder.getLocale;
  * @author Nikola Stanar
  * <p>
  * Validates that city name is unique within country boundaries.
+ * @see CityNameUniquenessValidator
  */
 @Service
 @Transactional(readOnly = true)
 @AllArgsConstructor
-public class CityNameUniquenessValidator implements BusinessValidator<CityDto> {
+public class CityNameUniquenessValidatorImpl implements CityNameUniquenessValidator {
 
     /**
      * Jpa repository for city.
@@ -43,7 +44,7 @@ public class CityNameUniquenessValidator implements BusinessValidator<CityDto> {
      * Validates that city name is unique within country boundaries.
      *
      * @param dto DTO to be validated
-     * @see BusinessValidator#validate(BaseDto)
+     * @see CityNameUniquenessValidator#validate(BaseDto)
      */
     @Override
     public void validate(@NotNull final CityDto dto) {

@@ -71,7 +71,7 @@ public interface UserService extends CrudService<UserDto, User> {
      * @param dto      Update content.
      * @return Updated user.
      */
-    @PostAuthorize("hasRole('ADMIN') or returnObject.username==authentication.principal.name")
+    @PostAuthorize("hasRole('ADMIN') or returnObject.username==authentication.principal.username")
     UserDto updateByUsername(@NotBlank final String username, @NotNull @Valid UserDto dto);
 
     /**
@@ -80,7 +80,7 @@ public interface UserService extends CrudService<UserDto, User> {
      * @param username User's username.
      * @return Deleted user.
      */
-    @PostAuthorize("hasRole('ADMIN') or returnObject.username==authentication.principal.name")
+    @PostAuthorize("hasRole('ADMIN') or returnObject.username==authentication.principal.username")
     UserDto deleteByUsername(@NotBlank final String username);
 
     /**

@@ -3,8 +3,8 @@ package com.htec.user_management.user.service.validation.validator.impl;
 import com.htec.domain_starter.service.dto.BaseDto;
 import com.htec.domain_starter.service.util.PasswordShredder;
 import com.htec.domain_starter.service.validation.exception.BusinessValidationException;
-import com.htec.domain_starter.service.validation.validator.BusinessValidator;
 import com.htec.user_management.user.service.dto.UserDto;
+import com.htec.user_management.user.service.validation.PasswordMatcherValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -17,10 +17,11 @@ import java.util.Arrays;
  * @author Nikola Stanar
  * <p>
  * Validates that passwords (original and retyped) match.
+ * @see PasswordMatcherValidator
  */
 @Component
 @AllArgsConstructor
-public class PasswordMatcherValidator implements BusinessValidator<UserDto> {
+public class PasswordMatcherValidatorImpl implements PasswordMatcherValidator {
 
     /**
      * Char array shredder.
@@ -41,7 +42,7 @@ public class PasswordMatcherValidator implements BusinessValidator<UserDto> {
      * Validates password matches new password.
      *
      * @param dto DTO to be validated
-     * @see BusinessValidator#validate(BaseDto)
+     * @see PasswordMatcherValidator#validate(BaseDto)
      */
     @Override
     public void validate(@NotNull final UserDto dto) {

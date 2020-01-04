@@ -1,17 +1,15 @@
 package com.htec.user_management.user.service.validation.chain.impl;
 
-import com.htec.domain_starter.service.dto.BaseDto;
 import com.htec.domain_starter.service.validation.chain.BusinessValidatorChain;
 import com.htec.domain_starter.service.validation.marker.Create;
 import com.htec.domain_starter.service.validation.validator.BusinessValidator;
 import com.htec.user_management.user.service.dto.UserDto;
-import com.htec.user_management.user.service.validation.validator.impl.PasswordMatcherValidator;
-import com.htec.user_management.user.service.validation.validator.impl.UsernameUniquenessValidator;
+import com.htec.user_management.user.service.validation.PasswordMatcherValidator;
+import com.htec.user_management.user.service.validation.UsernameUniquenessValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,17 +47,14 @@ public class UserBusinessValidatorChainImpl implements BusinessValidatorChain<Us
     }
 
     /**
-     * Performs group validation based on action trigger.
+     * Gets decision cache.
      *
-     * @param actionTrigger Marker interface to trigger specific validation flow.
-     * @param dto           DTO to be validated.
-     * @see BusinessValidatorChain#validateFor(Class, BaseDto)
+     * @return Decision cache.
+     * @see BusinessValidatorChain#getDecisionCache()
      */
     @Override
-    public void validateFor(final @NotNull Class<?> actionTrigger, @NotNull final UserDto dto) {
-        decisionCache
-                .get(actionTrigger)
-                .forEach(businessValidator -> businessValidator.validate(dto));
+    public Map<Class<?>, List<BusinessValidator<UserDto>>> getDecisionCache() {
+        return decisionCache;
     }
 
 }

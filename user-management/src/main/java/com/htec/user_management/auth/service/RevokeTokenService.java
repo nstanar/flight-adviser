@@ -19,6 +19,6 @@ public interface RevokeTokenService {
      *
      * @param username Username.
      */
-    @PostAuthorize("hasRole('ADMIN') or #username==authentication.principal.name")
+    @PostAuthorize("hasRole('ADMIN') or #username==authentication.principal.username")
     void revokeFor(@NotBlank final String username);
 }

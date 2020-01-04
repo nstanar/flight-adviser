@@ -71,7 +71,7 @@ public interface CrudService<DTO extends BaseDto, ENTITY extends BaseEntity> ext
      * @param dto Dto holding content that is about to be created.
      * @return Id of the created dto.
      */
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ADMIN')")
     default DTO createFrom(@NotNull @Valid final DTO dto) {
         getBusinessValidatorChain().ifPresent(businessValidatorChain -> businessValidatorChain.validateFor(Create.class, dto));
 

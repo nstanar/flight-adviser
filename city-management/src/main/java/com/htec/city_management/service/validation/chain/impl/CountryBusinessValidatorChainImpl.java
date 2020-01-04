@@ -1,8 +1,7 @@
 package com.htec.city_management.service.validation.chain.impl;
 
 import com.htec.city_management.service.dto.CountryDto;
-import com.htec.city_management.service.validation.validator.impl.CountryNameUniquenessValidator;
-import com.htec.domain_starter.service.dto.BaseDto;
+import com.htec.city_management.service.validation.CountryNameUniquenessValidator;
 import com.htec.domain_starter.service.validation.chain.BusinessValidatorChain;
 import com.htec.domain_starter.service.validation.marker.Create;
 import com.htec.domain_starter.service.validation.validator.BusinessValidator;
@@ -10,7 +9,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import javax.validation.constraints.NotNull;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -44,17 +42,13 @@ public class CountryBusinessValidatorChainImpl implements BusinessValidatorChain
     }
 
     /**
-     * Performs group validation based on action trigger.
+     * Gets decision cache.
      *
-     * @param actionTrigger Marker interface to trigger specific validation flow.
-     * @param dto           DTO to be validated.
-     * @see BusinessValidatorChain#validateFor(Class, BaseDto)
+     * @return Decision cache.
+     * @see BusinessValidatorChain#getDecisionCache()
      */
     @Override
-    public void validateFor(final @NotNull Class<?> actionTrigger, @NotNull final CountryDto dto) {
-        decisionCache
-                .get(actionTrigger)
-                .forEach(businessValidator -> businessValidator.validate(dto));
+    public Map<Class<?>, List<BusinessValidator<CountryDto>>> getDecisionCache() {
+        return decisionCache;
     }
-
 }

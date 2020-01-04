@@ -9,9 +9,9 @@ import com.htec.city_management.service.CityService;
 import com.htec.city_management.service.dto.CityDto;
 import com.htec.city_management.service.dto.CommentDto;
 import com.htec.domain_starter.controller.SearchableController;
-import com.htec.domain_starter.service.validation.exception.NotFoundException;
 import com.htec.domain_starter.controller.validation.exception.handler.ControllerAdvice;
 import com.htec.domain_starter.service.SearchableService;
+import com.htec.domain_starter.service.validation.exception.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
@@ -25,8 +25,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
-import static com.htec.domain_starter.common.constants.MessageSourceKeys.RESOURCE_DOES_NOT_EXIST;
-import static org.springframework.context.i18n.LocaleContextHolder.getLocale;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -86,18 +84,14 @@ public class CityController implements SearchableController<CityModel, CityDto, 
      * @see ControllerAdvice#handle(NotFoundException)
      */
     @PostMapping("/{cityId}/comments")
-    public ResponseEntity<?> createAndAssignFrom(@PathVariable final Long cityId, @RequestBody final CommentDto comment) {
-        return cityService.createAndAssignFrom(cityId, comment)
-                .map(commentDto -> {
-                    final URI location = linkTo(methodOn
-                            (CommentController.class).findBy(commentDto.getId())
-                    ).toUri();
-                    return ResponseEntity.created(location).build();
-                })
-                .orElseThrow(() -> {
-                    final String message = messageSource.getMessage(RESOURCE_DOES_NOT_EXIST, new Object[]{cityId}, getLocale());
-                    return new NotFoundException(message);
-                });
+    public ResponseEntity<Void> createAndAssignTo(@PathVariable final Long cityId, @RequestBody final CommentDto comment) {
+        final CommentDto createdComment = cityService.createAndAssignTo(cityId, comment);
+
+        final URI location = linkTo(methodOn
+                (CommentController.class).findBy(createdComment.getId())
+        ).toUri();
+
+        return ResponseEntity.created(location).build();
     }
 
     /**

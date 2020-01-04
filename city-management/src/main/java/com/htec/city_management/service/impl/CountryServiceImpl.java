@@ -1,13 +1,11 @@
 package com.htec.city_management.service.impl;
 
-import com.htec.city_management.repository.CityRepository;
 import com.htec.city_management.repository.CountryRepository;
-import com.htec.city_management.repository.entity.City;
 import com.htec.city_management.repository.entity.Country;
+import com.htec.city_management.service.CityService;
 import com.htec.city_management.service.CountryService;
 import com.htec.city_management.service.dto.CityDto;
 import com.htec.city_management.service.dto.CountryDto;
-import com.htec.city_management.service.dto.converter.CityDtoConverter;
 import com.htec.city_management.service.dto.converter.CountryDtoConverter;
 import com.htec.domain_starter.repository.SearchableRepository;
 import com.htec.domain_starter.service.dto.converter.DtoConverter;
@@ -37,12 +35,12 @@ public class CountryServiceImpl implements CountryService {
     /**
      * Repository for country.
      */
-    private final CountryRepository countryRepository;
+    private final CountryRepository repository;
 
     /**
      * Dto converter for country.
      */
-    private final CountryDtoConverter countryDtoConverter;
+    private final CountryDtoConverter dtoConverter;
 
     /**
      * Business validator chain for country.
@@ -50,14 +48,9 @@ public class CountryServiceImpl implements CountryService {
     private final BusinessValidatorChain<CountryDto> businessValidatorChain;
 
     /**
-     * Repository for city.
+     * City service.
      */
-    private final CityRepository cityRepository;
-
-    /**
-     * Dto converter for city.
-     */
-    private final CityDtoConverter cityDtoConverter;
+    private final CityService cityService;
 
     /**
      * Message source.
@@ -73,10 +66,7 @@ public class CountryServiceImpl implements CountryService {
      */
     @Override
     public Page<CityDto> findBy(@NotNull final Long countryId, @NotNull final Pageable pageable) {
-        log.info("Fetching {} of cities for country of id {}.", pageable, countryId);
-        return cityRepository
-                .findAllByCountryId(countryId, pageable)
-                .map(cityDtoConverter::from);
+        return cityService.findAllByCountryId(countryId, pageable);
     }
 
     /**
@@ -84,23 +74,13 @@ public class CountryServiceImpl implements CountryService {
      *
      * @param countryId Id of the country.
      * @param city      City to be added.
-     * @return Optional city created if country exists.
-     * @see CountryService#createAndAssignFrom(Long, CityDto)
+     * @see CountryService#createAndAssignTo(Long, CityDto)
      */
     @Override
-    public Optional<CityDto> createAndAssignFrom(final @NotNull Long countryId, final @NotNull @Valid CityDto city) {
+    public CityDto createAndAssignTo(final @NotNull Long countryId, final @NotNull @Valid CityDto city) {
         log.info("Adding city {} to country of id {}.", city, countryId);
         city.setCountryId(countryId);
-        //TODO: validate here
-        return countryRepository.findById(countryId)
-                .map(country -> {
-                    final City cityToBeCreated = cityDtoConverter.from(city);
-                    cityToBeCreated.setCountry(country);
-                    final City createdCity = cityRepository.save(cityToBeCreated);
-                    log.info("City successfully added to country and given id {}.", createdCity.getId());
-                    return createdCity;
-                })
-                .map(cityDtoConverter::from);
+        return cityService.createFrom(city);
     }
 
     /**
@@ -111,7 +91,7 @@ public class CountryServiceImpl implements CountryService {
      */
     @Override
     public DtoConverter<CountryDto, Country> getDtoConverter() {
-        return countryDtoConverter;
+        return dtoConverter;
     }
 
     /**
@@ -143,6 +123,6 @@ public class CountryServiceImpl implements CountryService {
      */
     @Override
     public SearchableRepository<Country> getRepository() {
-        return countryRepository;
+        return repository;
     }
 }
