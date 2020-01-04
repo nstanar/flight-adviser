@@ -3,13 +3,13 @@ package com.htec.domain_starter.service.util;
 /**
  * @author Nikola Stanar
  * <p>
- * Shreds char array value.
+ * Shreds password value.
  */
 @FunctionalInterface
-public interface CharArrayShredder {
+public interface PasswordShredder {
 
     /**
-     * Shreds char array value.
+     * Shreds password value.
      *
      * @param value Value.
      */

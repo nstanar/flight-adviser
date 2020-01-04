@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -21,22 +20,41 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @EnableWebSecurity
 @AllArgsConstructor
-//TODO: comment this.
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+    /**
+     * User details service.
+     */
     private final UserDetailsService userDetailsService;
 
+    /**
+     * Instantiates password encoder.
+     *
+     * @return Password encoder.
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    /***
+     * Configures authentication manager builder.
+     *
+     * @param auth Authentication manager builder.
+     * @throws Exception Exception during configuration.
+     */
     @Override
     @Autowired
     protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
+    /**
+     * Instantiates authentication manager.
+     *
+     * @return Authentication manager.
+     * @throws Exception Exception during instantiation.
+     */
     @Override
     @Bean
     public AuthenticationManager authenticationManager() throws Exception {

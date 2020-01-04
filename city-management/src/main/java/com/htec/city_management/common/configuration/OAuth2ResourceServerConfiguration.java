@@ -1,7 +1,6 @@
 package com.htec.city_management.common.configuration;
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,35 +15,59 @@ import org.springframework.security.oauth2.provider.expression.OAuth2MethodSecur
 import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
 
+/**
+ * @author Nikola Stanar
+ * <p>
+ * Resource server configuration for oauth2.
+ */
 @Configuration
 @EnableResourceServer
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-//TODO: document this.
 @AllArgsConstructor
 public class OAuth2ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
 
+    /**
+     * Instantiates expression handler.
+     *
+     * @return Method security expression handler.
+     */
     @Bean
     public MethodSecurityExpressionHandler createExpressionHandler() {
         return new OAuth2MethodSecurityExpressionHandler();
     }
 
+    /**
+     * Configures http security.
+     *
+     * @param http Check {@link HttpSecurity}.
+     * @throws Exception Exception during configuration.
+     */
     @Override
     public void configure(final HttpSecurity http) throws Exception {
         http
+                .antMatcher("/**")
                 .csrf().disable()
-                .requestMatchers()
-                .antMatchers("/countries/**", "/cities/**", "/comments", "/actuator**")
-                .and()
                 .authorizeRequests()
-                .anyRequest().authenticated();
+                .antMatchers("/actuator**").hasRole("ADMIN");
     }
 
+    /**
+     * Instantiates resource server token services.
+     *
+     * @return Resource server token services.
+     */
     @Bean
     @ConfigurationProperties("resource.server.token.services")
     public ResourceServerTokenServices remoteTokenServices() {
         return new RemoteTokenServices();
     }
 
+    /**
+     * Instantiates authentication manager.
+     *
+     * @param resourceServerTokenServices Resource server token services.
+     * @return Authentication manager.
+     */
     @Bean
     public AuthenticationManager authenticationManager(final ResourceServerTokenServices resourceServerTokenServices) {
         final OAuth2AuthenticationManager authenticationManager = new OAuth2AuthenticationManager();

@@ -1,7 +1,6 @@
 package com.htec.user_management.user.service.dto;
 
 import com.htec.domain_starter.service.dto.AuditAwareDto;
-import com.htec.domain_starter.service.dto.BaseDto;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -16,8 +15,8 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString(exclude = {"password"})
-@EqualsAndHashCode(exclude = {"password"})
+@ToString(exclude = {"password", "newPassword"})
+@EqualsAndHashCode(exclude = {"password", "newPassword"})
 public class UserDto extends AuditAwareDto {
 
     /**
@@ -46,7 +45,13 @@ public class UserDto extends AuditAwareDto {
      */
     @NotEmpty
     @Size(min = 6, max = 255)
-    //TODO: apply pattern for password
     private char[] password;
+
+    /**
+     * User's retyped password.
+     */
+    @NotEmpty
+    @Size(min = 6, max = 255)
+    private char[] retypedPassword;
 
 }

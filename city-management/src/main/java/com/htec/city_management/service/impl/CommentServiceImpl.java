@@ -6,11 +6,14 @@ import com.htec.city_management.service.CommentService;
 import com.htec.city_management.service.dto.CommentDto;
 import com.htec.city_management.service.dto.converter.CommentDtoConverter;
 import com.htec.domain_starter.service.dto.converter.DtoConverter;
+import com.htec.domain_starter.service.validation.chain.BusinessValidatorChain;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 /**
  * @author Nikola Stanar
@@ -37,6 +40,16 @@ public class CommentServiceImpl implements CommentService {
      * Message source.
      */
     private final MessageSource messageSource;
+
+    /**
+     * Gets business validator chain.
+     *
+     * @return Business validator chain.
+     */
+    @Override
+    public Optional<BusinessValidatorChain<CommentDto>> getBusinessValidatorChain() {
+        return Optional.empty();
+    }
 
     /**
      * Gets jpa repository.

@@ -10,8 +10,8 @@ import com.htec.city_management.service.dto.CountryDto;
 import com.htec.city_management.service.dto.converter.CityDtoConverter;
 import com.htec.city_management.service.dto.converter.CountryDtoConverter;
 import com.htec.domain_starter.repository.SearchableRepository;
-import com.htec.domain_starter.service.CrudService;
 import com.htec.domain_starter.service.dto.converter.DtoConverter;
+import com.htec.domain_starter.service.validation.chain.BusinessValidatorChain;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
@@ -32,7 +32,6 @@ import java.util.Optional;
 @Service
 @Slf4j
 @AllArgsConstructor
-//TODO: if there is time, introduce AOP for cross-cutting concerns like logging.
 public class CountryServiceImpl implements CountryService {
 
     /**
@@ -44,6 +43,11 @@ public class CountryServiceImpl implements CountryService {
      * Dto converter for country.
      */
     private final CountryDtoConverter countryDtoConverter;
+
+    /**
+     * Business validator chain for country.
+     */
+    private final BusinessValidatorChain<CountryDto> businessValidatorChain;
 
     /**
      * Repository for city.
@@ -86,6 +90,8 @@ public class CountryServiceImpl implements CountryService {
     @Override
     public Optional<CityDto> createAndAssignFrom(final @NotNull Long countryId, final @NotNull @Valid CityDto city) {
         log.info("Adding city {} to country of id {}.", city, countryId);
+        city.setCountryId(countryId);
+        //TODO: validate here
         return countryRepository.findById(countryId)
                 .map(country -> {
                     final City cityToBeCreated = cityDtoConverter.from(city);
@@ -117,6 +123,16 @@ public class CountryServiceImpl implements CountryService {
     @Override
     public MessageSource getMessageSource() {
         return messageSource;
+    }
+
+    /**
+     * Gets business validator chain.
+     *
+     * @return Business validator chain.
+     */
+    @Override
+    public Optional<BusinessValidatorChain<CountryDto>> getBusinessValidatorChain() {
+        return Optional.ofNullable(businessValidatorChain);
     }
 
     /**

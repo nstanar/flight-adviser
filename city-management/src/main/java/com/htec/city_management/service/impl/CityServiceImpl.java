@@ -11,6 +11,7 @@ import com.htec.city_management.service.dto.converter.CityDtoConverter;
 import com.htec.city_management.service.dto.converter.CommentDtoConverter;
 import com.htec.domain_starter.repository.SearchableRepository;
 import com.htec.domain_starter.service.dto.converter.DtoConverter;
+import com.htec.domain_starter.service.validation.chain.BusinessValidatorChain;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
@@ -103,6 +104,17 @@ public class CityServiceImpl implements CityService {
     @Override
     public DtoConverter<CityDto, City> getDtoConverter() {
         return cityDtoConverter;
+    }
+
+    /**
+     * Gets business validator chain.
+     *
+     * @return Business validator chain.
+     */
+    @Override
+    public Optional<BusinessValidatorChain<CityDto>> getBusinessValidatorChain() {
+        //TODO: business validator chain here.
+        return Optional.empty();
     }
 
     /**

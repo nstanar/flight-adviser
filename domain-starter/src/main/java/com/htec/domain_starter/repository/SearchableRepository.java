@@ -13,13 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
  * Searchable repository.
  */
 @NoRepositoryBean
-//TODO: if time left, make it generic with criteria API
+//TODO: if time left, make it generic with criteria API so it can be used for any field.
 public interface SearchableRepository<ENTITY extends BaseEntity> extends JpaRepository<ENTITY, Long> {
 
     /**
      * Finds page of entities matching name filter.
      * <p>
-     * TO BE OVERRIDDEN.
      *
      * @param namePrefix Name prefix.
      * @return Page of entities matching name filter.

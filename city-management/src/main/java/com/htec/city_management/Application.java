@@ -11,7 +11,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
  */
 @SpringBootApplication(scanBasePackages = {"com.htec.city_management", "com.htec.domain_starter.*"})
 @EntityScan(basePackages = {"com.htec.city_management", "com.htec.domain_starter.*"})
-//TODO: consider using HAL+FORMS to make self documented api
+//TODO: if time left use HAL+FORMS to make self documented api
 public class Application {
 
     /**

@@ -23,4 +23,14 @@ public interface CityRepository extends SearchableRepository<City> {
     @Transactional(readOnly = true)
     Page<City> findAllByCountryId(final Long countryId, final Pageable pageable);
 
+    /**
+     * Checks if city with given name in certain country already exists.
+     *
+     * @param name      City name.
+     * @param countryId Id of the country.
+     * @return True if exists; otherwise false.
+     */
+    @Transactional(readOnly = true)
+    boolean existsByNameIgnoreCaseAndCountryId(final String name, final Long countryId);
+
 }

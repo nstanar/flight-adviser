@@ -1,6 +1,6 @@
 package com.htec.domain_starter.service.util.impl;
 
-import com.htec.domain_starter.service.util.CharArrayShredder;
+import com.htec.domain_starter.service.util.PasswordShredder;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -9,18 +9,18 @@ import java.util.Arrays;
 /**
  * @author Nikola Stanar
  * <p>
- * Shreds char array value.
- * @see CharArrayShredder
+ * Shreds password value.
+ * @see PasswordShredder
  */
 @Component
 @NoArgsConstructor
-public class CharArrayShredderImpl implements CharArrayShredder {
+public class PasswordShredderImpl implements PasswordShredder {
 
     /**
-     * Shreds char array value,
+     * Shreds password value,
      *
      * @param value Value.
-     * @see CharArrayShredder#shred(char[])
+     * @see PasswordShredder#shred(char[])
      */
     @Override
     public void shred(final char[] value) {

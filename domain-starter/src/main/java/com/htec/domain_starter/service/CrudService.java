@@ -3,7 +3,10 @@ package com.htec.domain_starter.service;
 import com.htec.domain_starter.repository.entity.BaseEntity;
 import com.htec.domain_starter.service.dto.BaseDto;
 import com.htec.domain_starter.service.dto.converter.Convertible;
+import com.htec.domain_starter.service.validation.chain.BusinessValidatorChain;
 import com.htec.domain_starter.service.validation.exception.NotFoundException;
+import com.htec.domain_starter.service.validation.marker.Create;
+import com.htec.domain_starter.service.validation.marker.Update;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,7 +33,6 @@ import static org.springframework.context.i18n.LocaleContextHolder.getLocale;
  * Service for CRUD operations over DTO.
  */
 //TODO: AOP
-//TODO: add bulk insert
 @Transactional
 @Validated
 public interface CrudService<DTO extends BaseDto, ENTITY extends BaseEntity> extends Convertible<DTO, ENTITY> {
@@ -71,6 +73,8 @@ public interface CrudService<DTO extends BaseDto, ENTITY extends BaseEntity> ext
      */
     @PreAuthorize("isAuthenticated()")
     default DTO createFrom(@NotNull @Valid final DTO dto) {
+        getBusinessValidatorChain().ifPresent(businessValidatorChain -> businessValidatorChain.validateFor(Create.class, dto));
+
         final ENTITY entity = getDtoConverter().from(dto);
         final ENTITY createdEntity = getRepository()
                 .save(entity);
@@ -84,8 +88,10 @@ public interface CrudService<DTO extends BaseDto, ENTITY extends BaseEntity> ext
      * @param dto DTO holding update content.
      * @return Optional updated DTO if id exist, else empty.
      */
-    @PostAuthorize("hasRole('ADMIN') or returnObject.createdBy==authentication.principal.name")
+    @PostAuthorize("hasRole('ADMIN')")
     default DTO updateFrom(@NotNull final Long id, @NotNull @Valid final DTO dto) {
+        getBusinessValidatorChain().ifPresent(businessValidatorChain -> businessValidatorChain.validateFor(Update.class, dto));
+
         return getRepository()
                 .findById(id)
                 .map(entity -> getRepository().save(getDtoConverter().from(dto, entity)))
@@ -102,7 +108,7 @@ public interface CrudService<DTO extends BaseDto, ENTITY extends BaseEntity> ext
      * @param id Id of the DTO.
      * @return Optionally deleted DTO if existed.
      */
-    @PostAuthorize("hasRole('ADMIN') or returnObject.createdBy==authentication.principal.name")
+    @PostAuthorize("hasRole('ADMIN')")
     default DTO deleteById(final Long id) {
         return getRepository()
                 .findById(id)
@@ -121,15 +127,35 @@ public interface CrudService<DTO extends BaseDto, ENTITY extends BaseEntity> ext
      *
      * @param dtoS DTOs holding content that is about to be created.
      */
-    //TODO: extract this.
     @PreAuthorize("hasRole('ADMIN')")
     default void createFrom(final @NotEmpty Collection<@NotNull @Valid DTO> dtoS) {
         final Set<ENTITY> entities = dtoS
-                .stream()
+                .parallelStream()
                 .map(getDtoConverter()::from)
                 .collect(Collectors.toSet());
         getRepository().saveAll(entities);
     }
+
+    /**
+     * Deletes DTOs from method argument.
+     *
+     * @param dtoS DTOs holding content that is about to be created.
+     */
+    @PreAuthorize("hasRole('ADMIN')")
+    default void delete(final @NotEmpty Collection<@NotNull @Valid DTO> dtoS) {
+        final Set<ENTITY> entities = dtoS
+                .parallelStream()
+                .map(getDtoConverter()::from)
+                .collect(Collectors.toSet());
+        getRepository().deleteAll(entities);
+    }
+
+    /**
+     * Gets business validator chain.
+     *
+     * @return Optional validator chain.
+     */
+    Optional<BusinessValidatorChain<DTO>> getBusinessValidatorChain();
 
     /**
      * Gets jpa repository.

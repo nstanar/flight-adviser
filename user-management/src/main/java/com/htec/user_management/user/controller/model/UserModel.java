@@ -3,7 +3,6 @@ package com.htec.user_management.user.controller.model;
 import com.htec.domain_starter.controller.model.AuditAwareModel;
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
 /**

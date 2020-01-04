@@ -1,7 +1,6 @@
 package com.htec.user_management.user.repository.entity;
 
 import com.htec.domain_starter.repository.entity.AuditedEntity;
-import com.htec.domain_starter.repository.entity.BaseEntity;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

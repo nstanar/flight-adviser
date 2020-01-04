@@ -8,13 +8,20 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 
 /**
  * @author Nikola Stanar
+ * <p>
+ * Resource server configuration for oauth2.
  */
 @Configuration
 @EnableResourceServer
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-//TODO: document this.
 public class OAuth2ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
 
+    /**
+     * Configures http security.
+     *
+     * @param http Check {@link HttpSecurity}.
+     * @throws Exception Exception during configuration.
+     */
     @Override
     public void configure(final HttpSecurity http) throws Exception {
         http

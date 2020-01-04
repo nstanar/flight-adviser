@@ -39,8 +39,9 @@ public interface UserService extends CrudService<UserDto, User> {
      */
     @Override
     @PostAuthorize("hasRole('ADMIN')")
-    UserDto updateFrom(final @NotNull Long id, final @NotNull @Valid UserDto dto);
-
+    default UserDto updateFrom(final @NotNull Long id, final @NotNull @Valid UserDto dto) {
+        return CrudService.super.updateFrom(id, dto);
+    }
 
     /**
      * Deletes user by id.

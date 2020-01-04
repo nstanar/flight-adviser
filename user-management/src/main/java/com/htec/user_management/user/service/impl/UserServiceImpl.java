@@ -3,8 +3,9 @@ package com.htec.user_management.user.service.impl;
 import com.htec.domain_starter.service.CrudService;
 import com.htec.domain_starter.service.dto.converter.Convertible;
 import com.htec.domain_starter.service.dto.converter.DtoConverter;
-import com.htec.domain_starter.service.validation.exception.BusinessValidationException;
+import com.htec.domain_starter.service.validation.chain.BusinessValidatorChain;
 import com.htec.domain_starter.service.validation.exception.NotFoundException;
+import com.htec.domain_starter.service.validation.marker.Update;
 import com.htec.user_management.auth.service.RevokeTokenService;
 import com.htec.user_management.user.repository.RoleRepository;
 import com.htec.user_management.user.repository.UserRepository;
@@ -29,7 +30,6 @@ import java.util.Optional;
 import java.util.Set;
 
 import static com.htec.domain_starter.common.constants.MessageSourceKeys.RESOURCE_DOES_NOT_EXIST;
-import static com.htec.user_management.common.constants.UserMessageSourceKeys.USERNAME_ALREADY_EXISTS;
 import static com.htec.user_management.user.service.dto.RoleDto.Value.ROLE_REGULAR_USER;
 import static java.util.stream.Collectors.toSet;
 import static org.springframework.context.i18n.LocaleContextHolder.getLocale;
@@ -53,6 +53,11 @@ public class UserServiceImpl implements UserService {
      * Dto converter for user.
      */
     private final UserDtoConverter userDtoConverter;
+
+    /**
+     * Business validator chain for user.
+     */
+    private final BusinessValidatorChain<UserDto> businessValidatorChain;
 
     /**
      * Jpa repository for role.
@@ -82,31 +87,16 @@ public class UserServiceImpl implements UserService {
      * @see UserService#createFrom(UserDto)
      */
     @Override
-    //TODO: revise how to deal with uniqueness, since it is a cross cutting concern.
     public UserDto createFrom(@NotNull @Valid final UserDto user) {
-        log.info("Creating {}.", user);
-        /* Check if username already exists. */
-        final Optional<User> optionalExistingUser = userRepository.findByUsername(user.getUsername());
-        if (optionalExistingUser.isPresent()) {
-            final String message = messageSource.getMessage(USERNAME_ALREADY_EXISTS, new Object[]{}, getLocale());
-            throw new BusinessValidationException(message);
-        }
-
         final User userEntity = userDtoConverter.from(user);
         final Role regularUserRole = roleRepository.findByName(ROLE_REGULAR_USER.getName());
+
+        // TODO: Adding new roles should be supported in future.
         userEntity.setRoles(Collections.singleton(regularUserRole));
-        final User createdUser = userRepository
-                .save(userEntity);
 
-        log.info("User successfully created and given id {}.", createdUser.getId());
+        final User createdUser = userRepository.save(userEntity);
+
         return userDtoConverter.from(createdUser);
-    }
-
-    //TODO: deal with update beceause of the uniqueness.
-
-    @Override
-    public UserDto updateFrom(final @NotNull Long id, final @NotNull @Valid UserDto dto) {
-        return null;
     }
 
     /**
@@ -144,7 +134,7 @@ public class UserServiceImpl implements UserService {
     public Optional<UserDto> findByUsername(final @NotBlank String username) {
         log.info("Fetching details for user of username {}.", username);
         return userRepository
-                .findByUsername(username)
+                .findByUsernameIgnoreCase(username)
                 .map(userDtoConverter::from);
     }
 
@@ -159,16 +149,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto updateByUsername(final @NotBlank String username, @NotNull @Valid final UserDto dto) {
         log.info("Updating user {} with content {}.", username, dto);
-
-        //TODO: implement this.
-        /* Check if username already exists. */
-        final Optional<User> optionalExistingUser = userRepository.findByUsername(dto.getUsername());
-        if (optionalExistingUser.isPresent()) {
-            final String message = messageSource.getMessage(RESOURCE_DOES_NOT_EXIST, new Object[]{}, getLocale());
-            throw new BusinessValidationException(message);
-        }
-
-        return null;
+        businessValidatorChain.validateFor(Update.class, dto);
+        return userRepository
+                .findByUsernameIgnoreCase(username)
+                .map(entity -> getRepository().save(getDtoConverter().from(dto, entity)))
+                .map(getDtoConverter()::from)
+                .orElseThrow(() -> {
+                    final String message = getMessageSource().getMessage(RESOURCE_DOES_NOT_EXIST, new Object[]{username}, getLocale());
+                    throw new NotFoundException(message);
+                });
     }
 
     /**
@@ -182,7 +171,7 @@ public class UserServiceImpl implements UserService {
     public UserDto deleteByUsername(@NotBlank final String username) {
         log.info("Deleting user of username {}.", username);
         return userRepository
-                .findByUsername(username)
+                .findByUsernameIgnoreCase(username)
                 .map(user -> {
                     final UserDto deletedUser = getDtoConverter().from(user);
                     userRepository.deleteByUsername(username);
@@ -223,6 +212,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public JpaRepository<User, Long> getRepository() {
         return userRepository;
+    }
+
+    /**
+     * Gets business validator chain.
+     *
+     * @return Business validator chain.
+     * @see UserService#getBusinessValidatorChain()
+     */
+    @Override
+    public Optional<BusinessValidatorChain<UserDto>> getBusinessValidatorChain() {
+        return Optional.ofNullable(businessValidatorChain);
     }
 
     /**

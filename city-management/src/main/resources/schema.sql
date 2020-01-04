@@ -1,3 +1,5 @@
+-- TODO: in production database add partial and function indexes.
+
 DROP TABLE IF EXISTS country;
 DROP TABLE IF EXISTS city;
 DROP TABLE IF EXISTS comment;

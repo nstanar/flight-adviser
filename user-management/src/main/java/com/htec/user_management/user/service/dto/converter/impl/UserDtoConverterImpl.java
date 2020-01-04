@@ -2,7 +2,7 @@ package com.htec.user_management.user.service.dto.converter.impl;
 
 import com.htec.domain_starter.repository.entity.BaseEntity;
 import com.htec.domain_starter.service.dto.BaseDto;
-import com.htec.domain_starter.service.util.CharArrayShredder;
+import com.htec.domain_starter.service.util.PasswordShredder;
 import com.htec.user_management.user.repository.entity.User;
 import com.htec.user_management.user.service.dto.UserDto;
 import com.htec.user_management.user.service.dto.converter.UserDtoConverter;
@@ -33,7 +33,7 @@ public class UserDtoConverterImpl implements UserDtoConverter {
     /**
      * For password shredding.
      */
-    private final CharArrayShredder charArrayShredder;
+    private final PasswordShredder passwordShredder;
 
     /**
      * Converts user entity to dto.
@@ -66,7 +66,19 @@ public class UserDtoConverterImpl implements UserDtoConverter {
      */
     @Override
     public User from(@NotNull final UserDto dto) {
-        return from(dto, new User());
+        final User entity = new User();
+        entity.setFirstName(dto.getFirstName());
+        entity.setLastName(dto.getLastName());
+        entity.setUsername(dto.getUsername());
+
+        // Encode password.
+        final char[] password = dto.getPassword();
+        entity.setPassword(passwordEncoder.encode(wrap(password)));
+
+        // Shred password.
+        passwordShredder.shred(password);
+
+        return entity;
     }
 
     /**
@@ -81,12 +93,11 @@ public class UserDtoConverterImpl implements UserDtoConverter {
     public User from(@NotNull final UserDto dto, @NotNull final User existingEntity) {
         existingEntity.setFirstName(dto.getFirstName());
         existingEntity.setLastName(dto.getLastName());
-        existingEntity.setUsername(dto.getUsername());
 
-        // Encode password.
-        final char[] password = dto.getPassword();
-        existingEntity.setPassword(passwordEncoder.encode(wrap(password)));
-        charArrayShredder.shred(password);
+        /*
+         * TODO: Changing username and password not supported.
+         * In future authentication data and user profile data should be decoupled (Single responsibility principle).
+         */
 
         return existingEntity;
     }

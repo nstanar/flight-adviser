@@ -27,40 +27,78 @@ import java.util.Collections;
 
 /**
  * @author Nikola Stanar
+ * <p>
+ * Auhtorization server configuration for oauth2.
  */
 @Configuration
 @EnableAuthorizationServer
-//TODO: document this.
 public class Oauth2AuthServerConfiguration extends AuthorizationServerConfigurerAdapter {
 
+    /**
+     * Authentication manager.
+     */
     private AuthenticationManager authenticationManager;
 
+    /**
+     * Data source.
+     */
     private DataSource dataSource;
 
+    /**
+     * Password encoder.
+     */
     private PasswordEncoder passwordEncoder;
 
+    /**
+     * User details service.
+     */
     private UserDetailsService userDetailsService;
 
+    /**
+     * Setter for data source.
+     *
+     * @param dataSource Data source.
+     */
     @Autowired
     public void setDataSource(final DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
+    /**
+     * Setter for user details service.
+     *
+     * @param userDetailsService User details service.
+     */
     @Autowired
     public void setUserDetailsService(final UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
 
+    /**
+     * Setter for authentication manager.
+     *
+     * @param authenticationManager Authentication manager.
+     */
     @Autowired
     public void setAuthenticationManager(final AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
 
+    /**
+     * Setter for password encoder.
+     *
+     * @param passwordEncoder Password encoder.
+     */
     @Autowired
     public void setPasswordEncoder(final PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
 
+    /**
+     * Configures oauth server.
+     *
+     * @param oauthServer Check {@link AuthorizationServerSecurityConfigurer}.
+     */
     @Override
     public void configure(final AuthorizationServerSecurityConfigurer oauthServer) {
         oauthServer
@@ -68,44 +106,73 @@ public class Oauth2AuthServerConfiguration extends AuthorizationServerConfigurer
                 .checkTokenAccess("isAuthenticated()");
     }
 
+    /**
+     * Configures client details service.
+     *
+     * @param serviceConfigurer Check {@link ClientDetailsServiceConfigurer}.
+     * @throws Exception Exception during configuration.
+     */
     @Override
-    public void configure(final ClientDetailsServiceConfigurer detailsServiceConfigurer) throws Exception {
-        detailsServiceConfigurer.withClientDetails(jdbcClientDetailsService());
+    public void configure(final ClientDetailsServiceConfigurer serviceConfigurer) throws Exception {
+        serviceConfigurer.withClientDetails(clientDetailsService());
     }
 
+    /**
+     * Configures authorization server endpoints.
+     *
+     * @param endpoints Check {@link AuthorizationServerEndpointsConfigurer}.
+     */
     @Override
     public void configure(final AuthorizationServerEndpointsConfigurer endpoints) {
-        endpoints.authenticationManager(authenticationManager).tokenServices(tokenServices());
+        endpoints.authenticationManager(authenticationManager).tokenServices(tokenServices(providerManager()));
     }
 
+    /**
+     * Instantiates authorization server token services.
+     *
+     * @param providerManager Provider manager.
+     * @return Check {@link AuthorizationServerTokenServices}.
+     */
     @Bean
     @Primary
-    public AuthorizationServerTokenServices tokenServices() {
-        return defaultTokenServices();
-    }
-
-    private DefaultTokenServices defaultTokenServices() {
+    public AuthorizationServerTokenServices tokenServices(final ProviderManager providerManager) {
         final DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
         defaultTokenServices.setTokenStore(tokenStore());
         defaultTokenServices.setSupportRefreshToken(true);
-        defaultTokenServices.setClientDetailsService(jdbcClientDetailsService());
-        defaultTokenServices.setAuthenticationManager(createPreAuthProvider());
+        defaultTokenServices.setClientDetailsService(clientDetailsService());
+        defaultTokenServices.setAuthenticationManager(providerManager);
         return defaultTokenServices;
     }
 
-    private ProviderManager createPreAuthProvider() {
+    /**
+     * Instantiates provider manager.
+     *
+     * @return Provider manager.
+     */
+    @Bean
+    public ProviderManager providerManager() {
         final PreAuthenticatedAuthenticationProvider provider = new PreAuthenticatedAuthenticationProvider();
         provider.setPreAuthenticatedUserDetailsService(new UserDetailsByNameServiceWrapper<>(userDetailsService));
         return new ProviderManager(Collections.singletonList(provider));
     }
 
+    /**
+     * Instantiates token store.
+     *
+     * @return Token store.
+     */
     @Bean
     public TokenStore tokenStore() {
         return new JdbcTokenStore(dataSource);
     }
 
+    /**
+     * Instantiates client details service.
+     *
+     * @return Client details service.
+     */
     @Bean
-    public ClientDetailsService jdbcClientDetailsService() {
+    public ClientDetailsService clientDetailsService() {
         final JdbcClientDetailsService jdbcClientDetailsService = new JdbcClientDetailsService(dataSource);
         jdbcClientDetailsService.setPasswordEncoder(passwordEncoder);
         return jdbcClientDetailsService;

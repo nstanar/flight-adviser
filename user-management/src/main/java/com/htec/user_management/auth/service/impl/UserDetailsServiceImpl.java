@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static com.htec.user_management.common.constants.UserMessageSourceKeys.INVALID_CREDENTIALS;
 import static org.springframework.context.i18n.LocaleContextHolder.getLocale;
 
 /**
@@ -40,6 +39,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private final MessageSource messageSource;
 
     /**
+     * Message source key.
+     */
+    public static final String INVALID_CREDENTIALS = "invalid_credentials";
+
+    /**
      * Loads user by username.
      *
      * @param username User's username.
@@ -49,7 +53,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-        final Optional<User> optionalUser = userRepository.findByUsername(username);
+        final Optional<User> optionalUser = userRepository.findByUsernameIgnoreCase(username);
         if (optionalUser.isEmpty()) {
             log.info("Authenticating user with username {}", username);
             final String message = messageSource.getMessage(INVALID_CREDENTIALS, new Object[]{}, getLocale());
