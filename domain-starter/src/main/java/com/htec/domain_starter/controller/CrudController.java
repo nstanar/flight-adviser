@@ -1,11 +1,11 @@
 package com.htec.domain_starter.controller;
 
-import com.htec.domain_starter.service.validation.exception.NotFoundException;
 import com.htec.domain_starter.controller.validation.exception.handler.ControllerAdvice;
 import com.htec.domain_starter.repository.entity.BaseEntity;
 import com.htec.domain_starter.service.CrudService;
 import com.htec.domain_starter.service.dto.BaseDto;
 import com.htec.domain_starter.service.validation.exception.BusinessValidationException;
+import com.htec.domain_starter.service.validation.exception.NotFoundException;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -58,7 +58,7 @@ public interface CrudController<MODEL extends RepresentationModel<MODEL>, DTO ex
     @GetMapping("/{id}")
     default ResponseEntity<MODEL> findBy(@PathVariable final Long id) {
         return getService()
-                .findBy(id)
+                .findById(id)
                 .map(getModelAssembler()::toModel)
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> {
@@ -93,14 +93,8 @@ public interface CrudController<MODEL extends RepresentationModel<MODEL>, DTO ex
      */
     @PutMapping("/{id}")
     default ResponseEntity<?> updateFrom(@PathVariable final Long id, @RequestBody final DTO dto) {
-        return getService()
-                .updateFrom(id, dto)
-                .map(getModelAssembler()::toModel)
-                .map(model -> ResponseEntity.noContent().build())
-                .orElseThrow(() -> {
-                    final String message = getMessageSource().getMessage(RESOURCE_DOES_NOT_EXIST, new Object[]{id}, getLocale());
-                    return new NotFoundException(message);
-                });
+        getService().updateFrom(id, dto);
+        return ResponseEntity.noContent().build();
     }
 
     /**
@@ -112,12 +106,8 @@ public interface CrudController<MODEL extends RepresentationModel<MODEL>, DTO ex
      */
     @DeleteMapping("/{id}")
     default ResponseEntity<?> deleteBy(@PathVariable final Long id) {
-        if (getService().deleteBy(id).isPresent()) {
-            return ResponseEntity.noContent().build();
-        } else {
-            final String message = getMessageSource().getMessage(RESOURCE_DOES_NOT_EXIST, new Object[]{id}, getLocale());
-            throw new NotFoundException(message);
-        }
+        getService().deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 
     /**

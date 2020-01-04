@@ -3,9 +3,12 @@ package com.htec.domain_starter.service;
 import com.htec.domain_starter.repository.entity.BaseEntity;
 import com.htec.domain_starter.service.dto.BaseDto;
 import com.htec.domain_starter.service.dto.converter.Convertible;
+import com.htec.domain_starter.service.validation.exception.NotFoundException;
+import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -17,6 +20,9 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static com.htec.domain_starter.common.constants.MessageSourceKeys.RESOURCE_DOES_NOT_EXIST;
+import static org.springframework.context.i18n.LocaleContextHolder.getLocale;
 
 /**
  * @author Nikola Stanar
@@ -51,7 +57,7 @@ public interface CrudService<DTO extends BaseDto, ENTITY extends BaseEntity> ext
      */
     @PreAuthorize("isAuthenticated()")
     @Transactional(readOnly = true)
-    default Optional<DTO> findBy(@NotNull final Long id) {
+    default Optional<DTO> findById(@NotNull final Long id) {
         return getRepository()
                 .findById(id)
                 .map(getDtoConverter()::from);
@@ -78,13 +84,16 @@ public interface CrudService<DTO extends BaseDto, ENTITY extends BaseEntity> ext
      * @param dto DTO holding update content.
      * @return Optional updated DTO if id exist, else empty.
      */
-    //TODO: fix this for comments
-    @PreAuthorize("hasRole('ADMIN')")
-    default Optional<DTO> updateFrom(@NotNull final Long id, @NotNull @Valid final DTO dto) {
-        final Optional<ENTITY> optionalEntity = getRepository().findById(id);
-        return optionalEntity
+    @PostAuthorize("hasRole('ADMIN') or returnObject.createdBy==authentication.principal.name")
+    default DTO updateFrom(@NotNull final Long id, @NotNull @Valid final DTO dto) {
+        return getRepository()
+                .findById(id)
                 .map(entity -> getRepository().save(getDtoConverter().from(dto, entity)))
-                .map(getDtoConverter()::from);
+                .map(getDtoConverter()::from)
+                .orElseThrow(() -> {
+                    final String message = getMessageSource().getMessage(RESOURCE_DOES_NOT_EXIST, new Object[]{id}, getLocale());
+                    throw new NotFoundException(message);
+                });
     }
 
     /**
@@ -93,23 +102,26 @@ public interface CrudService<DTO extends BaseDto, ENTITY extends BaseEntity> ext
      * @param id Id of the DTO.
      * @return Optionally deleted DTO if existed.
      */
-    @PreAuthorize("hasRole('ADMIN')")
-    //TODO: fix this for comments
-    default Optional<DTO> deleteBy(final Long id) {
-        final Optional<ENTITY> optionalEntity = getRepository().findById(id);
-        Optional<DTO> deletedDto = Optional.empty();
-        if (optionalEntity.isPresent()) {
-            deletedDto = Optional.of(getDtoConverter().from(optionalEntity.get()));
-            getRepository().deleteById(id);
-        }
-        return deletedDto;
+    @PostAuthorize("hasRole('ADMIN') or returnObject.createdBy==authentication.principal.name")
+    default DTO deleteById(final Long id) {
+        return getRepository()
+                .findById(id)
+                .map(entity -> {
+                    final DTO deletedDto = getDtoConverter().from(entity);
+                    getRepository().deleteById(id);
+                    return deletedDto;
+                }).orElseThrow(() -> {
+                    final String message = getMessageSource().getMessage(RESOURCE_DOES_NOT_EXIST, new Object[]{id}, getLocale());
+                    throw new NotFoundException(message);
+                });
     }
 
     /**
      * Creates DTOs from method argument.
      *
-     * @param dtoS Stream of dtoS holding content that is about to be created.
+     * @param dtoS DTOs holding content that is about to be created.
      */
+    //TODO: extract this.
     @PreAuthorize("hasRole('ADMIN')")
     default void createFrom(final @NotEmpty Collection<@NotNull @Valid DTO> dtoS) {
         final Set<ENTITY> entities = dtoS
@@ -125,5 +137,12 @@ public interface CrudService<DTO extends BaseDto, ENTITY extends BaseEntity> ext
      * @return Check {@link JpaRepository}.
      */
     JpaRepository<ENTITY, Long> getRepository();
+
+    /**
+     * Gets message source.
+     *
+     * @return Message source.
+     */
+    MessageSource getMessageSource();
 
 }

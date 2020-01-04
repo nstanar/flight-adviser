@@ -1,11 +1,11 @@
 package com.htec.user_management.user.service.impl;
 
 import com.htec.domain_starter.service.CrudService;
-import com.htec.domain_starter.service.dto.BaseDto;
 import com.htec.domain_starter.service.dto.converter.Convertible;
 import com.htec.domain_starter.service.dto.converter.DtoConverter;
 import com.htec.domain_starter.service.validation.exception.BusinessValidationException;
 import com.htec.domain_starter.service.validation.exception.NotFoundException;
+import com.htec.user_management.auth.service.RevokeTokenService;
 import com.htec.user_management.user.repository.RoleRepository;
 import com.htec.user_management.user.repository.UserRepository;
 import com.htec.user_management.user.repository.entity.Role;
@@ -28,8 +28,8 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.htec.user_management.common.constants.MessageSourceKeys.USERNAME_ALREADY_EXISTS;
-import static com.htec.user_management.common.constants.MessageSourceKeys.USER_DOES_NOT_EXIST;
+import static com.htec.domain_starter.common.constants.MessageSourceKeys.RESOURCE_DOES_NOT_EXIST;
+import static com.htec.user_management.common.constants.UserMessageSourceKeys.USERNAME_ALREADY_EXISTS;
 import static com.htec.user_management.user.service.dto.RoleDto.Value.ROLE_REGULAR_USER;
 import static java.util.stream.Collectors.toSet;
 import static org.springframework.context.i18n.LocaleContextHolder.getLocale;
@@ -65,6 +65,11 @@ public class UserServiceImpl implements UserService {
     private final RoleDtoConverter roleDtoConverter;
 
     /**
+     * Revoke token service.
+     */
+    private final RevokeTokenService revokeTokenService;
+
+    /**
      * Message source.
      */
     private final MessageSource messageSource;
@@ -74,7 +79,7 @@ public class UserServiceImpl implements UserService {
      *
      * @param user User that is about to be created.
      * @return Created user.
-     * @see CrudService#createFrom(BaseDto)
+     * @see UserService#createFrom(UserDto)
      */
     @Override
     //TODO: revise how to deal with uniqueness, since it is a cross cutting concern.
@@ -98,6 +103,35 @@ public class UserServiceImpl implements UserService {
     }
 
     //TODO: deal with update beceause of the uniqueness.
+
+    @Override
+    public UserDto updateFrom(final @NotNull Long id, final @NotNull @Valid UserDto dto) {
+        return null;
+    }
+
+    /**
+     * Deletes user by id.
+     *
+     * @param id Id of the DTO.
+     * @return Deleted user.
+     * @see UserService#deleteById(Long)
+     */
+    @Override
+    public UserDto deleteById(final Long id) {
+        log.info("Deleting user of id {}.", id);
+        return userRepository
+                .findById(id)
+                .map(user -> {
+                    final UserDto deletedUser = getDtoConverter().from(user);
+                    userRepository.deleteById(id);
+                    //Logout user.
+                    revokeTokenService.revokeFor(user.getUsername());
+                    return deletedUser;
+                }).orElseThrow(() -> {
+                    final String message = messageSource.getMessage(RESOURCE_DOES_NOT_EXIST, new Object[]{id}, getLocale());
+                    throw new NotFoundException(message);
+                });
+    }
 
     /**
      * Finds user by username.
@@ -130,7 +164,7 @@ public class UserServiceImpl implements UserService {
         /* Check if username already exists. */
         final Optional<User> optionalExistingUser = userRepository.findByUsername(dto.getUsername());
         if (optionalExistingUser.isPresent()) {
-            final String message = messageSource.getMessage(USERNAME_ALREADY_EXISTS, new Object[]{}, getLocale());
+            final String message = messageSource.getMessage(RESOURCE_DOES_NOT_EXIST, new Object[]{}, getLocale());
             throw new BusinessValidationException(message);
         }
 
@@ -152,10 +186,11 @@ public class UserServiceImpl implements UserService {
                 .map(user -> {
                     final UserDto deletedUser = getDtoConverter().from(user);
                     userRepository.deleteByUsername(username);
-                    //TODO: revoke token.
+                    //Logout user.
+                    revokeTokenService.revokeFor(username);
                     return deletedUser;
                 }).orElseThrow(() -> {
-                    final String message = messageSource.getMessage(USER_DOES_NOT_EXIST, new Object[]{username}, getLocale());
+                    final String message = messageSource.getMessage(RESOURCE_DOES_NOT_EXIST, new Object[]{username}, getLocale());
                     throw new NotFoundException(message);
                 });
     }
@@ -165,6 +200,7 @@ public class UserServiceImpl implements UserService {
      *
      * @param userId Id ot the user.
      * @return User roles.
+     * @see UserService#findRolesBy(Long)
      */
     @Override
     public Set<RoleDto> findRolesBy(@NotNull final Long userId) {
@@ -187,6 +223,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public JpaRepository<User, Long> getRepository() {
         return userRepository;
+    }
+
+    /**
+     * Gets message source.
+     *
+     * @return Message source.
+     * @see UserService#getMessageSource()
+     */
+    @Override
+    public MessageSource getMessageSource() {
+        return messageSource;
     }
 
     /**

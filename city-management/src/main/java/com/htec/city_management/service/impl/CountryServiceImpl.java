@@ -10,9 +10,11 @@ import com.htec.city_management.service.dto.CountryDto;
 import com.htec.city_management.service.dto.converter.CityDtoConverter;
 import com.htec.city_management.service.dto.converter.CountryDtoConverter;
 import com.htec.domain_starter.repository.SearchableRepository;
+import com.htec.domain_starter.service.CrudService;
 import com.htec.domain_starter.service.dto.converter.DtoConverter;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -52,6 +54,11 @@ public class CountryServiceImpl implements CountryService {
      * Dto converter for city.
      */
     private final CityDtoConverter cityDtoConverter;
+
+    /**
+     * Message source.
+     */
+    private final MessageSource messageSource;
 
     /**
      * Finds page of cities belonging to country.
@@ -99,6 +106,17 @@ public class CountryServiceImpl implements CountryService {
     @Override
     public DtoConverter<CountryDto, Country> getDtoConverter() {
         return countryDtoConverter;
+    }
+
+    /**
+     * Gets message source.
+     *
+     * @return Message source.
+     * @see CountryService#getMessageSource()
+     */
+    @Override
+    public MessageSource getMessageSource() {
+        return messageSource;
     }
 
     /**

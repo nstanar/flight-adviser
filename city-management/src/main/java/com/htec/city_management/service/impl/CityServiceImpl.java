@@ -13,6 +13,7 @@ import com.htec.domain_starter.repository.SearchableRepository;
 import com.htec.domain_starter.service.dto.converter.DtoConverter;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -51,6 +52,11 @@ public class CityServiceImpl implements CityService {
      * Dto converter for comment.
      */
     private final CommentDtoConverter commentDtoConverter;
+
+    /**
+     * Message source.
+     */
+    private final MessageSource messageSource;
 
     /**
      * Finds page of comments belonging to city.
@@ -97,6 +103,17 @@ public class CityServiceImpl implements CityService {
     @Override
     public DtoConverter<CityDto, City> getDtoConverter() {
         return cityDtoConverter;
+    }
+
+    /**
+     * Gets message source.
+     *
+     * @return Message source.
+     * @see CityService#getMessageSource()
+     */
+    @Override
+    public MessageSource getMessageSource() {
+        return messageSource;
     }
 
     /**

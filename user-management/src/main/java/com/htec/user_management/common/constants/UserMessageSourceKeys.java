@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
  * Class holding message source keys.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class MessageSourceKeys {
+public final class UserMessageSourceKeys {
 
     /**
      * Used to indicate that username already exists.
@@ -20,9 +20,4 @@ public final class MessageSourceKeys {
      * Used to indicate that credentials are invalid.
      */
     public static final String INVALID_CREDENTIALS = "invalid_credentials";
-
-    /**
-     * Used to indicate that user does not exist.
-     */
-    public static final String USER_DOES_NOT_EXIST = "user_does_not_exist";
 }

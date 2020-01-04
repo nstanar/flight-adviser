@@ -1,4 +1,4 @@
-package com.htec.user_management.oauth2.service.impl;
+package com.htec.user_management.auth.service.impl;
 
 import com.htec.user_management.user.repository.UserRepository;
 import com.htec.user_management.user.repository.entity.User;
@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static com.htec.user_management.common.constants.MessageSourceKeys.INVALID_CREDENTIALS;
+import static com.htec.user_management.common.constants.UserMessageSourceKeys.INVALID_CREDENTIALS;
 import static org.springframework.context.i18n.LocaleContextHolder.getLocale;
 
 /**

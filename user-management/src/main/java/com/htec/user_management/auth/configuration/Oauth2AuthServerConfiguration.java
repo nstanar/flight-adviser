@@ -1,4 +1,4 @@
-package com.htec.user_management.common.configuration;
+package com.htec.user_management.auth.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

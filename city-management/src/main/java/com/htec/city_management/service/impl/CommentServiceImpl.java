@@ -8,6 +8,7 @@ import com.htec.city_management.service.dto.converter.CommentDtoConverter;
 import com.htec.domain_starter.service.dto.converter.DtoConverter;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +34,11 @@ public class CommentServiceImpl implements CommentService {
     private final CommentDtoConverter commentDtoConverter;
 
     /**
+     * Message source.
+     */
+    private final MessageSource messageSource;
+
+    /**
      * Gets jpa repository.
      *
      * @return Jpa repository.
@@ -41,6 +47,17 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public JpaRepository<Comment, Long> getRepository() {
         return commentRepository;
+    }
+
+    /**
+     * Gets message source.
+     *
+     * @return Message source.
+     * @see CommentService#getMessageSource()
+     */
+    @Override
+    public MessageSource getMessageSource() {
+        return messageSource;
     }
 
     /**

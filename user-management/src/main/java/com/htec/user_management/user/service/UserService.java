@@ -1,6 +1,7 @@
 package com.htec.user_management.user.service;
 
 import com.htec.domain_starter.service.CrudService;
+import com.htec.domain_starter.service.dto.BaseDto;
 import com.htec.user_management.user.repository.entity.User;
 import com.htec.user_management.user.service.dto.RoleDto;
 import com.htec.user_management.user.service.dto.UserDto;
@@ -29,6 +30,30 @@ public interface UserService extends CrudService<UserDto, User> {
     UserDto createFrom(final @NotNull @Valid UserDto dto);
 
     /**
+     * Updates user from dto content.
+     *
+     * @param id  Id of the dto.
+     * @param dto DTO holding update content.
+     * @return Updated user.
+     * @see CrudService#updateFrom(Long, BaseDto)
+     */
+    @Override
+    @PostAuthorize("hasRole('ADMIN')")
+    UserDto updateFrom(final @NotNull Long id, final @NotNull @Valid UserDto dto);
+
+
+    /**
+     * Deletes user by id.
+     *
+     * @param id Id of the DTO.
+     * @return Deleted user.
+     * @see CrudService#deleteById(Long)
+     */
+    @Override
+    @PostAuthorize("hasRole('ADMIN')")
+    UserDto deleteById(final Long id);
+
+    /**
      * Finds user by username.
      *
      * @param username User's username.
@@ -45,7 +70,7 @@ public interface UserService extends CrudService<UserDto, User> {
      * @param dto      Update content.
      * @return Updated user.
      */
-    @PostAuthorize("hasRole('ADMIN') or #username==returnObject.username")
+    @PostAuthorize("hasRole('ADMIN') or returnObject.username==authentication.principal.name")
     UserDto updateByUsername(@NotBlank final String username, @NotNull @Valid UserDto dto);
 
     /**
@@ -54,7 +79,7 @@ public interface UserService extends CrudService<UserDto, User> {
      * @param username User's username.
      * @return Deleted user.
      */
-    @PostAuthorize("hasRole('ADMIN') or #username==returnObject.username")
+    @PostAuthorize("hasRole('ADMIN') or returnObject.username==authentication.principal.name")
     UserDto deleteByUsername(@NotBlank final String username);
 
     /**
