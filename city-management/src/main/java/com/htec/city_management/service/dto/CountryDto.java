@@ -24,7 +24,7 @@ public class CountryDto extends BaseDto {
      */
     @NotBlank
     @Size(min = 2, max = 255)
-    @Pattern(regexp = "[a-zA-Z]{2,}")
+    @Pattern(regexp = "^([a-zA-Z\\u0080-\\u024F]+(?:. |-| |'))*[a-zA-Z\\u0080-\\u024F]*$")
     private String name;
 
 }

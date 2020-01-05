@@ -32,7 +32,7 @@ public interface SearchableService<DTO extends BaseDto, ENTITY extends BaseEntit
     default Page<DTO> findBy(@NotBlank @Size(min = 2) final String nameFilter, @NotNull final Pageable pageable) {
         final String enhancedNameFilter = "%" + nameFilter + "%";
         return getRepository()
-                .findByNameLike(enhancedNameFilter, pageable)
+                .findByNameLikeIgnoreCase(enhancedNameFilter, pageable)
                 .map(getDtoConverter()::from);
     }
 
