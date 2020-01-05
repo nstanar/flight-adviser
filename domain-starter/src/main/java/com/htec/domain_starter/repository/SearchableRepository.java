@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @NoRepositoryBean
 //TODO: if time left, make it generic with criteria API so it can be used for any field.
-public interface SearchableRepository<ENTITY extends BaseEntity> extends JpaRepository<ENTITY, Long> {
+public interface SearchableRepository<E extends BaseEntity> extends JpaRepository<E, Long> {
 
     /**
      * Finds page of entities matching name filter.
@@ -24,6 +24,6 @@ public interface SearchableRepository<ENTITY extends BaseEntity> extends JpaRepo
      * @return Page of entities matching name filter.
      */
     @Transactional(readOnly = true)
-    Page<ENTITY> findByNameLikeIgnoreCase(final String nameFilter, final Pageable pageable);
+    Page<E> findByNameLikeIgnoreCase(final String nameFilter, final Pageable pageable);
 
 }

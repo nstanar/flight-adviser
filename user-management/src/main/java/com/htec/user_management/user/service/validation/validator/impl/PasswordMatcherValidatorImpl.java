@@ -34,7 +34,7 @@ public class PasswordMatcherValidatorImpl implements PasswordMatcherValidator {
     /**
      * Used as message source key.
      */
-    public static final String PASSWORDS_DO_NOT_MATCH = "passwords_do_not_match";
+    public static final String SECRETS_DO_NOT_MATCH = "secrets_do_not_match";
 
     /**
      * Validates password matches new password.
@@ -49,7 +49,7 @@ public class PasswordMatcherValidatorImpl implements PasswordMatcherValidator {
         if (!Arrays.equals(password, newPassword)) {
             passwordShredder.shred(password);
             passwordShredder.shred(newPassword);
-            throw exceptionUtil.createBusinessValidationExceptionFrom(PASSWORDS_DO_NOT_MATCH, new Object[]{});
+            throw exceptionUtil.createBusinessValidationExceptionFrom(SECRETS_DO_NOT_MATCH, new Object[]{});
         }
 
         passwordShredder.shred(newPassword);

@@ -13,7 +13,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
 import java.util.Optional;
@@ -24,7 +23,6 @@ import java.util.Optional;
  * Service exposing operations over city.
  * Implementation of {@link CityService}.
  */
-@Service
 @Slf4j
 @AllArgsConstructor
 public class CityServiceImpl implements CityService {

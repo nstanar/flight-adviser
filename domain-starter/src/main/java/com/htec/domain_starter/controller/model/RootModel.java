@@ -1,7 +1,7 @@
 package com.htec.domain_starter.controller.model;
 
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import org.springframework.hateoas.RepresentationModel;
 
 /**
@@ -9,7 +9,7 @@ import org.springframework.hateoas.RepresentationModel;
  * <p>
  * Root representation model for application entry-point.
  */
-@Getter
+@Data
 @Builder
 public class RootModel extends RepresentationModel<RootModel> {
 

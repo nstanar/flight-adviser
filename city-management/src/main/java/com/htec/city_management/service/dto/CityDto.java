@@ -2,7 +2,9 @@ package com.htec.city_management.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.htec.domain_starter.service.dto.BaseDto;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -13,11 +15,9 @@ import javax.validation.constraints.Size;
  * <p>
  * Dto representing city.
  */
-@Getter
-@Setter
 @NoArgsConstructor
+@Data
 @ToString(exclude = {"countryName"})
-@EqualsAndHashCode
 public class CityDto extends BaseDto {
 
     /**

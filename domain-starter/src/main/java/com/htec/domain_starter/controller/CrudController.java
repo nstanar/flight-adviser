@@ -26,7 +26,7 @@ import static com.htec.domain_starter.common.constants.MessageSourceKeys.RESOURC
  * <p>
  * Crud controller exposing API operations over MODEl.
  */
-public interface CrudController<MODEL extends RepresentationModel<MODEL>, DTO extends BaseDto, ENTITY extends BaseEntity> {
+public interface CrudController<M extends RepresentationModel<M>, D extends BaseDto, E extends BaseEntity> {
 
     /**
      * Finds page of model entities matching name prefix (if present).
@@ -36,8 +36,8 @@ public interface CrudController<MODEL extends RepresentationModel<MODEL>, DTO ex
      * @return Page of model entities.
      */
     @GetMapping
-    default ResponseEntity<PagedModel<EntityModel<MODEL>>> find(final Pageable pageable, final PagedResourcesAssembler<MODEL> pagedResourcesAssembler) {
-        final Page<MODEL> modelEntities = getService()
+    default ResponseEntity<PagedModel<EntityModel<M>>> find(final Pageable pageable, final PagedResourcesAssembler<M> pagedResourcesAssembler) {
+        final Page<M> modelEntities = getService()
                 .find(pageable)
                 .map(getModelAssembler()::toModel);
 
@@ -52,7 +52,7 @@ public interface CrudController<MODEL extends RepresentationModel<MODEL>, DTO ex
      * @see ControllerAdvice#handle(NotFoundException)
      */
     @GetMapping("/{id}")
-    default ResponseEntity<MODEL> findBy(@PathVariable final Long id) {
+    default ResponseEntity<M> findBy(@PathVariable final Long id) {
         return getService()
                 .findById(id)
                 .map(getModelAssembler()::toModel)
@@ -63,32 +63,33 @@ public interface CrudController<MODEL extends RepresentationModel<MODEL>, DTO ex
     /**
      * Creates model entity from request body.
      *
-     * @param dto Request body.
-     * @return 200 with model in request body; otherwise 400 with exception message.
+     * @param d Request body.
+     * @return 200 with model in response body; otherwise 400 with exception message.
      * @see ControllerAdvice#handle(BusinessValidationException)
      * @see ControllerAdvice#handle(ConstraintViolationException)
      */
     @PostMapping
-    default ResponseEntity<MODEL> createFrom(@RequestBody final DTO dto) {
-        final DTO createdDto = getService().createFrom(dto);
-        final MODEL model = getModelAssembler().toModel(createdDto);
+    default ResponseEntity<M> createFrom(@RequestBody final D d) {
+        final D createdDto = getService().createFrom(d);
+        final M model = getModelAssembler().toModel(createdDto);
         return ResponseEntity.ok(model);
     }
 
     /**
      * Updates model entity with given id from the request body content.
      *
-     * @param id  Id of the model entity.
-     * @param dto Request body.
-     * @return 200 with model in request body; otherwise one of (404, 400) with exception message.
+     * @param id Id of the model entity.
+     * @param d  Request body.
+     * @return 200 with model in response body; otherwise one of (404, 400) with exception message.
      * @see ControllerAdvice#handle(BusinessValidationException)
      * @see ControllerAdvice#handle(ConstraintViolationException)
      * @see ControllerAdvice#handle(NotFoundException)
      */
     @PutMapping("/{id}")
-    default ResponseEntity<?> updateFrom(@PathVariable final Long id, @RequestBody final DTO dto) {
-        final DTO updatedDto = getService().updateFrom(id, dto);
-        return ResponseEntity.ok(updatedDto);
+    default ResponseEntity<M> updateFrom(@PathVariable final Long id, @RequestBody final D d) {
+        final D updatedDto = getService().updateFrom(id, d);
+        final M model = getModelAssembler().toModel(updatedDto);
+        return ResponseEntity.ok(model);
     }
 
     /**
@@ -99,7 +100,7 @@ public interface CrudController<MODEL extends RepresentationModel<MODEL>, DTO ex
      * @see ControllerAdvice#handle(NotFoundException)
      */
     @DeleteMapping("/{id}")
-    default ResponseEntity<?> deleteBy(@PathVariable final Long id) {
+    default ResponseEntity<Void> deleteBy(@PathVariable final Long id) {
         getService().deleteById(id);
         return ResponseEntity.noContent().build();
     }
@@ -109,14 +110,14 @@ public interface CrudController<MODEL extends RepresentationModel<MODEL>, DTO ex
      *
      * @return Crud service.
      */
-    CrudService<DTO, ENTITY> getService();
+    CrudService<D, E> getService();
 
     /**
      * Gets model assembler.
      *
      * @return Model assembler.
      */
-    RepresentationModelAssembler<DTO, MODEL> getModelAssembler();
+    RepresentationModelAssembler<D, M> getModelAssembler();
 
     /**
      * Gets exception util.

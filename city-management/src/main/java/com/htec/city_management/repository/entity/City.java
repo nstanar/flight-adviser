@@ -1,10 +1,8 @@
 package com.htec.city_management.repository.entity;
 
 import com.htec.domain_starter.repository.entity.BaseEntity;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -16,10 +14,8 @@ import java.util.Set;
  */
 @Entity
 @Table(uniqueConstraints = {@UniqueConstraint(name = "country_city_unique_constraint", columnNames = {"country_id", "name"})})
-@Getter
-@Setter
 @NoArgsConstructor
-@EqualsAndHashCode
+@Data
 public class City extends BaseEntity {
 
     /**

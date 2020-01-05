@@ -1,7 +1,8 @@
 package com.htec.domain_starter.repository.entity;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.Setter;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,8 +16,8 @@ import java.io.Serializable;
  * Generic entity that is to be extended by concrete entities.
  */
 @MappedSuperclass
-@Getter
-@NoArgsConstructor
+@Data
+@Setter(value = AccessLevel.PRIVATE)
 public abstract class BaseEntity implements Serializable {
 
     /**

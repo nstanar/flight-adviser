@@ -1,7 +1,10 @@
 package com.htec.user_management.user.repository.entity;
 
 import com.htec.domain_starter.repository.entity.AuditedEntity;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -16,9 +19,8 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "fa_user", uniqueConstraints = @UniqueConstraint(name = "sys_user_username", columnNames = "username"))
-@Getter
-@Setter
 @NoArgsConstructor
+@Data
 @EqualsAndHashCode(exclude = "password")
 @ToString(exclude = "password")
 public class User extends AuditedEntity implements UserDetails {

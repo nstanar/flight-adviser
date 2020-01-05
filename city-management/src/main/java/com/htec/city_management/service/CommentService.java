@@ -9,7 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -19,8 +18,6 @@ import javax.validation.constraints.NotNull;
  * <p>
  * Service exposing operations over comment.
  */
-@Transactional
-@Validated
 public interface CommentService extends CrudService<CommentDto, Comment> {
 
     /**

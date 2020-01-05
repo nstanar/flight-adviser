@@ -76,7 +76,7 @@ public class CountryController implements SearchableController<CountryModel, Cou
      *
      * @param countryId Country id.
      * @param city      City to be created and added to country.
-     * @return 201 with locations header or 404 with exception message.
+     * @return 200 with city in response body or 404 with exception message.
      * @see ControllerAdvice#handle(NotFoundException)
      */
     @PostMapping("/{countryId}/cities")

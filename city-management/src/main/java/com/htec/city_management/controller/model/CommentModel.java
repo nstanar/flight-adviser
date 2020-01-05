@@ -2,7 +2,9 @@ package com.htec.city_management.controller.model;
 
 import com.htec.domain_starter.controller.model.AuditAwareModel;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import org.springframework.hateoas.server.core.Relation;
 
 /**
  * @author Nikola Stanar
@@ -10,6 +12,8 @@ import lombok.Getter;
  * Representation model for comment.
  */
 @Getter
+@Relation("comments")
+@EqualsAndHashCode
 public class CommentModel extends AuditAwareModel<CommentModel> {
 
     /**

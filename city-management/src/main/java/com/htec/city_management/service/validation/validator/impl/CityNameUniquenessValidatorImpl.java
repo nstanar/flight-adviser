@@ -51,7 +51,11 @@ public class CityNameUniquenessValidatorImpl implements CityNameUniquenessValida
         final String name = dto.getName();
         final Long countryId = dto.getCountryId();
         final Optional<City> optionalCity = cityRepository.findByNameIgnoreCaseAndCountryId(name, countryId);
-        CityNameUniquenessValidator.super.validate(id, optionalCity.get(), CITY_NAME_ALREADY_EXISTS, new Object[]{name, countryId});
+        optionalCity.ifPresent(city ->
+                CityNameUniquenessValidator
+                        .super
+                        .validate(id, optionalCity.get(), CITY_NAME_ALREADY_EXISTS, new Object[]{name, countryId})
+        );
     }
 
     /**

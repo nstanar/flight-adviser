@@ -1,6 +1,7 @@
 package com.htec.city_management.controller.model;
 
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
@@ -13,6 +14,7 @@ import org.springframework.hateoas.server.core.Relation;
 @Getter
 @Builder
 @Relation(collectionRelation = "countries")
+@EqualsAndHashCode
 public class CountryModel extends RepresentationModel<CountryModel> {
 
     /**

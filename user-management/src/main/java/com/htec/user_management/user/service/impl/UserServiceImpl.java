@@ -20,7 +20,6 @@ import com.htec.user_management.user.service.dto.converter.UserDtoConverter;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -38,7 +37,6 @@ import static java.util.stream.Collectors.toSet;
  * <p>
  * Implementation of {@link UserService}.
  */
-@Service
 @Slf4j
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -59,7 +57,7 @@ public class UserServiceImpl implements UserService {
     private final BusinessValidatorChain<UserDto> businessValidatorChain;
 
     /**
-     * Jpa repository for role.
+     * Role repository.
      */
     private final RoleRepository roleRepository;
 
@@ -81,19 +79,15 @@ public class UserServiceImpl implements UserService {
     /**
      * Creates user from dto.
      *
-     * @param user User that is about to be created.
+     * @param dto User that is about to be created.
      * @return Created user.
      * @see UserService#createFrom(UserDto)
      */
     @Override
-    public UserDto createFrom(@NotNull @Valid final UserDto user) {
-        businessValidatorChain.validateFor(Create.class, user);
-        final User userEntity = userDtoConverter.from(user);
+    public UserDto createFrom(@NotNull @Valid final UserDto dto) {
+        businessValidatorChain.validateFor(Create.class, dto);
+        final User userEntity = userDtoConverter.from(dto);
         final Role regularUserRole = roleRepository.findByName(ROLE_REGULAR_USER.getName());
-
-        // TODO: Adding new roles should be supported in future.
-
-        //TODO: extract this to roles controller.
         userEntity.setRoles(Collections.singleton(regularUserRole));
 
         final User createdUser = userRepository.save(userEntity);
@@ -193,6 +187,27 @@ public class UserServiceImpl implements UserService {
                         .stream()
                         .map(roleDtoConverter::from)
                         .collect(toSet())).orElse(Collections.emptySet());
+    }
+
+    /**
+     * Assigns role to user.
+     *
+     * @param userId Id of the user.
+     * @param role   Role.
+     * @see UserService#assignRole(Long, RoleDto)
+     */
+    @Override
+    public void assignRole(final @NotNull Long userId, @NotNull @Valid final RoleDto role) {
+        final Optional<User> optionallyUpdatedUser = userRepository.findById(userId)
+                .map(user -> {
+                    final Role roleToBeAdded = roleRepository.findByName(role.getValue().getName());
+                    user.getRoles().add(roleToBeAdded);
+                    return userRepository.save(user);
+                });
+
+        if (optionallyUpdatedUser.isEmpty()) {
+            throw exceptionUtil.createNotFoundExceptionFrom(RESOURCE_DOES_NOT_EXIST, new Object[]{userId});
+        }
     }
 
     /**

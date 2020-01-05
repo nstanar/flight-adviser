@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
  * <p>
  * Interface for DTO converters.
  */
-public interface DtoConverter<DTO extends BaseDto, ENTITY extends BaseEntity> {
+public interface DtoConverter<D extends BaseDto, E extends BaseEntity> {
 
     /**
      * From ENTITY to DTO.
@@ -18,7 +18,7 @@ public interface DtoConverter<DTO extends BaseDto, ENTITY extends BaseEntity> {
      * @param entity Entity to be converted.
      * @return DTO.
      */
-    DTO from(@NotNull ENTITY entity);
+    D from(@NotNull E entity);
 
     /**
      * From DTO to ENTITY.
@@ -26,7 +26,7 @@ public interface DtoConverter<DTO extends BaseDto, ENTITY extends BaseEntity> {
      * @param dto DTO to be converted.
      * @return ENTITY.
      */
-    ENTITY from(@NotNull DTO dto);
+    E from(@NotNull D dto);
 
     /**
      * From DTO and existing ENTITY to ENTITY.
@@ -35,6 +35,6 @@ public interface DtoConverter<DTO extends BaseDto, ENTITY extends BaseEntity> {
      * @param existingEntity Existing ENTITY.
      * @return ENTITY.
      */
-    ENTITY from(@NotNull DTO dto, @NotNull ENTITY existingEntity);
+    E from(@NotNull D dto, @NotNull E existingEntity);
 
 }

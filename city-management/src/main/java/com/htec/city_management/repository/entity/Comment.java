@@ -1,9 +1,8 @@
 package com.htec.city_management.repository.entity;
 
 import com.htec.domain_starter.repository.entity.AuditedEntity;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -16,9 +15,8 @@ import javax.persistence.*;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table
-@Getter
-@Setter
 @NoArgsConstructor
+@Data
 public class Comment extends AuditedEntity {
 
     /**

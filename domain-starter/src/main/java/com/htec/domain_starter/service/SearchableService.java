@@ -18,7 +18,7 @@ import javax.validation.constraints.Size;
  * <p>
  * Searchable service exposing operation over DTO.
  */
-public interface SearchableService<DTO extends BaseDto, ENTITY extends BaseEntity> extends Convertible<DTO, ENTITY>, CrudService<DTO, ENTITY> {
+public interface SearchableService<D extends BaseDto, E extends BaseEntity> extends Convertible<D, E>, CrudService<D, E> {
 
     /**
      * Finds page of DTOs matching name filter.
@@ -29,7 +29,7 @@ public interface SearchableService<DTO extends BaseDto, ENTITY extends BaseEntit
      */
     @PreAuthorize("isAuthenticated()")
     @Transactional(readOnly = true)
-    default Page<DTO> findBy(@NotBlank @Size(min = 2) final String nameFilter, @NotNull final Pageable pageable) {
+    default Page<D> findBy(@NotBlank @Size(min = 2) final String nameFilter, @NotNull final Pageable pageable) {
         final String enhancedNameFilter = "%" + nameFilter + "%";
         return getRepository()
                 .findByNameLikeIgnoreCase(enhancedNameFilter, pageable)
@@ -42,6 +42,6 @@ public interface SearchableService<DTO extends BaseDto, ENTITY extends BaseEntit
      * @return Check {@link SearchableRepository}.
      */
     @Override
-    SearchableRepository<ENTITY> getRepository();
+    SearchableRepository<E> getRepository();
 
 }

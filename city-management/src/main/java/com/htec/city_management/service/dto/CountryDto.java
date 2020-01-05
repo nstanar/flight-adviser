@@ -1,7 +1,8 @@
 package com.htec.city_management.service.dto;
 
 import com.htec.domain_starter.service.dto.BaseDto;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -12,11 +13,8 @@ import javax.validation.constraints.Size;
  * <p>
  * Dto representing country.
  */
-@Getter
-@Setter
 @NoArgsConstructor
-@ToString
-@EqualsAndHashCode
+@Data
 public class CountryDto extends BaseDto {
 
     /**

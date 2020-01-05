@@ -1,20 +1,16 @@
 package com.htec.domain_starter.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 /**
  * @author Nikola Stanar
  * <p>
  * Dto class representing audit content.
  */
-@Getter
-@Setter
 @NoArgsConstructor
-@ToString
+@Data
 public abstract class AuditAwareDto extends BaseDto {
 
     /**

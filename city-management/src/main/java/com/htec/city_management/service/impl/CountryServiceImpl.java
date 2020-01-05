@@ -10,8 +10,6 @@ import com.htec.domain_starter.service.dto.converter.DtoConverter;
 import com.htec.domain_starter.service.validation.chain.BusinessValidatorChain;
 import com.htec.domain_starter.service.validation.util.ExceptionUtil;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
@@ -21,8 +19,6 @@ import java.util.Optional;
  * Service for operations over country.
  * @see CountryService
  */
-@Service
-@Slf4j
 @AllArgsConstructor
 public class CountryServiceImpl implements CountryService {
 

@@ -52,7 +52,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      */
     @Override
     @Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(final String username) {
         final Optional<User> optionalUser = userRepository.findByUsernameIgnoreCase(username);
         if (optionalUser.isEmpty()) {
             log.info("Authenticating user with username {}", username);

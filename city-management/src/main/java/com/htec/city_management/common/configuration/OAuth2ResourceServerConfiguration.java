@@ -46,7 +46,6 @@ public class OAuth2ResourceServerConfiguration extends ResourceServerConfigurerA
     public void configure(final HttpSecurity http) throws Exception {
         http
                 .antMatcher("/**")
-                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/actuator**").hasRole("ADMIN");
     }

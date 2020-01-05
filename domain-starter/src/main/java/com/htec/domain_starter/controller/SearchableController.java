@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * <p>
  * Searchable controller expsoing API operations over MODEL.
  */
-public interface SearchableController<MODEL extends RepresentationModel<MODEL>, DTO extends BaseDto, ENTITY extends BaseEntity> extends CrudController<MODEL, DTO, ENTITY> {
+public interface SearchableController<M extends RepresentationModel<M>, D extends BaseDto, E extends BaseEntity> extends CrudController<M, D, E> {
 
     /**
      * Finds page of model entities matching name filter (if present).
@@ -29,8 +29,8 @@ public interface SearchableController<MODEL extends RepresentationModel<MODEL>, 
      * @return Page of model entities.
      */
     @GetMapping("/search")
-    default ResponseEntity<PagedModel<EntityModel<MODEL>>> findBy(@RequestParam(required = false) final String nameFilter, final Pageable pageable, final PagedResourcesAssembler<MODEL> pagedResourcesAssembler) {
-        final Page<MODEL> modelEntities = getService()
+    default ResponseEntity<PagedModel<EntityModel<M>>> findBy(@RequestParam(required = false) final String nameFilter, final Pageable pageable, final PagedResourcesAssembler<M> pagedResourcesAssembler) {
+        final Page<M> modelEntities = getService()
                 .findBy(nameFilter, pageable)
                 .map(getModelAssembler()::toModel);
 
@@ -44,6 +44,6 @@ public interface SearchableController<MODEL extends RepresentationModel<MODEL>, 
      * @return Searchable service.
      */
     @Override
-    SearchableService<DTO, ENTITY> getService();
+    SearchableService<D, E> getService();
 
 }

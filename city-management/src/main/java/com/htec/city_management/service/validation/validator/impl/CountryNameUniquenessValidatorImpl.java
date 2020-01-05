@@ -50,7 +50,11 @@ public class CountryNameUniquenessValidatorImpl implements CountryNameUniqueness
         final Long id = dto.getId();
         final String name = dto.getName();
         final Optional<Country> optionalCountry = countryRepository.findByNameIgnoreCase(name);
-        CountryNameUniquenessValidator.super.validate(id, optionalCountry.get(), COUNTRY_NAME_ALREADY_EXISTS, new Object[]{name});
+        optionalCountry.ifPresent(country ->
+                CountryNameUniquenessValidator
+                        .super
+                        .validate(id, country, COUNTRY_NAME_ALREADY_EXISTS, new Object[]{name})
+        );
     }
 
     /**

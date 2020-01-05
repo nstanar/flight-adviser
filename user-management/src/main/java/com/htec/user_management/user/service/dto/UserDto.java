@@ -1,7 +1,11 @@
 package com.htec.user_management.user.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.htec.domain_starter.service.dto.AuditAwareDto;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -12,9 +16,8 @@ import javax.validation.constraints.Size;
  * <p>
  * DTO class representing user.
  */
-@Getter
-@Setter
 @NoArgsConstructor
+@Data
 @ToString(exclude = {"password", "retypedPassword"})
 @EqualsAndHashCode(exclude = {"password", "retypedPassword"})
 public class UserDto extends AuditAwareDto {
@@ -53,5 +56,11 @@ public class UserDto extends AuditAwareDto {
     @NotEmpty
     @Size(min = 6, max = 255)
     private char[] retypedPassword;
+
+    /**
+     * Default role of the user.
+     */
+    @JsonIgnore
+    private RoleDto defaultRole;
 
 }

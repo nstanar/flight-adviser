@@ -12,6 +12,7 @@ import com.htec.user_management.user.controller.model.assembler.impl.RoleModelAs
 import com.htec.user_management.user.controller.model.assembler.impl.UserModelAssembler;
 import com.htec.user_management.user.repository.entity.User;
 import com.htec.user_management.user.service.UserService;
+import com.htec.user_management.user.service.dto.RoleDto;
 import com.htec.user_management.user.service.dto.UserDto;
 import lombok.AllArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
@@ -76,7 +77,7 @@ public class UserController implements CrudController<UserModel, UserDto, User> 
      *
      * @param dto       Update content.
      * @param principal Check {@link Principal}.
-     * @return 200 with user in request body; otherwise one of (404, 400) with exception message.
+     * @return 200 with user in response body; otherwise one of (404, 400) with exception message.
      * @see ControllerAdvice#handle(NotFoundException)
      * @see ControllerAdvice#handle(BusinessValidationException)
      * @see ControllerAdvice#handle(ConstraintViolationException)
@@ -97,18 +98,21 @@ public class UserController implements CrudController<UserModel, UserDto, User> 
      * @return 204.
      */
     @DeleteMapping(value = "/me")
-    public ResponseEntity<?> deleteBy(final Principal principal) {
-        return Optional.ofNullable(principal)
-                .map(p -> userService.deleteByUsername(p.getName()))
-                .map(deletedUser -> ResponseEntity.noContent().build())
-                .orElseThrow(() -> getService().getExceptionUtil().createNotFoundExceptionFrom(RESOURCE_DOES_NOT_EXIST, new Object[]{null}));
+    public ResponseEntity<Void> deleteBy(final Principal principal) {
+        if (principal != null) {
+            userService.deleteByUsername(principal.getName());
+        } else {
+            throw getService().getExceptionUtil().createNotFoundExceptionFrom(RESOURCE_DOES_NOT_EXIST, new Object[]{null});
+        }
+
+        return ResponseEntity.noContent().build();
     }
 
     /**
      * Finds user roles.
      *
      * @param userId Id of the user.
-     * @return User roles.
+     * @return 200 with user roles in response body.
      */
     @GetMapping("/{userId}/roles")
     public ResponseEntity<CollectionModel<EntityModel<RoleModel>>> findRolesBy(@PathVariable final Long userId) {
@@ -119,6 +123,21 @@ public class UserController implements CrudController<UserModel, UserDto, User> 
                 .collect(Collectors.toSet());
 
         return ResponseEntity.ok(CollectionModel.wrap(roles));
+    }
+
+    /**
+     * Assign new role to user.
+     *
+     * @param userId Id of the user.
+     * @param role   Role to be assigned.
+     * @return 204 if successful; otherwise one of (404, 400) with exception message.
+     * @see ControllerAdvice#handle(NotFoundException)
+     */
+    @PutMapping("/{userId}/roles")
+    public ResponseEntity<Void> assignRole(@PathVariable final Long userId, @RequestBody final RoleDto role) {
+        userService.assignRole(userId, role);
+
+        return ResponseEntity.noContent().build();
     }
 
     /**

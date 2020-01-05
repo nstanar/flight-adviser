@@ -1,8 +1,7 @@
 package com.htec.domain_starter.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.io.Serializable;
 
@@ -11,8 +10,7 @@ import java.io.Serializable;
  * <p>
  * Generic DTO that is to be extended by concrete DTOs.
  */
-@Getter
-@Setter
+@Data
 public abstract class BaseDto implements Serializable {
 
     /**

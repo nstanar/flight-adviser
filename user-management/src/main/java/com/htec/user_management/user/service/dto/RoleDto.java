@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * @author Nikola Stanar
  * <p>
@@ -18,6 +20,7 @@ public class RoleDto extends BaseDto {
     /**
      * Role name.
      */
+    @NotNull
     private Value value;
 
     /**

@@ -8,7 +8,6 @@ import com.htec.user_management.user.service.dto.UserDto;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -21,8 +20,6 @@ import java.util.Set;
  * <p>
  * Service exposing operations over {@link UserDto}.
  */
-@Validated
-@Transactional
 public interface UserService extends CrudService<UserDto, User> {
 
     @Override
@@ -93,4 +90,12 @@ public interface UserService extends CrudService<UserDto, User> {
     @Transactional(readOnly = true)
     Set<RoleDto> findRolesBy(@NotNull final Long userId);
 
+    /**
+     * Assigns role to user.
+     *
+     * @param userId Id of the user.
+     * @param role   Role.
+     */
+    @PreAuthorize("hasRole('ADMIN')")
+    void assignRole(@NotNull final Long userId, @NotNull @Valid RoleDto role);
 }

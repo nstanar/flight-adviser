@@ -50,7 +50,11 @@ public class UsernameUniquenessValidatorImpl implements UsernameUniquenessValida
         final Long id = dto.getId();
         final String username = dto.getUsername();
         final Optional<User> optionalUser = userRepository.findByUsernameIgnoreCase(username);
-        UsernameUniquenessValidator.super.validate(id, optionalUser.get(), USERNAME_ALREADY_EXISTS, new Object[]{username});
+        optionalUser.ifPresent(user ->
+                UsernameUniquenessValidator
+                        .super
+                        .validate(id, optionalUser.get(), USERNAME_ALREADY_EXISTS, new Object[]{username})
+        );
     }
 
     /**
