@@ -5,9 +5,8 @@ import com.htec.city_management.repository.entity.City;
 import com.htec.city_management.repository.entity.Country;
 import com.htec.city_management.service.dto.CityDto;
 import com.htec.city_management.service.dto.converter.CityDtoConverter;
-import com.htec.domain_starter.service.validation.exception.NotFoundException;
+import com.htec.domain_starter.service.validation.util.ExceptionUtil;
 import lombok.AllArgsConstructor;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -16,7 +15,6 @@ import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
 import static com.htec.domain_starter.common.constants.MessageSourceKeys.RESOURCE_DOES_NOT_EXIST;
-import static org.springframework.context.i18n.LocaleContextHolder.getLocale;
 
 /**
  * @author Nikola Stanar
@@ -35,9 +33,9 @@ public class CityDtoConverterImpl implements CityDtoConverter {
     private final CountryRepository countryRepository;
 
     /**
-     * Message source.
+     * Exception util.
      */
-    private final MessageSource messageSource;
+    private final ExceptionUtil exceptionUtil;
 
     /**
      * Converts city entity to dto.
@@ -69,12 +67,13 @@ public class CityDtoConverterImpl implements CityDtoConverter {
         entity.setDescription(dto.getDescription());
         final Long countryId = dto.getCountryId();
         final Optional<Country> optionalCountry = countryRepository.findById(countryId);
+
         if (optionalCountry.isPresent()) {
             entity.setCountry(optionalCountry.get());
         } else {
-            final String message = messageSource.getMessage(RESOURCE_DOES_NOT_EXIST, new Object[]{countryId}, getLocale());
-            throw new NotFoundException(message);
+            throw exceptionUtil.createNotFoundExceptionFrom(RESOURCE_DOES_NOT_EXIST, new Object[]{countryId});
         }
+
         return entity;
     }
 

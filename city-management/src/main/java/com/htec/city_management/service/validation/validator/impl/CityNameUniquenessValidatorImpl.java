@@ -5,16 +5,13 @@ import com.htec.city_management.repository.entity.City;
 import com.htec.city_management.service.dto.CityDto;
 import com.htec.city_management.service.validation.CityNameUniquenessValidator;
 import com.htec.domain_starter.service.dto.BaseDto;
-import com.htec.domain_starter.service.validation.exception.BusinessValidationException;
+import com.htec.domain_starter.service.validation.util.ExceptionUtil;
 import lombok.AllArgsConstructor;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
 import java.util.Optional;
-
-import static org.springframework.context.i18n.LocaleContextHolder.getLocale;
 
 /**
  * @author Nikola Stanar
@@ -33,9 +30,9 @@ public class CityNameUniquenessValidatorImpl implements CityNameUniquenessValida
     private final CityRepository cityRepository;
 
     /**
-     * Message source.
+     * Exception util.
      */
-    private final MessageSource messageSource;
+    private final ExceptionUtil exceptionUtil;
 
     /**
      * Message source key.
@@ -54,27 +51,18 @@ public class CityNameUniquenessValidatorImpl implements CityNameUniquenessValida
         final String name = dto.getName();
         final Long countryId = dto.getCountryId();
         final Optional<City> optionalCity = cityRepository.findByNameIgnoreCaseAndCountryId(name, countryId);
+        CityNameUniquenessValidator.super.validate(id, optionalCity.get(), CITY_NAME_ALREADY_EXISTS, new Object[]{name, countryId});
+    }
 
-        boolean alreadyExists = false;
-        if (optionalCity.isPresent()) {
-            final City city = optionalCity.get();
-            if (id != null) {
-                // Existing city.
-                if (!city.getId().equals(id)) {
-                    // Existing city with different id and same name.
-                    alreadyExists = true;
-                }
-            } else {
-                // Completely new city with existing name.
-                alreadyExists = true;
-            }
-        }
-
-        if (alreadyExists) {
-            final String message = messageSource.getMessage(CITY_NAME_ALREADY_EXISTS, new Object[]{name, countryId}, getLocale());
-            throw new BusinessValidationException(message);
-        }
-
+    /**
+     * Gets exception util.
+     *
+     * @return Exception util.
+     * @see CityNameUniquenessValidator#getExceptionUtil()
+     */
+    @Override
+    public ExceptionUtil getExceptionUtil() {
+        return exceptionUtil;
     }
 
 }

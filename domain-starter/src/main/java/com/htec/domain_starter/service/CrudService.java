@@ -4,10 +4,9 @@ import com.htec.domain_starter.repository.entity.BaseEntity;
 import com.htec.domain_starter.service.dto.BaseDto;
 import com.htec.domain_starter.service.dto.converter.Convertible;
 import com.htec.domain_starter.service.validation.chain.BusinessValidatorChain;
-import com.htec.domain_starter.service.validation.exception.NotFoundException;
 import com.htec.domain_starter.service.validation.marker.Create;
 import com.htec.domain_starter.service.validation.marker.Update;
-import org.springframework.context.MessageSource;
+import com.htec.domain_starter.service.validation.util.ExceptionUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -25,7 +24,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.htec.domain_starter.common.constants.MessageSourceKeys.RESOURCE_DOES_NOT_EXIST;
-import static org.springframework.context.i18n.LocaleContextHolder.getLocale;
 
 /**
  * @author Nikola Stanar
@@ -97,10 +95,7 @@ public interface CrudService<DTO extends BaseDto, ENTITY extends BaseEntity> ext
                 .findById(id)
                 .map(entity -> getRepository().save(getDtoConverter().from(dto, entity)))
                 .map(getDtoConverter()::from)
-                .orElseThrow(() -> {
-                    final String message = getMessageSource().getMessage(RESOURCE_DOES_NOT_EXIST, new Object[]{id}, getLocale());
-                    throw new NotFoundException(message);
-                });
+                .orElseThrow(() -> getExceptionUtil().createNotFoundExceptionFrom(RESOURCE_DOES_NOT_EXIST, new Object[]{id}));
     }
 
     /**
@@ -117,10 +112,8 @@ public interface CrudService<DTO extends BaseDto, ENTITY extends BaseEntity> ext
                     final DTO deletedDto = getDtoConverter().from(entity);
                     getRepository().deleteById(id);
                     return deletedDto;
-                }).orElseThrow(() -> {
-                    final String message = getMessageSource().getMessage(RESOURCE_DOES_NOT_EXIST, new Object[]{id}, getLocale());
-                    throw new NotFoundException(message);
-                });
+                })
+                .orElseThrow(() -> getExceptionUtil().createNotFoundExceptionFrom(RESOURCE_DOES_NOT_EXIST, new Object[]{id}));
     }
 
     /**
@@ -166,10 +159,10 @@ public interface CrudService<DTO extends BaseDto, ENTITY extends BaseEntity> ext
     JpaRepository<ENTITY, Long> getRepository();
 
     /**
-     * Gets message source.
+     * Gets exception util.
      *
-     * @return Message source.
+     * @return Exception util.
      */
-    MessageSource getMessageSource();
+    ExceptionUtil getExceptionUtil();
 
 }

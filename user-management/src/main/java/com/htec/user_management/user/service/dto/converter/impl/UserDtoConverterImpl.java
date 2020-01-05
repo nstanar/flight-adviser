@@ -93,11 +93,14 @@ public class UserDtoConverterImpl implements UserDtoConverter {
     public User from(@NotNull final UserDto dto, @NotNull final User existingEntity) {
         existingEntity.setFirstName(dto.getFirstName());
         existingEntity.setLastName(dto.getLastName());
+        existingEntity.setUsername(dto.getUsername());
 
-        /*
-         * TODO: Changing username and password not supported.
-         * In future authentication data and user profile data should be decoupled (Single responsibility principle).
-         */
+        // Encode password.
+        final char[] password = dto.getPassword();
+        existingEntity.setPassword(passwordEncoder.encode(wrap(password)));
+
+        // Shred password.
+        passwordShredder.shred(password);
 
         return existingEntity;
     }

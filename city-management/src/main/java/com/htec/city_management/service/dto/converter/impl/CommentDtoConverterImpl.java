@@ -8,9 +8,8 @@ import com.htec.city_management.service.dto.converter.CommentDtoConverter;
 import com.htec.domain_starter.repository.entity.BaseEntity;
 import com.htec.domain_starter.service.dto.BaseDto;
 import com.htec.domain_starter.service.dto.converter.DtoConverter;
-import com.htec.domain_starter.service.validation.exception.NotFoundException;
+import com.htec.domain_starter.service.validation.util.ExceptionUtil;
 import lombok.AllArgsConstructor;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -18,7 +17,6 @@ import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
 import static com.htec.domain_starter.common.constants.MessageSourceKeys.RESOURCE_DOES_NOT_EXIST;
-import static org.springframework.context.i18n.LocaleContextHolder.getLocale;
 
 /**
  * @author Nikola Stanar
@@ -37,9 +35,9 @@ public class CommentDtoConverterImpl implements CommentDtoConverter {
     private final CityRepository cityRepository;
 
     /**
-     * Message source.
+     * Exception util.
      */
-    private final MessageSource messageSource;
+    private final ExceptionUtil exceptionUtil;
 
     /**
      * Converts comment entity to dto.
@@ -80,8 +78,7 @@ public class CommentDtoConverterImpl implements CommentDtoConverter {
             entity.setCity(optionalCity.get());
             return entity;
         } else {
-            final String message = messageSource.getMessage(RESOURCE_DOES_NOT_EXIST, new Object[]{cityId}, getLocale());
-            throw new NotFoundException(message);
+            throw exceptionUtil.createNotFoundExceptionFrom(RESOURCE_DOES_NOT_EXIST, new Object[]{cityId});
         }
     }
 

@@ -8,9 +8,9 @@ import com.htec.city_management.service.dto.converter.CityDtoConverter;
 import com.htec.domain_starter.repository.SearchableRepository;
 import com.htec.domain_starter.service.dto.converter.DtoConverter;
 import com.htec.domain_starter.service.validation.chain.BusinessValidatorChain;
+import com.htec.domain_starter.service.validation.util.ExceptionUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -45,9 +45,9 @@ public class CityServiceImpl implements CityService {
     private final BusinessValidatorChain<CityDto> businessValidatorChain;
 
     /**
-     * Message source.
+     * Exception util.
      */
-    private final MessageSource messageSource;
+    private final ExceptionUtil exceptionUtil;
 
     /**
      * Finds page of cities belonging to country of id.
@@ -87,14 +87,14 @@ public class CityServiceImpl implements CityService {
     }
 
     /**
-     * Gets message source.
+     * Gets exception util.
      *
-     * @return Message source.
-     * @see CityService#getMessageSource()
+     * @return Exception util.
+     * @see CityService#getExceptionUtil()
      */
     @Override
-    public MessageSource getMessageSource() {
-        return messageSource;
+    public ExceptionUtil getExceptionUtil() {
+        return exceptionUtil;
     }
 
     /**

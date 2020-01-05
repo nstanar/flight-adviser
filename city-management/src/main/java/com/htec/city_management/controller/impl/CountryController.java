@@ -14,7 +14,6 @@ import com.htec.domain_starter.controller.validation.exception.handler.Controlle
 import com.htec.domain_starter.service.SearchableService;
 import com.htec.domain_starter.service.validation.exception.NotFoundException;
 import lombok.AllArgsConstructor;
-import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -23,11 +22,6 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.net.URI;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 /**
  * @author Nikola Stanar
@@ -61,11 +55,6 @@ public class CountryController implements SearchableController<CountryModel, Cou
     private final CityModelAssembler cityModelAssembler;
 
     /**
-     * Message source.
-     */
-    private final MessageSource messageSource;
-
-    /**
      * Finds page of cities belonging to country.
      *
      * @param countryId               Country id.
@@ -91,16 +80,13 @@ public class CountryController implements SearchableController<CountryModel, Cou
      * @see ControllerAdvice#handle(NotFoundException)
      */
     @PostMapping("/{countryId}/cities")
-    public ResponseEntity<?> createAndAssignTo(@PathVariable final Long countryId, @RequestBody final CityDto city) {
+    public ResponseEntity<CityModel> createAndAssignTo(@PathVariable final Long countryId, @RequestBody final CityDto city) {
         city.setCountryId(countryId);
 
         final CityDto createdCity = cityService.createFrom(city);
+        final CityModel model = cityModelAssembler.toModel(createdCity);
 
-        final URI location = linkTo(methodOn
-                (CityController.class).findBy(createdCity.getId())
-        ).toUri();
-
-        return ResponseEntity.created(location).build();
+        return ResponseEntity.ok(model);
     }
 
     /**
@@ -123,17 +109,6 @@ public class CountryController implements SearchableController<CountryModel, Cou
     @Override
     public RepresentationModelAssembler<CountryDto, CountryModel> getModelAssembler() {
         return countryModelAssembler;
-    }
-
-    /**
-     * Gets message source.
-     *
-     * @return Message source.
-     * @see SearchableController#getMessageSource()
-     */
-    @Override
-    public MessageSource getMessageSource() {
-        return messageSource;
     }
 
 }

@@ -5,7 +5,6 @@ import com.htec.domain_starter.service.dto.BaseDto;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -39,7 +38,7 @@ public class CityDto extends BaseDto {
     /**
      * Id of the country city resides in.
      */
-    @NotNull
+    @JsonIgnore
     private Long countryId;
 
     /**

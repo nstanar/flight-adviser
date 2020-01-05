@@ -1,9 +1,10 @@
 package com.htec.user_management.user.controller.impl;
 
-import com.htec.domain_starter.common.constants.MessageSourceKeys;
 import com.htec.domain_starter.controller.CrudController;
 import com.htec.domain_starter.controller.SearchableController;
+import com.htec.domain_starter.controller.validation.exception.handler.ControllerAdvice;
 import com.htec.domain_starter.service.CrudService;
+import com.htec.domain_starter.service.validation.exception.BusinessValidationException;
 import com.htec.domain_starter.service.validation.exception.NotFoundException;
 import com.htec.user_management.user.controller.model.RoleModel;
 import com.htec.user_management.user.controller.model.UserModel;
@@ -13,18 +14,19 @@ import com.htec.user_management.user.repository.entity.User;
 import com.htec.user_management.user.service.UserService;
 import com.htec.user_management.user.service.dto.UserDto;
 import lombok.AllArgsConstructor;
-import org.springframework.context.MessageSource;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.ConstraintViolationException;
 import java.security.Principal;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.springframework.context.i18n.LocaleContextHolder.getLocale;
+import static com.htec.domain_starter.common.constants.MessageSourceKeys.RESOURCE_DOES_NOT_EXIST;
 
 /**
  * @author Nikola Stanar
@@ -52,11 +54,6 @@ public class UserController implements CrudController<UserModel, UserDto, User> 
     private final RoleModelAssembler roleModelAssembler;
 
     /**
-     * Message source.
-     */
-    private final MessageSource messageSource;
-
-    /**
      * Finds profile data of currently logged in user.
      *
      * @param principal Check {@link Principal}.
@@ -64,16 +61,14 @@ public class UserController implements CrudController<UserModel, UserDto, User> 
      */
     @GetMapping(value = "/me")
     public ResponseEntity<UserModel> findBy(final Principal principal) {
-        if (principal != null) {
-            return userService
-                    .findByUsername(principal.getName())
-                    .map(userModelAssembler::toModel)
-                    .map(ResponseEntity::ok)
-                    .get();
-        } else {
-            final String message = messageSource.getMessage(MessageSourceKeys.RESOURCE_DOES_NOT_EXIST, new Object[]{null}, getLocale());
-            throw new NotFoundException(message);
-        }
+        return Optional.ofNullable(principal)
+                .map(p -> userService
+                        .findByUsername(p.getName())
+                        .map(userModelAssembler::toModel)
+                        .map(ResponseEntity::ok)
+                        .get()
+                )
+                .orElseThrow(() -> getService().getExceptionUtil().createNotFoundExceptionFrom(RESOURCE_DOES_NOT_EXIST, new Object[]{null}));
     }
 
     /**
@@ -81,17 +76,18 @@ public class UserController implements CrudController<UserModel, UserDto, User> 
      *
      * @param dto       Update content.
      * @param principal Check {@link Principal}.
-     * @return 204.
+     * @return 200 with user in request body; otherwise one of (404, 400) with exception message.
+     * @see ControllerAdvice#handle(NotFoundException)
+     * @see ControllerAdvice#handle(BusinessValidationException)
+     * @see ControllerAdvice#handle(ConstraintViolationException)
      */
     @PutMapping(value = "/me")
-    public ResponseEntity<Void> updateBy(@RequestBody final UserDto dto, final Principal principal) {
-        if (principal != null) {
-            userService.updateByUsername(principal.getName(), dto);
-            return ResponseEntity.noContent().build();
-        } else {
-            final String message = messageSource.getMessage(MessageSourceKeys.RESOURCE_DOES_NOT_EXIST, new Object[]{null}, getLocale());
-            throw new NotFoundException(message);
-        }
+    public ResponseEntity<UserModel> updateBy(@RequestBody final UserDto dto, final Principal principal) {
+        return Optional.ofNullable(principal)
+                .map(p -> userService.updateByUsername(p.getName(), dto))
+                .map(userModelAssembler::toModel)
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> getService().getExceptionUtil().createNotFoundExceptionFrom(RESOURCE_DOES_NOT_EXIST, new Object[]{null}));
     }
 
     /**
@@ -101,14 +97,11 @@ public class UserController implements CrudController<UserModel, UserDto, User> 
      * @return 204.
      */
     @DeleteMapping(value = "/me")
-    public ResponseEntity<Void> deleteBy(final Principal principal) {
-        if (principal != null) {
-            userService.deleteByUsername(principal.getName());
-            return ResponseEntity.noContent().build();
-        } else {
-            final String message = messageSource.getMessage(MessageSourceKeys.RESOURCE_DOES_NOT_EXIST, new Object[]{null}, getLocale());
-            throw new NotFoundException(message);
-        }
+    public ResponseEntity<?> deleteBy(final Principal principal) {
+        return Optional.ofNullable(principal)
+                .map(p -> userService.deleteByUsername(p.getName()))
+                .map(deletedUser -> ResponseEntity.noContent().build())
+                .orElseThrow(() -> getService().getExceptionUtil().createNotFoundExceptionFrom(RESOURCE_DOES_NOT_EXIST, new Object[]{null}));
     }
 
     /**
@@ -148,17 +141,6 @@ public class UserController implements CrudController<UserModel, UserDto, User> 
     @Override
     public RepresentationModelAssembler<UserDto, UserModel> getModelAssembler() {
         return userModelAssembler;
-    }
-
-    /**
-     * Gets message source.
-     *
-     * @return Message source.
-     * @see SearchableController#getMessageSource()
-     */
-    @Override
-    public MessageSource getMessageSource() {
-        return messageSource;
     }
 
 }

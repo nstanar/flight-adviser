@@ -5,16 +5,13 @@ import com.htec.city_management.repository.entity.Country;
 import com.htec.city_management.service.dto.CountryDto;
 import com.htec.city_management.service.validation.CountryNameUniquenessValidator;
 import com.htec.domain_starter.service.dto.BaseDto;
-import com.htec.domain_starter.service.validation.exception.BusinessValidationException;
+import com.htec.domain_starter.service.validation.util.ExceptionUtil;
 import lombok.AllArgsConstructor;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
 import java.util.Optional;
-
-import static org.springframework.context.i18n.LocaleContextHolder.getLocale;
 
 /**
  * @author Nikola Stanar
@@ -33,9 +30,9 @@ public class CountryNameUniquenessValidatorImpl implements CountryNameUniqueness
     private final CountryRepository countryRepository;
 
     /**
-     * Message source.
+     * Exception util.
      */
-    private final MessageSource messageSource;
+    private final ExceptionUtil exceptionUtil;
 
     /**
      * Message source key.
@@ -53,26 +50,18 @@ public class CountryNameUniquenessValidatorImpl implements CountryNameUniqueness
         final Long id = dto.getId();
         final String name = dto.getName();
         final Optional<Country> optionalCountry = countryRepository.findByNameIgnoreCase(name);
+        CountryNameUniquenessValidator.super.validate(id, optionalCountry.get(), COUNTRY_NAME_ALREADY_EXISTS, new Object[]{name});
+    }
 
-        boolean alreadyExists = false;
-        if (optionalCountry.isPresent()) {
-            final Country country = optionalCountry.get();
-            if (id != null) {
-                // Existing country.
-                if (!country.getId().equals(id)) {
-                    // Existing country with different id and same name.
-                    alreadyExists = true;
-                }
-            } else {
-                // Completely new country with existing name.
-                alreadyExists = true;
-            }
-        }
-
-        if (alreadyExists) {
-            final String message = messageSource.getMessage(COUNTRY_NAME_ALREADY_EXISTS, new Object[]{name}, getLocale());
-            throw new BusinessValidationException(message);
-        }
+    /**
+     * Gets exception util.
+     *
+     * @return Exception util.
+     * @see CountryNameUniquenessValidator#getExceptionUtil()
+     */
+    @Override
+    public ExceptionUtil getExceptionUtil() {
+        return exceptionUtil;
     }
 
 }

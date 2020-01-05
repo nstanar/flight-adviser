@@ -8,9 +8,9 @@ import com.htec.city_management.service.dto.converter.CountryDtoConverter;
 import com.htec.domain_starter.repository.SearchableRepository;
 import com.htec.domain_starter.service.dto.converter.DtoConverter;
 import com.htec.domain_starter.service.validation.chain.BusinessValidatorChain;
+import com.htec.domain_starter.service.validation.util.ExceptionUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -42,9 +42,9 @@ public class CountryServiceImpl implements CountryService {
     private final BusinessValidatorChain<CountryDto> businessValidatorChain;
 
     /**
-     * Message source.
+     * Exception util.
      */
-    private final MessageSource messageSource;
+    private final ExceptionUtil exceptionUtil;
 
     /**
      * Gets dto converter.
@@ -58,14 +58,14 @@ public class CountryServiceImpl implements CountryService {
     }
 
     /**
-     * Gets message source.
+     * Gets exception util.
      *
-     * @return Message source.
-     * @see CountryService#getMessageSource()
+     * @return Exception util.
+     * @see CountryService#getExceptionUtil()
      */
     @Override
-    public MessageSource getMessageSource() {
-        return messageSource;
+    public ExceptionUtil getExceptionUtil() {
+        return exceptionUtil;
     }
 
     /**

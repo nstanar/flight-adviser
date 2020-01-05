@@ -12,9 +12,9 @@ import com.htec.city_management.service.dto.CommentDto;
 import com.htec.domain_starter.controller.SearchableController;
 import com.htec.domain_starter.controller.validation.exception.handler.ControllerAdvice;
 import com.htec.domain_starter.service.SearchableService;
+import com.htec.domain_starter.service.validation.exception.BusinessValidationException;
 import com.htec.domain_starter.service.validation.exception.NotFoundException;
 import lombok.AllArgsConstructor;
-import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -24,10 +24,7 @@ import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import javax.validation.ConstraintViolationException;
 
 /**
  * @author Nikola Stanar
@@ -60,11 +57,6 @@ public class CityController implements SearchableController<CityModel, CityDto, 
     private final CommentModelAssembler commentModelAssembler;
 
     /**
-     * Message source.
-     */
-    private final MessageSource messageSource;
-
-    /**
      * Finds page of comments belonging to city.
      *
      * @param cityId                  City id.
@@ -86,20 +78,19 @@ public class CityController implements SearchableController<CityModel, CityDto, 
      *
      * @param cityId  City id.
      * @param comment Comment to be created and added to city.
-     * @return 201 with locations header or 404 with exception message.
+     * @return 200 with model in request body; otherwise one of (404, 400) with exception message.
+     * @see ControllerAdvice#handle(BusinessValidationException)
+     * @see ControllerAdvice#handle(ConstraintViolationException)
      * @see ControllerAdvice#handle(NotFoundException)
      */
     @PostMapping("/{cityId}/comments")
-    public ResponseEntity<Void> createAndAssignTo(@PathVariable final Long cityId, @RequestBody final CommentDto comment) {
+    public ResponseEntity<CommentModel> createAndAssignTo(@PathVariable final Long cityId, @RequestBody final CommentDto comment) {
         comment.setCityId(cityId);
 
         final CommentDto createdComment = commentService.createFrom(comment);
+        final CommentModel model = commentModelAssembler.toModel(createdComment);
 
-        final URI location = linkTo(methodOn
-                (CommentController.class).findBy(createdComment.getId())
-        ).toUri();
-
-        return ResponseEntity.created(location).build();
+        return ResponseEntity.ok(model);
     }
 
     /**
@@ -122,17 +113,6 @@ public class CityController implements SearchableController<CityModel, CityDto, 
     @Override
     public RepresentationModelAssembler<CityDto, CityModel> getModelAssembler() {
         return cityModelAssembler;
-    }
-
-    /**
-     * Gets message source.
-     *
-     * @return Message source.
-     * @see SearchableController#getMessageSource()
-     */
-    @Override
-    public MessageSource getMessageSource() {
-        return messageSource;
     }
 
 }

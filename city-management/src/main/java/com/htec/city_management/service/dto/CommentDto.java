@@ -1,5 +1,6 @@
 package com.htec.city_management.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.htec.domain_starter.service.dto.AuditAwareDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,7 +8,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -38,6 +38,6 @@ public class CommentDto extends AuditAwareDto {
     /**
      * Id of the city comment belongs to.
      */
-    @NotNull
+    @JsonIgnore
     private Long cityId;
 }

@@ -4,9 +4,9 @@ import com.htec.domain_starter.service.CrudService;
 import com.htec.domain_starter.service.dto.converter.Convertible;
 import com.htec.domain_starter.service.dto.converter.DtoConverter;
 import com.htec.domain_starter.service.validation.chain.BusinessValidatorChain;
-import com.htec.domain_starter.service.validation.exception.NotFoundException;
 import com.htec.domain_starter.service.validation.marker.Create;
 import com.htec.domain_starter.service.validation.marker.Update;
+import com.htec.domain_starter.service.validation.util.ExceptionUtil;
 import com.htec.user_management.auth.service.RevokeTokenService;
 import com.htec.user_management.user.repository.RoleRepository;
 import com.htec.user_management.user.repository.UserRepository;
@@ -19,7 +19,6 @@ import com.htec.user_management.user.service.dto.converter.RoleDtoConverter;
 import com.htec.user_management.user.service.dto.converter.UserDtoConverter;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.MessageSource;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +32,6 @@ import java.util.Set;
 import static com.htec.domain_starter.common.constants.MessageSourceKeys.RESOURCE_DOES_NOT_EXIST;
 import static com.htec.user_management.user.service.dto.RoleDto.Value.ROLE_REGULAR_USER;
 import static java.util.stream.Collectors.toSet;
-import static org.springframework.context.i18n.LocaleContextHolder.getLocale;
 
 /**
  * @author Nikola Stanar
@@ -76,9 +74,9 @@ public class UserServiceImpl implements UserService {
     private final RevokeTokenService revokeTokenService;
 
     /**
-     * Message source.
+     * Exception util.
      */
-    private final MessageSource messageSource;
+    private final ExceptionUtil exceptionUtil;
 
     /**
      * Creates user from dto.
@@ -113,18 +111,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto deleteById(final Long id) {
         log.info("Deleting user of id {}.", id);
-        return userRepository
-                .findById(id)
+        return userRepository.findById(id)
                 .map(user -> {
                     final UserDto deletedUser = getDtoConverter().from(user);
                     userRepository.deleteById(id);
                     //Logout user.
                     revokeTokenService.revokeFor(user.getUsername());
                     return deletedUser;
-                }).orElseThrow(() -> {
-                    final String message = messageSource.getMessage(RESOURCE_DOES_NOT_EXIST, new Object[]{id}, getLocale());
-                    throw new NotFoundException(message);
-                });
+                })
+                .orElseThrow(() -> exceptionUtil.createNotFoundExceptionFrom(RESOURCE_DOES_NOT_EXIST, new Object[]{id}));
     }
 
     /**
@@ -154,14 +149,10 @@ public class UserServiceImpl implements UserService {
     public UserDto updateByUsername(final @NotBlank String username, @NotNull @Valid final UserDto dto) {
         log.info("Updating user {} with content {}.", username, dto);
         businessValidatorChain.validateFor(Update.class, dto);
-        return userRepository
-                .findByUsernameIgnoreCase(username)
+        return userRepository.findByUsernameIgnoreCase(username)
                 .map(entity -> getRepository().save(getDtoConverter().from(dto, entity)))
                 .map(getDtoConverter()::from)
-                .orElseThrow(() -> {
-                    final String message = getMessageSource().getMessage(RESOURCE_DOES_NOT_EXIST, new Object[]{username}, getLocale());
-                    throw new NotFoundException(message);
-                });
+                .orElseThrow(() -> exceptionUtil.createNotFoundExceptionFrom(RESOURCE_DOES_NOT_EXIST, new Object[]{username}));
     }
 
     /**
@@ -174,18 +165,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto deleteByUsername(@NotBlank final String username) {
         log.info("Deleting user of username {}.", username);
-        return userRepository
-                .findByUsernameIgnoreCase(username)
+        return userRepository.findByUsernameIgnoreCase(username)
                 .map(user -> {
                     final UserDto deletedUser = getDtoConverter().from(user);
                     userRepository.deleteByUsername(username);
                     //Logout user.
                     revokeTokenService.revokeFor(username);
                     return deletedUser;
-                }).orElseThrow(() -> {
-                    final String message = messageSource.getMessage(RESOURCE_DOES_NOT_EXIST, new Object[]{username}, getLocale());
-                    throw new NotFoundException(message);
-                });
+                })
+                .orElseThrow(() -> exceptionUtil.createNotFoundExceptionFrom(RESOURCE_DOES_NOT_EXIST, new Object[]{username}));
     }
 
     /**
@@ -230,17 +218,6 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Gets message source.
-     *
-     * @return Message source.
-     * @see UserService#getMessageSource()
-     */
-    @Override
-    public MessageSource getMessageSource() {
-        return messageSource;
-    }
-
-    /**
      * Gets dto converter.
      *
      * @return Check {@link DtoConverter}.
@@ -250,4 +227,16 @@ public class UserServiceImpl implements UserService {
     public DtoConverter<UserDto, User> getDtoConverter() {
         return userDtoConverter;
     }
+
+    /**
+     * Gets exception util.
+     *
+     * @return Exception util.
+     * @see UserService#getExceptionUtil()
+     */
+    @Override
+    public ExceptionUtil getExceptionUtil() {
+        return exceptionUtil;
+    }
+
 }

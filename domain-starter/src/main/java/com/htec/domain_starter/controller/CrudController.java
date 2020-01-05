@@ -6,7 +6,7 @@ import com.htec.domain_starter.service.CrudService;
 import com.htec.domain_starter.service.dto.BaseDto;
 import com.htec.domain_starter.service.validation.exception.BusinessValidationException;
 import com.htec.domain_starter.service.validation.exception.NotFoundException;
-import org.springframework.context.MessageSource;
+import com.htec.domain_starter.service.validation.util.ExceptionUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -18,12 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.ConstraintViolationException;
-import java.net.URI;
 
 import static com.htec.domain_starter.common.constants.MessageSourceKeys.RESOURCE_DOES_NOT_EXIST;
-import static org.springframework.context.i18n.LocaleContextHolder.getLocale;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 /**
  * @author Nikola Stanar
@@ -61,25 +57,22 @@ public interface CrudController<MODEL extends RepresentationModel<MODEL>, DTO ex
                 .findById(id)
                 .map(getModelAssembler()::toModel)
                 .map(ResponseEntity::ok)
-                .orElseThrow(() -> {
-                    final String message = getMessageSource().getMessage(RESOURCE_DOES_NOT_EXIST, new Object[]{id}, getLocale());
-                    return new NotFoundException(message);
-                });
+                .orElseThrow(() -> getExceptionUtil().createNotFoundExceptionFrom(RESOURCE_DOES_NOT_EXIST, new Object[]{id}));
     }
 
     /**
      * Creates model entity from request body.
      *
      * @param dto Request body.
-     * @return 201 with location header if successful; otherwise 400 with exception message.
+     * @return 200 with model in request body; otherwise 400 with exception message.
      * @see ControllerAdvice#handle(BusinessValidationException)
      * @see ControllerAdvice#handle(ConstraintViolationException)
      */
     @PostMapping
-    default ResponseEntity<Void> createFrom(@RequestBody final DTO dto) {
-        final Long id = getService().createFrom(dto).getId();
-        final URI location = linkTo(methodOn(getClass()).findBy(id)).toUri();
-        return ResponseEntity.created(location).build();
+    default ResponseEntity<MODEL> createFrom(@RequestBody final DTO dto) {
+        final DTO createdDto = getService().createFrom(dto);
+        final MODEL model = getModelAssembler().toModel(createdDto);
+        return ResponseEntity.ok(model);
     }
 
     /**
@@ -87,14 +80,15 @@ public interface CrudController<MODEL extends RepresentationModel<MODEL>, DTO ex
      *
      * @param id  Id of the model entity.
      * @param dto Request body.
-     * @return 204 if successful; otherwise one of (404, 400) with exception message.
+     * @return 200 with model in request body; otherwise one of (404, 400) with exception message.
      * @see ControllerAdvice#handle(BusinessValidationException)
      * @see ControllerAdvice#handle(ConstraintViolationException)
+     * @see ControllerAdvice#handle(NotFoundException)
      */
     @PutMapping("/{id}")
     default ResponseEntity<?> updateFrom(@PathVariable final Long id, @RequestBody final DTO dto) {
-        getService().updateFrom(id, dto);
-        return ResponseEntity.noContent().build();
+        final DTO updatedDto = getService().updateFrom(id, dto);
+        return ResponseEntity.ok(updatedDto);
     }
 
     /**
@@ -125,10 +119,12 @@ public interface CrudController<MODEL extends RepresentationModel<MODEL>, DTO ex
     RepresentationModelAssembler<DTO, MODEL> getModelAssembler();
 
     /**
-     * Gets message source.
+     * Gets exception util.
      *
-     * @return Message source.
+     * @return Exception util.
      */
-    MessageSource getMessageSource();
+    default ExceptionUtil getExceptionUtil() {
+        return getService().getExceptionUtil();
+    }
 
 }
