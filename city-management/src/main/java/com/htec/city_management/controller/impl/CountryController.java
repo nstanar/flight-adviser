@@ -5,6 +5,7 @@ import com.htec.city_management.controller.model.CountryModel;
 import com.htec.city_management.controller.model.assembler.impl.CityModelAssembler;
 import com.htec.city_management.controller.model.assembler.impl.CountryModelAssembler;
 import com.htec.city_management.repository.entity.Country;
+import com.htec.city_management.service.CityService;
 import com.htec.city_management.service.CountryService;
 import com.htec.city_management.service.dto.CityDto;
 import com.htec.city_management.service.dto.CountryDto;
@@ -50,6 +51,11 @@ public class CountryController implements SearchableController<CountryModel, Cou
     private final CountryModelAssembler countryModelAssembler;
 
     /**
+     * City service.
+     */
+    private final CityService cityService;
+
+    /**
      * Assembler for city model.
      */
     private final CityModelAssembler cityModelAssembler;
@@ -69,8 +75,8 @@ public class CountryController implements SearchableController<CountryModel, Cou
      */
     @GetMapping("/{countryId}/cities")
     public ResponseEntity<PagedModel<EntityModel<CityModel>>> findBy(@PathVariable final Long countryId, final Pageable pageable, final PagedResourcesAssembler<CityModel> pagedResourcesAssembler) {
-        final Page<CityModel> cities = countryService
-                .findBy(countryId, pageable)
+        final Page<CityModel> cities = cityService
+                .findAllByCountryId(countryId, pageable)
                 .map(cityModelAssembler::toModel);
 
         return ResponseEntity.ok(pagedResourcesAssembler.toModel(cities));
@@ -86,10 +92,12 @@ public class CountryController implements SearchableController<CountryModel, Cou
      */
     @PostMapping("/{countryId}/cities")
     public ResponseEntity<?> createAndAssignTo(@PathVariable final Long countryId, @RequestBody final CityDto city) {
-        countryService.createAndAssignTo(countryId, city);
+        city.setCountryId(countryId);
+
+        final CityDto createdCity = cityService.createFrom(city);
 
         final URI location = linkTo(methodOn
-                (CityController.class).findBy(city.getId())
+                (CityController.class).findBy(createdCity.getId())
         ).toUri();
 
         return ResponseEntity.created(location).build();

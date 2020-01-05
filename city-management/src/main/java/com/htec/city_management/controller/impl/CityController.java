@@ -6,6 +6,7 @@ import com.htec.city_management.controller.model.assembler.impl.CityModelAssembl
 import com.htec.city_management.controller.model.assembler.impl.CommentModelAssembler;
 import com.htec.city_management.repository.entity.City;
 import com.htec.city_management.service.CityService;
+import com.htec.city_management.service.CommentService;
 import com.htec.city_management.service.dto.CityDto;
 import com.htec.city_management.service.dto.CommentDto;
 import com.htec.domain_starter.controller.SearchableController;
@@ -49,6 +50,11 @@ public class CityController implements SearchableController<CityModel, CityDto, 
     private final CityModelAssembler cityModelAssembler;
 
     /**
+     * Comment service.
+     */
+    private final CommentService commentService;
+
+    /**
      * Model assembler for comment.
      */
     private final CommentModelAssembler commentModelAssembler;
@@ -68,8 +74,8 @@ public class CityController implements SearchableController<CityModel, CityDto, 
      */
     @GetMapping("/{cityId}/comments")
     public ResponseEntity<PagedModel<EntityModel<CommentModel>>> findBy(@PathVariable final Long cityId, final Pageable pageable, final PagedResourcesAssembler<CommentModel> pagedResourcesAssembler) {
-        final Page<CommentModel> comments = cityService
-                .findBy(cityId, pageable)
+        final Page<CommentModel> comments = commentService
+                .findAllByCityId(cityId, pageable)
                 .map(commentModelAssembler::toModel);
 
         return ResponseEntity.ok(pagedResourcesAssembler.toModel(comments));
@@ -85,7 +91,9 @@ public class CityController implements SearchableController<CityModel, CityDto, 
      */
     @PostMapping("/{cityId}/comments")
     public ResponseEntity<Void> createAndAssignTo(@PathVariable final Long cityId, @RequestBody final CommentDto comment) {
-        final CommentDto createdComment = cityService.createAndAssignTo(cityId, comment);
+        comment.setCityId(cityId);
+
+        final CommentDto createdComment = commentService.createFrom(comment);
 
         final URI location = linkTo(methodOn
                 (CommentController.class).findBy(createdComment.getId())

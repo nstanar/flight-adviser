@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -37,5 +38,6 @@ public class CommentDto extends AuditAwareDto {
     /**
      * Id of the city comment belongs to.
      */
+    @NotNull
     private Long cityId;
 }

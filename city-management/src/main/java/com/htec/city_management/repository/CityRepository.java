@@ -6,6 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 /**
  * @author Nikola Stanar
  * <p>
@@ -24,13 +26,13 @@ public interface CityRepository extends SearchableRepository<City> {
     Page<City> findAllByCountryId(final Long countryId, final Pageable pageable);
 
     /**
-     * Checks if city with given name in certain country already exists.
+     * Finds city with given name in certain country.
      *
      * @param name      City name.
      * @param countryId Id of the country.
-     * @return True if exists; otherwise false.
+     * @return Optional city.
      */
     @Transactional(readOnly = true)
-    boolean existsByNameIgnoreCaseAndCountryId(final String name, final Long countryId);
+    Optional<City> findByNameIgnoreCaseAndCountryId(final String name, final Long countryId);
 
 }

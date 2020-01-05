@@ -4,6 +4,8 @@ import com.htec.city_management.repository.entity.Country;
 import com.htec.domain_starter.repository.SearchableRepository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 /**
  * @author Nikola Stanar
  * <p>
@@ -12,12 +14,12 @@ import org.springframework.transaction.annotation.Transactional;
 public interface CountryRepository extends SearchableRepository<Country> {
 
     /**
-     * Checks if country with given name already exists (ignores case).
+     * Finds country with given name.
      *
      * @param name Country name.
-     * @return True if exists; otherwise false.
+     * @return Optional country.
      */
     @Transactional(readOnly = true)
-    boolean existsByNameIgnoreCase(final String name);
+    Optional<Country> findByNameIgnoreCase(final String name);
 
 }

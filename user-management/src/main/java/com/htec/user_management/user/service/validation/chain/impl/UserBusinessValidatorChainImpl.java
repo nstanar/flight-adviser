@@ -2,6 +2,7 @@ package com.htec.user_management.user.service.validation.chain.impl;
 
 import com.htec.domain_starter.service.validation.chain.BusinessValidatorChain;
 import com.htec.domain_starter.service.validation.marker.Create;
+import com.htec.domain_starter.service.validation.marker.Update;
 import com.htec.domain_starter.service.validation.validator.BusinessValidator;
 import com.htec.user_management.user.service.dto.UserDto;
 import com.htec.user_management.user.service.validation.PasswordMatcherValidator;
@@ -44,6 +45,7 @@ public class UserBusinessValidatorChainImpl implements BusinessValidatorChain<Us
     @PostConstruct
     protected void decoupleValidators() {
         decisionCache.put(Create.class, List.of(usernameUniquenessValidator, passwordMatcherValidator));
+        decisionCache.put(Update.class, List.of(usernameUniquenessValidator, passwordMatcherValidator));
     }
 
     /**

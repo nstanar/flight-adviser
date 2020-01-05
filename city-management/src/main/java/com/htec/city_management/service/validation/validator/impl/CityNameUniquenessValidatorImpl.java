@@ -1,6 +1,7 @@
 package com.htec.city_management.service.validation.validator.impl;
 
 import com.htec.city_management.repository.CityRepository;
+import com.htec.city_management.repository.entity.City;
 import com.htec.city_management.service.dto.CityDto;
 import com.htec.city_management.service.validation.CityNameUniquenessValidator;
 import com.htec.domain_starter.service.dto.BaseDto;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
+import java.util.Optional;
 
 import static org.springframework.context.i18n.LocaleContextHolder.getLocale;
 
@@ -48,13 +50,31 @@ public class CityNameUniquenessValidatorImpl implements CityNameUniquenessValida
      */
     @Override
     public void validate(@NotNull final CityDto dto) {
-        final String cityName = dto.getName();
+        final Long id = dto.getId();
+        final String name = dto.getName();
         final Long countryId = dto.getCountryId();
-        final boolean alreadyExists = cityRepository.existsByNameIgnoreCaseAndCountryId(cityName, countryId);
+        final Optional<City> optionalCity = cityRepository.findByNameIgnoreCaseAndCountryId(name, countryId);
+
+        boolean alreadyExists = false;
+        if (optionalCity.isPresent()) {
+            final City city = optionalCity.get();
+            if (id != null) {
+                // Existing city.
+                if (!city.getId().equals(id)) {
+                    // Existing city with different id and same name.
+                    alreadyExists = true;
+                }
+            } else {
+                // Completely new city with existing name.
+                alreadyExists = true;
+            }
+        }
+
         if (alreadyExists) {
-            final String message = messageSource.getMessage(CITY_NAME_ALREADY_EXISTS, new Object[]{cityName, countryId}, getLocale());
+            final String message = messageSource.getMessage(CITY_NAME_ALREADY_EXISTS, new Object[]{name, countryId}, getLocale());
             throw new BusinessValidationException(message);
         }
+
     }
 
 }

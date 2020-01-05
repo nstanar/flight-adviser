@@ -94,6 +94,8 @@ public class UserServiceImpl implements UserService {
         final Role regularUserRole = roleRepository.findByName(ROLE_REGULAR_USER.getName());
 
         // TODO: Adding new roles should be supported in future.
+
+        //TODO: extract this to roles controller.
         userEntity.setRoles(Collections.singleton(regularUserRole));
 
         final User createdUser = userRepository.save(userEntity);

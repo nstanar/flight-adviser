@@ -54,6 +54,7 @@ public class CommentServiceImpl implements CommentService {
      */
     @Override
     public Page<CommentDto> findAllByCityId(final @NotNull Long cityId, final @NotNull Pageable pageable) {
+        log.info("Fetching {} of comments belonging to city {}. ", pageable, cityId);
         return repository
                 .findAllByCityId(cityId, pageable)
                 .map(dtoConverter::from);

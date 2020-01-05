@@ -21,19 +21,19 @@ import javax.validation.constraints.Size;
 public interface SearchableService<DTO extends BaseDto, ENTITY extends BaseEntity> extends Convertible<DTO, ENTITY>, CrudService<DTO, ENTITY> {
 
     /**
-     * Finds page of DTOs matching name prefix.
+     * Finds page of DTOs matching name filter.
      *
-     * @param namePrefix Name prefix.
+     * @param nameFilter Name filter.
      * @param pageable   Check pageable.
      * @return Page of DTOs matching name prefix.
      */
     @PreAuthorize("isAuthenticated()")
     @Transactional(readOnly = true)
-    default Page<DTO> findBy(@NotBlank @Size(min = 2) final String namePrefix, @NotNull final Pageable pageable) {
+    default Page<DTO> findBy(@NotBlank @Size(min = 2) final String nameFilter, @NotNull final Pageable pageable) {
+        final String enhancedNameFilter = "%" + nameFilter + "%";
         return getRepository()
-                .findByNameStartingWithIgnoreCase(namePrefix, pageable)
+                .findByNameLike(enhancedNameFilter, pageable)
                 .map(getDtoConverter()::from);
-
     }
 
     /**

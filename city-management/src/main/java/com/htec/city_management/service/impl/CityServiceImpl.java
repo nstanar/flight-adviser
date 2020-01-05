@@ -3,9 +3,7 @@ package com.htec.city_management.service.impl;
 import com.htec.city_management.repository.CityRepository;
 import com.htec.city_management.repository.entity.City;
 import com.htec.city_management.service.CityService;
-import com.htec.city_management.service.CommentService;
 import com.htec.city_management.service.dto.CityDto;
-import com.htec.city_management.service.dto.CommentDto;
 import com.htec.city_management.service.dto.converter.CityDtoConverter;
 import com.htec.domain_starter.repository.SearchableRepository;
 import com.htec.domain_starter.service.dto.converter.DtoConverter;
@@ -17,7 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
@@ -48,11 +45,6 @@ public class CityServiceImpl implements CityService {
     private final BusinessValidatorChain<CityDto> businessValidatorChain;
 
     /**
-     * Service for comment.
-     */
-    private final CommentService commentService;
-
-    /**
      * Message source.
      */
     private final MessageSource messageSource;
@@ -70,33 +62,6 @@ public class CityServiceImpl implements CityService {
         return repository
                 .findAllByCountryId(countryId, pageable)
                 .map(dtoConverter::from);
-    }
-
-    /**
-     * Finds page of comments belonging to city.
-     *
-     * @param cityId   City id.
-     * @param pageable Check pageable.
-     * @return Page of comments belonging to city;
-     * @see CityService#findBy(Long, Pageable)
-     */
-    public Page<CommentDto> findBy(@NotNull final Long cityId, @NotNull final Pageable pageable) {
-        log.info("Fetching {} of comments for city of id {}.", pageable, cityId);
-        return commentService.findAllByCityId(cityId, pageable);
-    }
-
-    /**
-     * Adds comment to the city of certain id.
-     *
-     * @param cityId  Id of the city.
-     * @param comment Comment to be added.
-     * @return Created comment.
-     * @see CityService#createAndAssignTo(Long, CommentDto)
-     */
-    public CommentDto createAndAssignTo(@NotNull final Long cityId, @NotNull @Valid final CommentDto comment) {
-        log.info("Adding comment {} to city of id {}.", comment, cityId);
-        comment.setCityId(cityId);
-        return commentService.createFrom(comment);
     }
 
     /**

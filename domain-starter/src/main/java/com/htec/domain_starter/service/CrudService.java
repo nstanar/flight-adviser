@@ -90,6 +90,7 @@ public interface CrudService<DTO extends BaseDto, ENTITY extends BaseEntity> ext
      */
     @PostAuthorize("hasRole('ADMIN')")
     default DTO updateFrom(@NotNull final Long id, @NotNull @Valid final DTO dto) {
+        dto.setId(id);
         getBusinessValidatorChain().ifPresent(businessValidatorChain -> businessValidatorChain.validateFor(Update.class, dto));
 
         return getRepository()

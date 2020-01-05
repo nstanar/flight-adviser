@@ -5,6 +5,8 @@ import com.htec.domain_starter.service.dto.BaseDto;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 /**
@@ -15,7 +17,7 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString(exclude = {"country"})
+@ToString(exclude = {"countryName"})
 @EqualsAndHashCode
 public class CityDto extends BaseDto {
 
@@ -24,6 +26,7 @@ public class CityDto extends BaseDto {
      */
     @NotBlank
     @Size(min = 1, max = 255)
+    @Pattern(regexp = "^([a-zA-Z\\u0080-\\u024F]+(?:. |-| |'))*[a-zA-Z\\u0080-\\u024F]*$")
     private String name;
 
     /**
@@ -36,6 +39,7 @@ public class CityDto extends BaseDto {
     /**
      * Id of the country city resides in.
      */
+    @NotNull
     private Long countryId;
 
     /**

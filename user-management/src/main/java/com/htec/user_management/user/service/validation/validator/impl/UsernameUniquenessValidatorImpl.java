@@ -3,6 +3,7 @@ package com.htec.user_management.user.service.validation.validator.impl;
 import com.htec.domain_starter.service.dto.BaseDto;
 import com.htec.domain_starter.service.validation.exception.BusinessValidationException;
 import com.htec.user_management.user.repository.UserRepository;
+import com.htec.user_management.user.repository.entity.User;
 import com.htec.user_management.user.service.dto.UserDto;
 import com.htec.user_management.user.service.validation.UsernameUniquenessValidator;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
+import java.util.Optional;
 
 import static org.springframework.context.i18n.LocaleContextHolder.getLocale;
 
@@ -48,12 +50,31 @@ public class UsernameUniquenessValidatorImpl implements UsernameUniquenessValida
      */
     @Override
     public void validate(final @NotNull UserDto dto) {
+        final Long id = dto.getId();
         final String username = dto.getUsername();
-        final boolean alreadyExists = userRepository.existsByUsernameIgnoreCase(username);
+        final Optional<User> optionalUser = userRepository.findByUsernameIgnoreCase(username);
+
+        boolean alreadyExists = false;
+        if (optionalUser.isPresent()) {
+            final User user = optionalUser.get();
+            if (id != null) {
+                // Existing user.
+                if (!user.getId().equals(id)) {
+                    // Existing user with different id and same username.
+                    alreadyExists = true;
+                }
+            } else {
+                // Completely new user with existing username.
+                alreadyExists = true;
+            }
+        }
+
         if (alreadyExists) {
             final String message = messageSource.getMessage(USERNAME_ALREADY_EXISTS, new Object[]{username}, getLocale());
             throw new BusinessValidationException(message);
         }
+
+
     }
 
 }

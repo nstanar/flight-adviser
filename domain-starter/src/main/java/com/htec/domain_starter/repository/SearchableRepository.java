@@ -20,10 +20,10 @@ public interface SearchableRepository<ENTITY extends BaseEntity> extends JpaRepo
      * Finds page of entities matching name filter.
      * <p>
      *
-     * @param namePrefix Name prefix.
+     * @param nameFilter Name filter.
      * @return Page of entities matching name filter.
      */
     @Transactional(readOnly = true)
-    Page<ENTITY> findByNameStartingWithIgnoreCase(final String namePrefix, final Pageable pageable);
+    Page<ENTITY> findByNameLike(final String nameFilter, final Pageable pageable);
 
 }

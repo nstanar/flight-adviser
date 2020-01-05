@@ -4,6 +4,7 @@ import com.htec.city_management.service.dto.CityDto;
 import com.htec.city_management.service.validation.CityNameUniquenessValidator;
 import com.htec.domain_starter.service.validation.chain.BusinessValidatorChain;
 import com.htec.domain_starter.service.validation.marker.Create;
+import com.htec.domain_starter.service.validation.marker.Update;
 import com.htec.domain_starter.service.validation.validator.BusinessValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -39,6 +40,7 @@ public class CityBusinessValidatorChainImpl implements BusinessValidatorChain<Ci
     @PostConstruct
     protected void decoupleValidators() {
         decisionCache.put(Create.class, Collections.singletonList(cityNameUniquenessValidator));
+        decisionCache.put(Update.class, Collections.singletonList(cityNameUniquenessValidator));
     }
 
     /**
