@@ -1,5 +1,3 @@
--- TODO: in production database add partial and function indexes.
-
 DROP TABLE IF EXISTS fa_user;
 DROP TABLE IF EXISTS fa_role;
 DROP TABLE IF EXISTS fa_user_role;

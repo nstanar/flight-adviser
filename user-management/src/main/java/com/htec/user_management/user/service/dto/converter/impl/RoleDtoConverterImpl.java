@@ -1,7 +1,7 @@
 package com.htec.user_management.user.service.dto.converter.impl;
 
 
-import com.htec.domain_starter.repository.entity.BaseEntity;
+import com.htec.domain_starter.repository.BaseEntity;
 import com.htec.domain_starter.service.dto.BaseDto;
 import com.htec.domain_starter.service.dto.converter.DtoConverter;
 import com.htec.user_management.user.repository.entity.Role;

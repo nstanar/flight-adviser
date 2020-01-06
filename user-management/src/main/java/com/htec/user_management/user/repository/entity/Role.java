@@ -1,6 +1,6 @@
 package com.htec.user_management.user.repository.entity;
 
-import com.htec.domain_starter.repository.entity.BaseEntity;
+import com.htec.domain_starter.repository.entity.jpa.JpaBaseEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,7 +19,7 @@ import javax.persistence.UniqueConstraint;
 @Table(name = "fa_role", uniqueConstraints = @UniqueConstraint(name = "fa_role_name_unique_constraint", columnNames = "name"))
 @NoArgsConstructor
 @Data
-public class Role extends BaseEntity implements GrantedAuthority {
+public class Role extends JpaBaseEntity implements GrantedAuthority {
 
     /**
      * Name of the role.
@@ -27,8 +27,14 @@ public class Role extends BaseEntity implements GrantedAuthority {
     @Column(nullable = false, length = 30)
     private String name;
 
+    /**
+     * Getter for authority.
+     *
+     * @return Authority.
+     */
     @Override
     public String getAuthority() {
         return name;
     }
+
 }

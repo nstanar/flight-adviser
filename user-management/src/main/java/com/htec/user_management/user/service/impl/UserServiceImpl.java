@@ -20,6 +20,8 @@ import com.htec.user_management.user.service.dto.converter.UserDtoConverter;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -37,6 +39,7 @@ import static java.util.stream.Collectors.toSet;
  * <p>
  * Implementation of {@link UserService}.
  */
+@Service
 @Slf4j
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -88,11 +91,28 @@ public class UserServiceImpl implements UserService {
         businessValidatorChain.validateFor(Create.class, dto);
         final User userEntity = userDtoConverter.from(dto);
         final Role regularUserRole = roleRepository.findByName(ROLE_REGULAR_USER.getName());
-        userEntity.setRoles(Collections.singleton(regularUserRole));
+        userEntity.getRoles().add(regularUserRole);
 
         final User createdUser = userRepository.save(userEntity);
 
         return userDtoConverter.from(createdUser);
+    }
+
+    /**
+     * Update from id.
+     *
+     * @param id  Id of the dto.
+     * @param dto DTO holding update content.
+     * @return Updated user.
+     */
+    @Override
+    public UserDto updateFrom(final @NotNull Long id, final @NotNull @Valid UserDto dto) {
+        final UserDto userDto = UserService.super.updateFrom(id, dto);
+
+        //Logout user.
+        revokeTokenService.revokeFor(dto.getUsername());
+
+        return userDto;
     }
 
     /**
@@ -145,7 +165,12 @@ public class UserServiceImpl implements UserService {
         businessValidatorChain.validateFor(Update.class, dto);
         return userRepository.findByUsernameIgnoreCase(username)
                 .map(entity -> getRepository().save(getDtoConverter().from(dto, entity)))
-                .map(getDtoConverter()::from)
+                .map(createdEntity -> {
+                    //Logout user.
+                    revokeTokenService.revokeFor(username);
+
+                    return getDtoConverter().from(createdEntity);
+                })
                 .orElseThrow(() -> exceptionUtil.createNotFoundExceptionFrom(RESOURCE_DOES_NOT_EXIST, new Object[]{username}));
     }
 
@@ -217,7 +242,7 @@ public class UserServiceImpl implements UserService {
      * @see CrudService#getRepository()
      */
     @Override
-    public JpaRepository<User, Long> getRepository() {
+    public PagingAndSortingRepository<User, Long> getRepository() {
         return userRepository;
     }
 

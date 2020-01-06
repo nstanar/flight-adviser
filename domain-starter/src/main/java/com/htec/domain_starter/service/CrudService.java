@@ -1,6 +1,6 @@
 package com.htec.domain_starter.service;
 
-import com.htec.domain_starter.repository.entity.BaseEntity;
+import com.htec.domain_starter.repository.BaseEntity;
 import com.htec.domain_starter.service.dto.BaseDto;
 import com.htec.domain_starter.service.dto.converter.Convertible;
 import com.htec.domain_starter.service.validation.chain.BusinessValidatorChain;
@@ -9,10 +9,9 @@ import com.htec.domain_starter.service.validation.marker.Update;
 import com.htec.domain_starter.service.validation.util.ExceptionUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
@@ -31,8 +30,7 @@ import static com.htec.domain_starter.common.constants.MessageSourceKeys.RESOURC
  * <p>
  * Service for CRUD operations over DTO.
  */
-//TODO: AOP
-@Service
+//TODO: AOP logging if time left
 @Transactional
 @Validated
 public interface CrudService<D extends BaseDto, E extends BaseEntity> extends Convertible<D, E> {
@@ -156,9 +154,9 @@ public interface CrudService<D extends BaseDto, E extends BaseEntity> extends Co
     /**
      * Gets jpa repository.
      *
-     * @return Check {@link JpaRepository}.
+     * @return Check {@link PagingAndSortingRepository}.
      */
-    JpaRepository<E, Long> getRepository();
+    PagingAndSortingRepository<E, Long> getRepository();
 
     /**
      * Gets exception util.

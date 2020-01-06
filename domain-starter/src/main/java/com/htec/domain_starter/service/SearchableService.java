@@ -1,7 +1,7 @@
 package com.htec.domain_starter.service;
 
+import com.htec.domain_starter.repository.BaseEntity;
 import com.htec.domain_starter.repository.SearchableRepository;
-import com.htec.domain_starter.repository.entity.BaseEntity;
 import com.htec.domain_starter.service.dto.BaseDto;
 import com.htec.domain_starter.service.dto.converter.Convertible;
 import org.springframework.data.domain.Page;
@@ -30,9 +30,8 @@ public interface SearchableService<D extends BaseDto, E extends BaseEntity> exte
     @PreAuthorize("isAuthenticated()")
     @Transactional(readOnly = true)
     default Page<D> findBy(@NotBlank @Size(min = 2) final String nameFilter, @NotNull final Pageable pageable) {
-        final String enhancedNameFilter = "%" + nameFilter + "%";
         return getRepository()
-                .findByNameLikeIgnoreCase(enhancedNameFilter, pageable)
+                .findByNameContainingIgnoreCase(nameFilter, pageable)
                 .map(getDtoConverter()::from);
     }
 

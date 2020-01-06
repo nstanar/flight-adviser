@@ -1,10 +1,9 @@
 package com.htec.domain_starter.repository;
 
-import com.htec.domain_starter.repository.entity.BaseEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -14,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @NoRepositoryBean
 //TODO: if time left, make it generic with criteria API so it can be used for any field.
-public interface SearchableRepository<E extends BaseEntity> extends JpaRepository<E, Long> {
+public interface SearchableRepository<E extends BaseEntity> extends PagingAndSortingRepository<E, Long> {
 
     /**
      * Finds page of entities matching name filter.
@@ -24,6 +23,6 @@ public interface SearchableRepository<E extends BaseEntity> extends JpaRepositor
      * @return Page of entities matching name filter.
      */
     @Transactional(readOnly = true)
-    Page<E> findByNameLikeIgnoreCase(final String nameFilter, final Pageable pageable);
+    Page<E> findByNameContainingIgnoreCase(final String nameFilter, final Pageable pageable);
 
 }

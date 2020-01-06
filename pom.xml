@@ -36,7 +36,7 @@
     <modules>
         <module>domain-starter</module>
         <module>user-management</module>
-        <module>city-management</module>
+        <module>flight-management</module>
     </modules>
 
     <dependencyManagement>

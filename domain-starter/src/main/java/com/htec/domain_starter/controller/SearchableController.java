@@ -1,6 +1,6 @@
 package com.htec.domain_starter.controller;
 
-import com.htec.domain_starter.repository.entity.BaseEntity;
+import com.htec.domain_starter.repository.BaseEntity;
 import com.htec.domain_starter.service.SearchableService;
 import com.htec.domain_starter.service.dto.BaseDto;
 import org.springframework.data.domain.Page;

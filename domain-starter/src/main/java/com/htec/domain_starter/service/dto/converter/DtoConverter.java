@@ -1,6 +1,6 @@
 package com.htec.domain_starter.service.dto.converter;
 
-import com.htec.domain_starter.repository.entity.BaseEntity;
+import com.htec.domain_starter.repository.BaseEntity;
 import com.htec.domain_starter.service.dto.BaseDto;
 
 import javax.validation.constraints.NotNull;

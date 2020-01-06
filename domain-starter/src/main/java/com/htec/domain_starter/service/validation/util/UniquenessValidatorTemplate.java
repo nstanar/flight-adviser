@@ -1,6 +1,6 @@
 package com.htec.domain_starter.service.validation.util;
 
-import com.htec.domain_starter.repository.entity.BaseEntity;
+import com.htec.domain_starter.repository.BaseEntity;
 import com.htec.domain_starter.service.dto.BaseDto;
 import com.htec.domain_starter.service.validation.validator.BusinessValidator;
 

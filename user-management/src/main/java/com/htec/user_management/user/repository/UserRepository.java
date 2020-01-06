@@ -1,8 +1,8 @@
 package com.htec.user_management.user.repository;
 
 import com.htec.user_management.user.repository.entity.User;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
@@ -13,7 +13,7 @@ import java.util.Optional;
  * Repository for {@link User}.
  */
 @Transactional
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends PagingAndSortingRepository<User, Long> {
 
     /**
      * Finds user by username (ignores case).
