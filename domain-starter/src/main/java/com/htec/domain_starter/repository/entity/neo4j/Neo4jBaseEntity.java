@@ -16,13 +16,13 @@ import org.neo4j.ogm.annotation.NodeEntity;
 @NodeEntity
 @Getter
 @Setter(AccessLevel.PRIVATE)
-public class Neo4jBaseEntity implements BaseEntity {
+public abstract class Neo4jBaseEntity<ID> implements BaseEntity<ID> {
 
     /**
      * Neo4j requires annotations on field.
      */
     @Id
     @GeneratedValue
-    private Long id;
+    private ID id;
 
 }

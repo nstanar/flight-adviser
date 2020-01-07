@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
  */
 @NoArgsConstructor
 @Data
-public abstract class AuditAwareDto extends BaseDto {
+public abstract class AuditAwareDto extends BaseDto<Long> {
 
     /**
      * Designates creation date of the record.

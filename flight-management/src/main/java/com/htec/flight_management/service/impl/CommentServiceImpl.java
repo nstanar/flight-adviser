@@ -1,13 +1,13 @@
 package com.htec.flight_management.service.impl;
 
+import com.htec.domain_starter.service.dto.converter.DtoConverter;
+import com.htec.domain_starter.service.validation.chain.BusinessValidatorChain;
+import com.htec.domain_starter.service.validation.util.ExceptionUtil;
 import com.htec.flight_management.repository.CommentRepository;
 import com.htec.flight_management.repository.entity.Comment;
 import com.htec.flight_management.service.CommentService;
 import com.htec.flight_management.service.dto.CommentDto;
 import com.htec.flight_management.service.dto.converter.CommentDtoConverter;
-import com.htec.domain_starter.service.dto.converter.DtoConverter;
-import com.htec.domain_starter.service.validation.chain.BusinessValidatorChain;
-import com.htec.domain_starter.service.validation.util.ExceptionUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -66,7 +66,7 @@ public class CommentServiceImpl implements CommentService {
      * @return Business validator chain.
      */
     @Override
-    public Optional<BusinessValidatorChain<CommentDto>> getBusinessValidatorChain() {
+    public Optional<BusinessValidatorChain<CommentDto, Long>> getBusinessValidatorChain() {
         return Optional.empty();
     }
 
@@ -99,7 +99,7 @@ public class CommentServiceImpl implements CommentService {
      * @see CommentService#getDtoConverter()
      */
     @Override
-    public DtoConverter<CommentDto, Comment> getDtoConverter() {
+    public DtoConverter<CommentDto, Comment, Long> getDtoConverter() {
         return dtoConverter;
     }
 }

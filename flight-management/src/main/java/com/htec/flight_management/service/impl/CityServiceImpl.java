@@ -1,14 +1,14 @@
 package com.htec.flight_management.service.impl;
 
+import com.htec.domain_starter.repository.SearchableRepository;
+import com.htec.domain_starter.service.dto.converter.DtoConverter;
+import com.htec.domain_starter.service.validation.chain.BusinessValidatorChain;
+import com.htec.domain_starter.service.validation.util.ExceptionUtil;
 import com.htec.flight_management.repository.CityRepository;
 import com.htec.flight_management.repository.entity.City;
 import com.htec.flight_management.service.CityService;
 import com.htec.flight_management.service.dto.CityDto;
 import com.htec.flight_management.service.dto.converter.CityDtoConverter;
-import com.htec.domain_starter.repository.SearchableRepository;
-import com.htec.domain_starter.service.dto.converter.DtoConverter;
-import com.htec.domain_starter.service.validation.chain.BusinessValidatorChain;
-import com.htec.domain_starter.service.validation.util.ExceptionUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -42,7 +42,7 @@ public class CityServiceImpl implements CityService {
     /**
      * Business validator chain for city.
      */
-    private final BusinessValidatorChain<CityDto> businessValidatorChain;
+    private final BusinessValidatorChain<CityDto, Long> businessValidatorChain;
 
     /**
      * Exception util.
@@ -71,7 +71,7 @@ public class CityServiceImpl implements CityService {
      * @see CityService#getDtoConverter()
      */
     @Override
-    public DtoConverter<CityDto, City> getDtoConverter() {
+    public DtoConverter<CityDto, City, Long> getDtoConverter() {
         return dtoConverter;
     }
 
@@ -82,7 +82,7 @@ public class CityServiceImpl implements CityService {
      * @see CityService#getBusinessValidatorChain()
      */
     @Override
-    public Optional<BusinessValidatorChain<CityDto>> getBusinessValidatorChain() {
+    public Optional<BusinessValidatorChain<CityDto, Long>> getBusinessValidatorChain() {
         return Optional.ofNullable(businessValidatorChain);
     }
 
@@ -104,7 +104,7 @@ public class CityServiceImpl implements CityService {
      * @see CityService#getRepository()
      */
     @Override
-    public SearchableRepository<City> getRepository() {
+    public SearchableRepository<City, Long> getRepository() {
         return repository;
     }
 }

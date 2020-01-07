@@ -19,7 +19,7 @@ import javax.persistence.UniqueConstraint;
 @Table(name = "fa_role", uniqueConstraints = @UniqueConstraint(name = "fa_role_name_unique_constraint", columnNames = "name"))
 @NoArgsConstructor
 @Data
-public class Role extends JpaBaseEntity implements GrantedAuthority {
+public class Role extends JpaBaseEntity<Long> implements GrantedAuthority {
 
     /**
      * Name of the role.

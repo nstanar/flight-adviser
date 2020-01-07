@@ -20,7 +20,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode(exclude = "cities")
-public class Country extends Neo4jBaseEntity {
+public class Country extends Neo4jBaseEntity<Long> {
 
     /**
      * Country name.

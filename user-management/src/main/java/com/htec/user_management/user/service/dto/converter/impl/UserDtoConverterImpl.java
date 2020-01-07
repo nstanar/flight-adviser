@@ -9,7 +9,6 @@ import com.htec.user_management.user.service.dto.converter.UserDtoConverter;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
 
@@ -21,7 +20,6 @@ import static java.nio.CharBuffer.wrap;
  * Implemenation of {@link UserDtoConverter}.
  */
 @Component
-@Validated
 @AllArgsConstructor
 public class UserDtoConverterImpl implements UserDtoConverter {
 

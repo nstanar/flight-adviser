@@ -1,9 +1,9 @@
 package com.htec.user_management.user.controller.impl;
 
-import com.htec.domain_starter.controller.CrudController;
+import com.htec.domain_starter.controller.PagingAndSortingController;
 import com.htec.domain_starter.controller.SearchableController;
 import com.htec.domain_starter.controller.validation.exception.handler.ControllerAdvice;
-import com.htec.domain_starter.service.CrudService;
+import com.htec.domain_starter.service.PagingAndSortingService;
 import com.htec.domain_starter.service.validation.exception.BusinessValidationException;
 import com.htec.domain_starter.service.validation.exception.NotFoundException;
 import com.htec.user_management.user.controller.model.RoleModel;
@@ -37,7 +37,7 @@ import static com.htec.domain_starter.common.constants.MessageSourceKeys.RESOURC
 @RestController
 @RequestMapping(value = "/users")
 @AllArgsConstructor
-public class UserController implements CrudController<UserModel, UserDto, User> {
+public class UserController implements PagingAndSortingController<UserModel, UserDto, User, Long> {
 
     /**
      * Service for user.
@@ -147,7 +147,7 @@ public class UserController implements CrudController<UserModel, UserDto, User> 
      * @see SearchableController#getService()
      */
     @Override
-    public CrudService<UserDto, User> getService() {
+    public PagingAndSortingService<UserDto, User, Long> getService() {
         return userService;
     }
 

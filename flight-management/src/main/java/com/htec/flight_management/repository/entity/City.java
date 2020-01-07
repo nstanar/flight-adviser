@@ -17,23 +17,19 @@ import static org.neo4j.ogm.annotation.Relationship.INCOMING;
  * @author Nikola Stanar
  * <p>
  * Entity class representing city.
+ * <p>
+ * Composite indexes and required fields are supported only in Neo4 Enterprise!
  */
 @NodeEntity
 @NoArgsConstructor
 @Getter
 @Setter
-public class City extends Neo4jBaseEntity {
+public class City extends Neo4jBaseEntity<Long> {
 
     /**
      * Name of the city.
      */
     private String name;
-
-    /**
-     * Country id.
-     * Redundancy needed here because of index.
-     */
-    private Long countryId;
 
     /**
      * Country in which city resides in.
@@ -51,4 +47,11 @@ public class City extends Neo4jBaseEntity {
      */
     @Relationship(type = "HAS_COMMENT")
     private final Set<Comment> comments = new HashSet<>();
+
+    /**
+     * Airports belonging to city.
+     */
+    @Relationship(type = "HAS_AIRPORT")
+    private final Set<Airport> airports = new HashSet<>();
+
 }

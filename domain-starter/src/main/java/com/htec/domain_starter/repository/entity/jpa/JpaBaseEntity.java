@@ -1,7 +1,9 @@
 package com.htec.domain_starter.repository.entity.jpa;
 
 import com.htec.domain_starter.repository.BaseEntity;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Setter;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,12 +17,13 @@ import javax.persistence.MappedSuperclass;
  */
 @MappedSuperclass
 @Data
-public class JpaBaseEntity implements BaseEntity {
+@Setter(value = AccessLevel.PRIVATE)
+public class JpaBaseEntity<ID> implements BaseEntity<ID> {
 
     /**
      * Id.
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private ID id;
 }

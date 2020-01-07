@@ -28,12 +28,12 @@ import static com.htec.domain_starter.common.constants.MessageSourceKeys.RESOURC
 /**
  * @author Nikola Stanar
  * <p>
- * Service for CRUD operations over DTO.
+ * Paging and sorting service exposing operations over DTO.
  */
 //TODO: AOP logging if time left
 @Transactional
 @Validated
-public interface CrudService<D extends BaseDto, E extends BaseEntity> extends Convertible<D, E> {
+public interface PagingAndSortingService<D extends BaseDto<ID>, E extends BaseEntity<ID>, ID> extends Convertible<D, E, ID> {
 
     /**
      * Finds page of DTOs.
@@ -57,7 +57,7 @@ public interface CrudService<D extends BaseDto, E extends BaseEntity> extends Co
      */
     @PreAuthorize("isAuthenticated()")
     @Transactional(readOnly = true)
-    default Optional<D> findById(@NotNull final Long id) {
+    default Optional<D> findById(@NotNull final ID id) {
         return getRepository()
                 .findById(id)
                 .map(getDtoConverter()::from);
@@ -87,7 +87,7 @@ public interface CrudService<D extends BaseDto, E extends BaseEntity> extends Co
      * @return Optional updated DTO if id exist, else empty.
      */
     @PostAuthorize("hasRole('ADMIN')")
-    default D updateFrom(@NotNull final Long id, @NotNull @Valid final D dto) {
+    default D updateFrom(@NotNull final ID id, @NotNull @Valid final D dto) {
         dto.setId(id);
         getBusinessValidatorChain().ifPresent(businessValidatorChain -> businessValidatorChain.validateFor(Update.class, dto));
 
@@ -105,7 +105,7 @@ public interface CrudService<D extends BaseDto, E extends BaseEntity> extends Co
      * @return Optionally deleted DTO if existed.
      */
     @PostAuthorize("hasRole('ADMIN')")
-    default D deleteById(final Long id) {
+    default D deleteById(final ID id) {
         return getRepository()
                 .findById(id)
                 .map(entity -> {
@@ -149,14 +149,14 @@ public interface CrudService<D extends BaseDto, E extends BaseEntity> extends Co
      *
      * @return Optional validator chain.
      */
-    Optional<BusinessValidatorChain<D>> getBusinessValidatorChain();
+    Optional<BusinessValidatorChain<D, ID>> getBusinessValidatorChain();
 
     /**
      * Gets jpa repository.
      *
      * @return Check {@link PagingAndSortingRepository}.
      */
-    PagingAndSortingRepository<E, Long> getRepository();
+    PagingAndSortingRepository<E, ID> getRepository();
 
     /**
      * Gets exception util.

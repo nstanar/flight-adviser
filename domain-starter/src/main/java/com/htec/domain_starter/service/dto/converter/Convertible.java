@@ -9,13 +9,13 @@ import com.htec.domain_starter.service.dto.BaseDto;
  * Convertable.
  */
 @FunctionalInterface
-public interface Convertible<D extends BaseDto, E extends BaseEntity> {
+public interface Convertible<D extends BaseDto<ID>, E extends BaseEntity<ID>, ID> {
 
     /**
      * Gets dto converter.
      *
      * @return Check {@link DtoConverter}.
      */
-    DtoConverter<D, E> getDtoConverter();
+    DtoConverter<D, E, ID> getDtoConverter();
 
 }

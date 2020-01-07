@@ -7,13 +7,13 @@ import java.io.Serializable;
  * <p>
  * Generic entity that is to be extended by concrete entities.
  */
-public interface BaseEntity extends Serializable {
+public interface BaseEntity<ID> extends Serializable {
 
     /**
      * Getter for id.
      *
      * @return Id.
      */
-    Long getId();
+    ID getId();
 
 }

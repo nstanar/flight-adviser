@@ -4,7 +4,6 @@ import com.htec.flight_management.repository.entity.Country;
 import com.htec.flight_management.service.dto.CountryDto;
 import com.htec.flight_management.service.dto.converter.CountryDtoConverter;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
 
@@ -15,7 +14,6 @@ import javax.validation.constraints.NotNull;
  * @see CountryDtoConverter
  */
 @Component
-@Validated
 public class CountryDtoConverterImpl implements CountryDtoConverter {
 
     /**

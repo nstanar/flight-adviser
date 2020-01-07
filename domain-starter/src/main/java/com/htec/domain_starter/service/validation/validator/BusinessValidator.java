@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
  */
 @FunctionalInterface
 @Validated
-public interface BusinessValidator<D extends BaseDto> {
+public interface BusinessValidator<D extends BaseDto<ID>, ID> {
 
     /**
      * Validates dto based on some criteria.

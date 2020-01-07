@@ -1,6 +1,7 @@
 package com.htec.domain_starter.repository.entity.neo4j;
 
 import com.htec.domain_starter.repository.AuditedEntity;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.neo4j.ogm.annotation.GeneratedValue;
@@ -19,14 +20,15 @@ import org.springframework.data.annotation.LastModifiedDate;
 @NodeEntity
 @Getter
 @Setter
-public class Neo4jAuditedEntity implements AuditedEntity {
+public abstract class Neo4jAuditedEntity<ID> implements AuditedEntity<ID> {
 
     /**
      * Id.
      */
     @Id
     @GeneratedValue
-    private Long id;
+    @Setter(value = AccessLevel.PRIVATE)
+    private ID id;
 
     /**
      * Designates creation date of the record.

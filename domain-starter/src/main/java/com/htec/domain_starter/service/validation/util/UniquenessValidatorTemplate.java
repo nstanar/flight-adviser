@@ -10,7 +10,7 @@ import com.htec.domain_starter.service.validation.validator.BusinessValidator;
  * Uniquenes validator helper.
  * @see BusinessValidator#validate(BaseDto)
  */
-public interface UniquenessValidatorTemplate<D extends BaseDto, E extends BaseEntity> extends BusinessValidator<D> {
+public interface UniquenessValidatorTemplate<D extends BaseDto<ID>, E extends BaseEntity<ID>, ID> extends BusinessValidator<D, ID> {
 
     /**
      * Template method for checking uniqueness.
@@ -20,7 +20,7 @@ public interface UniquenessValidatorTemplate<D extends BaseDto, E extends BaseEn
      * @param messageKey        Message key.
      * @param messageParameters Message parameters.
      */
-    default void validate(final Long id, final E entity, final String messageKey, final Object[] messageParameters) {
+    default void validate(final ID id, final E entity, final String messageKey, final Object[] messageParameters) {
         boolean alreadyExists = false;
 
         if (entity != null) {

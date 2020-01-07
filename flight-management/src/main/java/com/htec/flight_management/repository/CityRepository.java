@@ -1,7 +1,7 @@
 package com.htec.flight_management.repository;
 
-import com.htec.flight_management.repository.entity.City;
 import com.htec.domain_starter.repository.SearchableRepository;
+import com.htec.flight_management.repository.entity.City;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +13,7 @@ import java.util.List;
  * <p>
  * Repository for {@link City}.
  */
-public interface CityRepository extends SearchableRepository<City> {
+public interface CityRepository extends SearchableRepository<City, Long> {
 
     /**
      * Finds page of cities by country id.

@@ -16,7 +16,7 @@ import java.util.Map;
  */
 @FunctionalInterface
 @Validated
-public interface BusinessValidatorChain<D extends BaseDto> {
+public interface BusinessValidatorChain<D extends BaseDto<ID>, ID> {
 
 
     /**
@@ -26,7 +26,7 @@ public interface BusinessValidatorChain<D extends BaseDto> {
      * @param dto           DTO to be validated.
      */
     default void validateFor(final @NotNull Class<?> actionTrigger, @NotNull final D dto) {
-        final List<BusinessValidator<D>> businessValidators = getDecisionCache().get(actionTrigger);
+        final List<BusinessValidator<D, ID>> businessValidators = getDecisionCache().get(actionTrigger);
         if (CollectionUtils.isNotEmpty(businessValidators)) {
             businessValidators.forEach(businessValidator -> businessValidator.validate(dto));
         }
@@ -37,6 +37,6 @@ public interface BusinessValidatorChain<D extends BaseDto> {
      *
      * @return Decision cache.
      */
-    Map<Class<?>, List<BusinessValidator<D>>> getDecisionCache();
+    Map<Class<?>, List<BusinessValidator<D, ID>>> getDecisionCache();
 
 }

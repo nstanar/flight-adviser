@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.provider.ClientDetails;
 
 import java.util.Optional;
 
@@ -28,6 +29,8 @@ public class AuditConfiguration {
 
             if (principal instanceof UserDetails) {
                 result = ((UserDetails) principal).getUsername();
+            } else if (principal instanceof ClientDetails) {
+                result = ((ClientDetails) principal).getClientId();
             } else {
                 result = (String) principal;
             }

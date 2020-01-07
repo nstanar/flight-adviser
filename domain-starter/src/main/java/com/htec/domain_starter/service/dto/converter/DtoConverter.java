@@ -2,6 +2,7 @@ package com.htec.domain_starter.service.dto.converter;
 
 import com.htec.domain_starter.repository.BaseEntity;
 import com.htec.domain_starter.service.dto.BaseDto;
+import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
 
@@ -10,7 +11,8 @@ import javax.validation.constraints.NotNull;
  * <p>
  * Interface for DTO converters.
  */
-public interface DtoConverter<D extends BaseDto, E extends BaseEntity> {
+@Validated
+public interface DtoConverter<D extends BaseDto<ID>, E extends BaseEntity<ID>, ID> {
 
     /**
      * From ENTITY to DTO.

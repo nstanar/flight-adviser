@@ -1,6 +1,6 @@
 package com.htec.user_management.user.service;
 
-import com.htec.domain_starter.service.CrudService;
+import com.htec.domain_starter.service.PagingAndSortingService;
 import com.htec.domain_starter.service.dto.BaseDto;
 import com.htec.user_management.user.repository.entity.User;
 import com.htec.user_management.user.service.dto.RoleDto;
@@ -20,7 +20,7 @@ import java.util.Set;
  * <p>
  * Service exposing operations over {@link UserDto}.
  */
-public interface UserService extends CrudService<UserDto, User> {
+public interface UserService extends PagingAndSortingService<UserDto, User, Long> {
 
     @Override
     @PreAuthorize("isAnonymous() or hasRole('ADMIN')")
@@ -32,12 +32,12 @@ public interface UserService extends CrudService<UserDto, User> {
      * @param id  Id of the dto.
      * @param dto DTO holding update content.
      * @return Updated user.
-     * @see CrudService#updateFrom(Long, BaseDto)
+     * @see PagingAndSortingService#updateFrom(Object, BaseDto)
      */
     @Override
     @PostAuthorize("hasRole('ADMIN')")
     default UserDto updateFrom(final @NotNull Long id, final @NotNull @Valid UserDto dto) {
-        return CrudService.super.updateFrom(id, dto);
+        return PagingAndSortingService.super.updateFrom(id, dto);
     }
 
     /**
@@ -45,7 +45,7 @@ public interface UserService extends CrudService<UserDto, User> {
      *
      * @param id Id of the DTO.
      * @return Deleted user.
-     * @see CrudService#deleteById(Long)
+     * @see PagingAndSortingService#deleteById(Object)
      */
     @Override
     @PostAuthorize("hasRole('ADMIN')")

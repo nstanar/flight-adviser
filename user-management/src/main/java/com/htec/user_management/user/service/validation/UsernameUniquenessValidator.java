@@ -11,6 +11,6 @@ import com.htec.user_management.user.service.dto.UserDto;
  * Validates uniqueness of the username.
  * @see BusinessValidator
  */
-public interface UsernameUniquenessValidator extends UniquenessValidatorTemplate<UserDto, User> {
+public interface UsernameUniquenessValidator extends UniquenessValidatorTemplate<UserDto, User, Long> {
 
 }

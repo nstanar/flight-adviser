@@ -1,17 +1,16 @@
 package com.htec.flight_management.service.dto.converter.impl;
 
+import com.htec.domain_starter.repository.BaseEntity;
+import com.htec.domain_starter.service.dto.BaseDto;
+import com.htec.domain_starter.service.dto.converter.DtoConverter;
+import com.htec.domain_starter.service.validation.util.ExceptionUtil;
 import com.htec.flight_management.repository.CityRepository;
 import com.htec.flight_management.repository.entity.City;
 import com.htec.flight_management.repository.entity.Comment;
 import com.htec.flight_management.service.dto.CommentDto;
 import com.htec.flight_management.service.dto.converter.CommentDtoConverter;
-import com.htec.domain_starter.repository.BaseEntity;
-import com.htec.domain_starter.service.dto.BaseDto;
-import com.htec.domain_starter.service.dto.converter.DtoConverter;
-import com.htec.domain_starter.service.validation.util.ExceptionUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
 import java.util.Optional;
@@ -25,7 +24,6 @@ import static com.htec.domain_starter.common.constants.MessageSourceKeys.RESOURC
  * @see CommentDtoConverter
  */
 @Service
-@Validated
 @AllArgsConstructor
 public class CommentDtoConverterImpl implements CommentDtoConverter {
 

@@ -11,11 +11,11 @@ import java.io.Serializable;
  * Generic DTO that is to be extended by concrete DTOs.
  */
 @Data
-public abstract class BaseDto implements Serializable {
+public abstract class BaseDto<ID> implements Serializable {
 
     /**
      * Id.
      */
     @JsonIgnore
-    private Long id;
+    private ID id;
 }

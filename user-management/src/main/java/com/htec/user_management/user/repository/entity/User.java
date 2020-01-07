@@ -26,7 +26,7 @@ import java.util.Set;
 @Data
 @EqualsAndHashCode(exclude = "password")
 @ToString(exclude = "password")
-public class User extends JpaAuditedEntity implements UserDetails {
+public class User extends JpaAuditedEntity<Long> implements UserDetails {
 
     /**
      * User's first name.
@@ -62,17 +62,6 @@ public class User extends JpaAuditedEntity implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "role_id"),
             uniqueConstraints = @UniqueConstraint(name = "fa_user_role_unique_constraint", columnNames = {"user_id", "role_id"}))
     private Set<Role> roles = new HashSet<>();
-
-    /**
-     * Getter for value sec.
-     *
-     * @return Value sec.
-     */
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
 
     /**
      * Gets authorities.

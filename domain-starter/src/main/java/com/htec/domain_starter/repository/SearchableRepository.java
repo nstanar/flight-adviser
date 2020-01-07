@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @NoRepositoryBean
 //TODO: if time left, make it generic with criteria API so it can be used for any field.
-public interface SearchableRepository<E extends BaseEntity> extends PagingAndSortingRepository<E, Long> {
+public interface SearchableRepository<E extends BaseEntity<ID>, ID> extends PagingAndSortingRepository<E, ID> {
 
     /**
      * Finds page of entities matching name filter.

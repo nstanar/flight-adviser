@@ -1,5 +1,10 @@
 package com.htec.flight_management.controller.impl;
 
+import com.htec.domain_starter.controller.SearchableController;
+import com.htec.domain_starter.controller.validation.exception.handler.ControllerAdvice;
+import com.htec.domain_starter.service.SearchableService;
+import com.htec.domain_starter.service.validation.exception.BusinessValidationException;
+import com.htec.domain_starter.service.validation.exception.NotFoundException;
 import com.htec.flight_management.controller.model.CityModel;
 import com.htec.flight_management.controller.model.CommentModel;
 import com.htec.flight_management.controller.model.assembler.impl.CityModelAssembler;
@@ -9,11 +14,6 @@ import com.htec.flight_management.service.CityService;
 import com.htec.flight_management.service.CommentService;
 import com.htec.flight_management.service.dto.CityDto;
 import com.htec.flight_management.service.dto.CommentDto;
-import com.htec.domain_starter.controller.SearchableController;
-import com.htec.domain_starter.controller.validation.exception.handler.ControllerAdvice;
-import com.htec.domain_starter.service.SearchableService;
-import com.htec.domain_starter.service.validation.exception.BusinessValidationException;
-import com.htec.domain_starter.service.validation.exception.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,7 +34,7 @@ import javax.validation.ConstraintViolationException;
 @RestController
 @RequestMapping("/cities")
 @AllArgsConstructor
-public class CityController implements SearchableController<CityModel, CityDto, City> {
+public class CityController implements SearchableController<CityModel, CityDto, City, Long> {
 
     /**
      * City service.
@@ -100,7 +100,7 @@ public class CityController implements SearchableController<CityModel, CityDto, 
      * @see SearchableController#getService()
      */
     @Override
-    public SearchableService<CityDto, City> getService() {
+    public SearchableService<CityDto, City, Long> getService() {
         return cityService;
     }
 

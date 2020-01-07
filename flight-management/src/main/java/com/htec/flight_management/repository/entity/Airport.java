@@ -1,0 +1,46 @@
+package com.htec.flight_management.repository.entity;
+
+import com.htec.domain_starter.repository.entity.neo4j.Neo4jBaseEntity;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.neo4j.ogm.annotation.NodeEntity;
+import org.neo4j.ogm.annotation.Relationship;
+
+import static org.neo4j.ogm.annotation.Relationship.INCOMING;
+
+/**
+ * @author Nikola Stanar
+ * <p>
+ * Entity class representing airport.
+ * <p>
+ * Composite indexes and required fields are supported only in Neo4 Enterprise!
+ */
+@Getter
+@Setter
+@NoArgsConstructor
+@NodeEntity
+public class Airport extends Neo4jBaseEntity<Long> {
+
+    /**
+     * Name.
+     */
+    private String name;
+
+    /**
+     * 3-letter IATA code. Null if not assigned/unknown.
+     */
+    private String iataCode;
+
+    /**
+     * 4-letter ICAO code. Null if not assigned.
+     */
+    private String icaoCode;
+
+    /**
+     * City airport belongs to.
+     */
+    @Relationship(type = "HAS_AIRPORT", direction = INCOMING)
+    private City city;
+
+}

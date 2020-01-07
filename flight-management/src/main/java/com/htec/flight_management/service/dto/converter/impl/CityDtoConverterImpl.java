@@ -1,15 +1,14 @@
 package com.htec.flight_management.service.dto.converter.impl;
 
+import com.htec.domain_starter.service.validation.util.ExceptionUtil;
 import com.htec.flight_management.repository.CountryRepository;
 import com.htec.flight_management.repository.entity.City;
 import com.htec.flight_management.repository.entity.Country;
 import com.htec.flight_management.service.dto.CityDto;
 import com.htec.flight_management.service.dto.converter.CityDtoConverter;
-import com.htec.domain_starter.service.validation.util.ExceptionUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
 import java.util.Optional;
@@ -23,7 +22,6 @@ import static com.htec.domain_starter.common.constants.MessageSourceKeys.RESOURC
  */
 @Service
 @Transactional(readOnly = true)
-@Validated
 @AllArgsConstructor
 public class CityDtoConverterImpl implements CityDtoConverter {
 
@@ -70,7 +68,6 @@ public class CityDtoConverterImpl implements CityDtoConverter {
 
         if (optionalCountry.isPresent()) {
             final Country country = optionalCountry.get();
-            entity.setCountryId(countryId);
             entity.setCountry(country);
         } else {
             throw exceptionUtil.createNotFoundExceptionFrom(RESOURCE_DOES_NOT_EXIST, new Object[]{countryId});

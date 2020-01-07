@@ -15,7 +15,7 @@ import javax.validation.constraints.Size;
  */
 @NoArgsConstructor
 @Data
-public class CountryDto extends BaseDto {
+public class CountryDto extends BaseDto<Long> {
 
     /**
      * Name of the country.

@@ -18,7 +18,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @Data
 @ToString(exclude = {"countryName"})
-public class CityDto extends BaseDto {
+public class CityDto extends BaseDto<Long> {
 
     /**
      * City name.

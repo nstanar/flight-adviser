@@ -1,14 +1,14 @@
 package com.htec.flight_management.service.impl;
 
+import com.htec.domain_starter.repository.SearchableRepository;
+import com.htec.domain_starter.service.dto.converter.DtoConverter;
+import com.htec.domain_starter.service.validation.chain.BusinessValidatorChain;
+import com.htec.domain_starter.service.validation.util.ExceptionUtil;
 import com.htec.flight_management.repository.CountryRepository;
 import com.htec.flight_management.repository.entity.Country;
 import com.htec.flight_management.service.CountryService;
 import com.htec.flight_management.service.dto.CountryDto;
 import com.htec.flight_management.service.dto.converter.CountryDtoConverter;
-import com.htec.domain_starter.repository.SearchableRepository;
-import com.htec.domain_starter.service.dto.converter.DtoConverter;
-import com.htec.domain_starter.service.validation.chain.BusinessValidatorChain;
-import com.htec.domain_starter.service.validation.util.ExceptionUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +37,7 @@ public class CountryServiceImpl implements CountryService {
     /**
      * Business validator chain for country.
      */
-    private final BusinessValidatorChain<CountryDto> businessValidatorChain;
+    private final BusinessValidatorChain<CountryDto, Long> businessValidatorChain;
 
     /**
      * Exception util.
@@ -51,7 +51,7 @@ public class CountryServiceImpl implements CountryService {
      * @see CountryService#getDtoConverter()
      */
     @Override
-    public DtoConverter<CountryDto, Country> getDtoConverter() {
+    public DtoConverter<CountryDto, Country, Long> getDtoConverter() {
         return dtoConverter;
     }
 
@@ -72,7 +72,7 @@ public class CountryServiceImpl implements CountryService {
      * @return Business validator chain.
      */
     @Override
-    public Optional<BusinessValidatorChain<CountryDto>> getBusinessValidatorChain() {
+    public Optional<BusinessValidatorChain<CountryDto, Long>> getBusinessValidatorChain() {
         return Optional.ofNullable(businessValidatorChain);
     }
 
@@ -83,7 +83,7 @@ public class CountryServiceImpl implements CountryService {
      * @see CountryService#getRepository()
      */
     @Override
-    public SearchableRepository<Country> getRepository() {
+    public SearchableRepository<Country, Long> getRepository() {
         return repository;
     }
 }

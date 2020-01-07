@@ -1,5 +1,9 @@
 package com.htec.flight_management.controller.impl;
 
+import com.htec.domain_starter.controller.SearchableController;
+import com.htec.domain_starter.controller.validation.exception.handler.ControllerAdvice;
+import com.htec.domain_starter.service.SearchableService;
+import com.htec.domain_starter.service.validation.exception.NotFoundException;
 import com.htec.flight_management.controller.model.CityModel;
 import com.htec.flight_management.controller.model.CountryModel;
 import com.htec.flight_management.controller.model.assembler.impl.CityModelAssembler;
@@ -9,10 +13,6 @@ import com.htec.flight_management.service.CityService;
 import com.htec.flight_management.service.CountryService;
 import com.htec.flight_management.service.dto.CityDto;
 import com.htec.flight_management.service.dto.CountryDto;
-import com.htec.domain_starter.controller.SearchableController;
-import com.htec.domain_starter.controller.validation.exception.handler.ControllerAdvice;
-import com.htec.domain_starter.service.SearchableService;
-import com.htec.domain_starter.service.validation.exception.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/countries")
 @AllArgsConstructor
-public class CountryController implements SearchableController<CountryModel, CountryDto, Country> {
+public class CountryController implements SearchableController<CountryModel, CountryDto, Country, Long> {
 
     /**
      * Country service.
@@ -96,7 +96,7 @@ public class CountryController implements SearchableController<CountryModel, Cou
      * @see SearchableController#getService()
      */
     @Override
-    public SearchableService<CountryDto, Country> getService() {
+    public SearchableService<CountryDto, Country, Long> getService() {
         return countryService;
     }
 

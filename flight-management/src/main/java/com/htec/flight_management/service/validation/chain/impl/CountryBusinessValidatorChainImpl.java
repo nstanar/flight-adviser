@@ -1,11 +1,11 @@
 package com.htec.flight_management.service.validation.chain.impl;
 
-import com.htec.flight_management.service.dto.CountryDto;
-import com.htec.flight_management.service.validation.CountryNameUniquenessValidator;
 import com.htec.domain_starter.service.validation.chain.BusinessValidatorChain;
 import com.htec.domain_starter.service.validation.marker.Create;
 import com.htec.domain_starter.service.validation.marker.Update;
 import com.htec.domain_starter.service.validation.validator.BusinessValidator;
+import com.htec.flight_management.service.dto.CountryDto;
+import com.htec.flight_management.service.validation.CountryNameUniquenessValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +22,7 @@ import java.util.Map;
  */
 @Component
 @AllArgsConstructor
-public class CountryBusinessValidatorChainImpl implements BusinessValidatorChain<CountryDto> {
+public class CountryBusinessValidatorChainImpl implements BusinessValidatorChain<CountryDto, Long> {
 
     /**
      * Validates uniqueness of country name.
@@ -32,7 +32,7 @@ public class CountryBusinessValidatorChainImpl implements BusinessValidatorChain
     /**
      * Decision cache.
      */
-    protected final Map<Class<?>, List<BusinessValidator<CountryDto>>> decisionCache = new HashMap<>();
+    protected final Map<Class<?>, List<BusinessValidator<CountryDto, Long>>> decisionCache = new HashMap<>();
 
     /**
      * Decouples validators.
@@ -50,7 +50,7 @@ public class CountryBusinessValidatorChainImpl implements BusinessValidatorChain
      * @see BusinessValidatorChain#getDecisionCache()
      */
     @Override
-    public Map<Class<?>, List<BusinessValidator<CountryDto>>> getDecisionCache() {
+    public Map<Class<?>, List<BusinessValidator<CountryDto, Long>>> getDecisionCache() {
         return decisionCache;
     }
 }

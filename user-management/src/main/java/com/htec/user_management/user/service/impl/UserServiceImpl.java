@@ -1,6 +1,6 @@
 package com.htec.user_management.user.service.impl;
 
-import com.htec.domain_starter.service.CrudService;
+import com.htec.domain_starter.service.PagingAndSortingService;
 import com.htec.domain_starter.service.dto.converter.Convertible;
 import com.htec.domain_starter.service.dto.converter.DtoConverter;
 import com.htec.domain_starter.service.validation.chain.BusinessValidatorChain;
@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
     /**
      * Business validator chain for user.
      */
-    private final BusinessValidatorChain<UserDto> businessValidatorChain;
+    private final BusinessValidatorChain<UserDto, Long> businessValidatorChain;
 
     /**
      * Role repository.
@@ -239,7 +239,7 @@ public class UserServiceImpl implements UserService {
      * Gets searchable repository.
      *
      * @return Check {@link JpaRepository}.
-     * @see CrudService#getRepository()
+     * @see PagingAndSortingService#getRepository()
      */
     @Override
     public PagingAndSortingRepository<User, Long> getRepository() {
@@ -253,7 +253,7 @@ public class UserServiceImpl implements UserService {
      * @see UserService#getBusinessValidatorChain()
      */
     @Override
-    public Optional<BusinessValidatorChain<UserDto>> getBusinessValidatorChain() {
+    public Optional<BusinessValidatorChain<UserDto, Long>> getBusinessValidatorChain() {
         return Optional.ofNullable(businessValidatorChain);
     }
 
@@ -264,7 +264,7 @@ public class UserServiceImpl implements UserService {
      * @see Convertible#getDtoConverter()
      */
     @Override
-    public DtoConverter<UserDto, User> getDtoConverter() {
+    public DtoConverter<UserDto, User, Long> getDtoConverter() {
         return userDtoConverter;
     }
 

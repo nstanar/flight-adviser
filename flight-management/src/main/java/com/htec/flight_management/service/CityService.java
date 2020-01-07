@@ -1,8 +1,8 @@
 package com.htec.flight_management.service;
 
+import com.htec.domain_starter.service.SearchableService;
 import com.htec.flight_management.repository.entity.City;
 import com.htec.flight_management.service.dto.CityDto;
-import com.htec.domain_starter.service.SearchableService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
  * <p>
  * Service for operations over city.
  */
-public interface CityService extends SearchableService<CityDto, City> {
+public interface CityService extends SearchableService<CityDto, City, Long> {
 
     /**
      * Finds page of cities belonging to country of id.

@@ -2,7 +2,7 @@ package com.htec.domain_starter.controller;
 
 import com.htec.domain_starter.controller.validation.exception.handler.ControllerAdvice;
 import com.htec.domain_starter.repository.BaseEntity;
-import com.htec.domain_starter.service.CrudService;
+import com.htec.domain_starter.service.PagingAndSortingService;
 import com.htec.domain_starter.service.dto.BaseDto;
 import com.htec.domain_starter.service.validation.exception.BusinessValidationException;
 import com.htec.domain_starter.service.validation.exception.NotFoundException;
@@ -24,9 +24,9 @@ import static com.htec.domain_starter.common.constants.MessageSourceKeys.RESOURC
 /**
  * @author Nikola Stanar
  * <p>
- * Crud controller exposing API operations over MODEl.
+ * Paging and sorting controller exposing API operations over MODEl.
  */
-public interface CrudController<M extends RepresentationModel<M>, D extends BaseDto, E extends BaseEntity> {
+public interface PagingAndSortingController<M extends RepresentationModel<M>, D extends BaseDto<ID>, E extends BaseEntity<ID>, ID> {
 
     /**
      * Finds page of model entities matching name prefix (if present).
@@ -52,7 +52,7 @@ public interface CrudController<M extends RepresentationModel<M>, D extends Base
      * @see ControllerAdvice#handle(NotFoundException)
      */
     @GetMapping("/{id}")
-    default ResponseEntity<M> findBy(@PathVariable final Long id) {
+    default ResponseEntity<M> findBy(@PathVariable final ID id) {
         return getService()
                 .findById(id)
                 .map(getModelAssembler()::toModel)
@@ -86,7 +86,7 @@ public interface CrudController<M extends RepresentationModel<M>, D extends Base
      * @see ControllerAdvice#handle(NotFoundException)
      */
     @PutMapping("/{id}")
-    default ResponseEntity<M> updateFrom(@PathVariable final Long id, @RequestBody final D d) {
+    default ResponseEntity<M> updateFrom(@PathVariable final ID id, @RequestBody final D d) {
         final D updatedDto = getService().updateFrom(id, d);
         final M model = getModelAssembler().toModel(updatedDto);
         return ResponseEntity.ok(model);
@@ -100,7 +100,7 @@ public interface CrudController<M extends RepresentationModel<M>, D extends Base
      * @see ControllerAdvice#handle(NotFoundException)
      */
     @DeleteMapping("/{id}")
-    default ResponseEntity<Void> deleteBy(@PathVariable final Long id) {
+    default ResponseEntity<Void> deleteBy(@PathVariable final ID id) {
         getService().deleteById(id);
         return ResponseEntity.noContent().build();
     }
@@ -110,7 +110,7 @@ public interface CrudController<M extends RepresentationModel<M>, D extends Base
      *
      * @return Crud service.
      */
-    CrudService<D, E> getService();
+    PagingAndSortingService<D, E, ID> getService();
 
     /**
      * Gets model assembler.

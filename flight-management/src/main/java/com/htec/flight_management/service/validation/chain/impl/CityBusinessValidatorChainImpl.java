@@ -1,11 +1,11 @@
 package com.htec.flight_management.service.validation.chain.impl;
 
-import com.htec.flight_management.service.dto.CityDto;
-import com.htec.flight_management.service.validation.CityNameUniquenessValidator;
 import com.htec.domain_starter.service.validation.chain.BusinessValidatorChain;
 import com.htec.domain_starter.service.validation.marker.Create;
 import com.htec.domain_starter.service.validation.marker.Update;
 import com.htec.domain_starter.service.validation.validator.BusinessValidator;
+import com.htec.flight_management.service.dto.CityDto;
+import com.htec.flight_management.service.validation.CityNameUniquenessValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +22,7 @@ import java.util.Map;
  */
 @Component
 @AllArgsConstructor
-public class CityBusinessValidatorChainImpl implements BusinessValidatorChain<CityDto> {
+public class CityBusinessValidatorChainImpl implements BusinessValidatorChain<CityDto, Long> {
 
     /**
      * Validates uniqueness of country name.
@@ -32,7 +32,7 @@ public class CityBusinessValidatorChainImpl implements BusinessValidatorChain<Ci
     /**
      * Decision cache.
      */
-    protected final Map<Class<?>, List<BusinessValidator<CityDto>>> decisionCache = new HashMap<>();
+    protected final Map<Class<?>, List<BusinessValidator<CityDto, Long>>> decisionCache = new HashMap<>();
 
     /**
      * Decouples validators.
@@ -50,7 +50,7 @@ public class CityBusinessValidatorChainImpl implements BusinessValidatorChain<Ci
      * @see BusinessValidatorChain#getDecisionCache()
      */
     @Override
-    public Map<Class<?>, List<BusinessValidator<CityDto>>> getDecisionCache() {
+    public Map<Class<?>, List<BusinessValidator<CityDto, Long>>> getDecisionCache() {
         return decisionCache;
     }
 

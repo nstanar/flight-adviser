@@ -1,9 +1,9 @@
 package com.htec.flight_management.service;
 
+import com.htec.domain_starter.service.PagingAndSortingService;
+import com.htec.domain_starter.service.dto.BaseDto;
 import com.htec.flight_management.repository.entity.Comment;
 import com.htec.flight_management.service.dto.CommentDto;
-import com.htec.domain_starter.service.CrudService;
-import com.htec.domain_starter.service.dto.BaseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
  * <p>
  * Service exposing operations over comment.
  */
-public interface CommentService extends CrudService<CommentDto, Comment> {
+public interface CommentService extends PagingAndSortingService<CommentDto, Comment, Long> {
 
     /**
      * Finds page of comments belonging to city.
@@ -37,12 +37,12 @@ public interface CommentService extends CrudService<CommentDto, Comment> {
      *
      * @param dto Dto holding content that is about to be created.
      * @return Id of the created dto.
-     * @see CrudService#createFrom(BaseDto)
+     * @see PagingAndSortingService#createFrom(BaseDto)
      */
     @PreAuthorize("isAuthenticated()")
     @Override
     default CommentDto createFrom(final @NotNull @Valid CommentDto dto) {
-        return CrudService.super.createFrom(dto);
+        return PagingAndSortingService.super.createFrom(dto);
     }
 
     /**
@@ -51,12 +51,12 @@ public interface CommentService extends CrudService<CommentDto, Comment> {
      * @param id  Id of the dto.
      * @param dto DTO holding update content.
      * @return Optional updated DTO if id exist, else empty.
-     * @see CrudService#updateFrom(Long, BaseDto)
+     * @see PagingAndSortingService#updateFrom(Object, BaseDto)
      */
     @PostAuthorize("hasRole('ADMIN') or returnObject.createdBy==authentication.principal")
     @Override
     default CommentDto updateFrom(final @NotNull Long id, final @NotNull @Valid CommentDto dto) {
-        return CrudService.super.updateFrom(id, dto);
+        return PagingAndSortingService.super.updateFrom(id, dto);
     }
 
     /**
@@ -64,11 +64,11 @@ public interface CommentService extends CrudService<CommentDto, Comment> {
      *
      * @param id Id of the DTO.
      * @return Optionally deleted DTO if existed.
-     * @see CrudService#deleteById(Long)
+     * @see PagingAndSortingService#deleteById(Object)
      */
     @PostAuthorize("hasRole('ADMIN') or returnObject.createdBy==authentication.principal")
     @Override
     default CommentDto deleteById(final Long id) {
-        return CrudService.super.deleteById(id);
+        return PagingAndSortingService.super.deleteById(id);
     }
 }
