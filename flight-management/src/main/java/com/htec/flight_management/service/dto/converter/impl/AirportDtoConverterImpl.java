@@ -1,5 +1,7 @@
 package com.htec.flight_management.service.dto.converter.impl;
 
+import com.htec.domain_starter.repository.BaseEntity;
+import com.htec.domain_starter.service.dto.BaseDto;
 import com.htec.domain_starter.service.validation.util.ExceptionUtil;
 import com.htec.flight_management.repository.CityRepository;
 import com.htec.flight_management.repository.entity.Airport;
@@ -41,15 +43,17 @@ public class AirportDtoConverterImpl implements AirportDtoConverter {
      *
      * @param entity Entity to be converted.
      * @return Airport dto.
+     * @see AirportDtoConverter#from(BaseEntity)
      */
     @Override
     public AirportDto from(@NotNull final Airport entity) {
         final AirportDto dto = new AirportDto();
         dto.setId(entity.getId());
         dto.setName(entity.getName());
-        dto.setIataCode(entity.getIataCode());
-        dto.setIcaoCode(entity.getIcaoCode());
+        dto.setCode(entity.getCode());
         dto.setCityId(entity.getCity().getId());
+        dto.setCityName(entity.getCity().getName());
+        dto.setCountryName(entity.getCity().getCountry().getName());
         return dto;
     }
 
@@ -58,14 +62,14 @@ public class AirportDtoConverterImpl implements AirportDtoConverter {
      *
      * @param dto DTO to be converted.
      * @return Airport entity.
+     * @see AirportDtoConverter#from(BaseDto)
      */
     @Override
     public Airport from(@NotNull final AirportDto dto) {
         final Airport entity = new Airport();
         entity.setName(dto.getName());
         entity.setName(dto.getName());
-        entity.setIataCode(dto.getIataCode());
-        entity.setIcaoCode(dto.getIcaoCode());
+        entity.setCode(dto.getCode());
         final Long cityId = dto.getCityId();
         final Optional<City> optionalCity = cityRepository.findById(cityId);
 
@@ -85,13 +89,13 @@ public class AirportDtoConverterImpl implements AirportDtoConverter {
      * @param dto            DTO to be converted.
      * @param existingEntity Existing ENTITY.
      * @return Airport entity with updated content.
+     * @see AirportDtoConverter#from(BaseDto, BaseEntity)
      */
     @Override
     public Airport from(@NotNull final AirportDto dto, @NotNull final Airport existingEntity) {
         existingEntity.setName(dto.getName());
         existingEntity.setName(dto.getName());
-        existingEntity.setIataCode(dto.getIataCode());
-        existingEntity.setIcaoCode(dto.getIcaoCode());
+        existingEntity.setCode(dto.getCode());
         return existingEntity;
     }
 

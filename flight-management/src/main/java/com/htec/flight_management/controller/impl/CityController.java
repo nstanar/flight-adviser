@@ -5,13 +5,17 @@ import com.htec.domain_starter.controller.validation.exception.handler.Controlle
 import com.htec.domain_starter.service.SearchableService;
 import com.htec.domain_starter.service.validation.exception.BusinessValidationException;
 import com.htec.domain_starter.service.validation.exception.NotFoundException;
+import com.htec.flight_management.controller.model.AirportModel;
 import com.htec.flight_management.controller.model.CityModel;
 import com.htec.flight_management.controller.model.CommentModel;
+import com.htec.flight_management.controller.model.assembler.impl.AirportModelAssembler;
 import com.htec.flight_management.controller.model.assembler.impl.CityModelAssembler;
 import com.htec.flight_management.controller.model.assembler.impl.CommentModelAssembler;
 import com.htec.flight_management.repository.entity.City;
+import com.htec.flight_management.service.AirportService;
 import com.htec.flight_management.service.CityService;
 import com.htec.flight_management.service.CommentService;
+import com.htec.flight_management.service.dto.AirportDto;
 import com.htec.flight_management.service.dto.CityDto;
 import com.htec.flight_management.service.dto.CommentDto;
 import lombok.AllArgsConstructor;
@@ -57,6 +61,16 @@ public class CityController implements SearchableController<CityModel, CityDto, 
     private final CommentModelAssembler commentModelAssembler;
 
     /**
+     * Airports service.
+     */
+    private final AirportService airportService;
+
+    /**
+     * Model assembler for airport.
+     */
+    private final AirportModelAssembler airportModelAssembler;
+
+    /**
      * Finds page of comments belonging to city.
      *
      * @param cityId                  City id.
@@ -65,7 +79,7 @@ public class CityController implements SearchableController<CityModel, CityDto, 
      * @return Page of comments belonging to city.
      */
     @GetMapping("/{cityId}/comments")
-    public ResponseEntity<PagedModel<EntityModel<CommentModel>>> findBy(@PathVariable final Long cityId, final Pageable pageable, final PagedResourcesAssembler<CommentModel> pagedResourcesAssembler) {
+    public ResponseEntity<PagedModel<EntityModel<CommentModel>>> findCommentsBy(@PathVariable final Long cityId, final Pageable pageable, final PagedResourcesAssembler<CommentModel> pagedResourcesAssembler) {
         final Page<CommentModel> comments = commentService
                 .findAllByCityId(cityId, pageable)
                 .map(commentModelAssembler::toModel);
@@ -74,7 +88,7 @@ public class CityController implements SearchableController<CityModel, CityDto, 
     }
 
     /**
-     * Adds comment to existing comment.
+     * Adds comment to existing city.
      *
      * @param cityId  City id.
      * @param comment Comment to be created and added to city.
@@ -89,6 +103,43 @@ public class CityController implements SearchableController<CityModel, CityDto, 
 
         final CommentDto createdComment = commentService.createFrom(comment);
         final CommentModel model = commentModelAssembler.toModel(createdComment);
+
+        return ResponseEntity.ok(model);
+    }
+
+    /**
+     * Finds page of airports belonging to city.
+     *
+     * @param cityId                  City id.
+     * @param pageable                Check {@link Pageable}.
+     * @param pagedResourcesAssembler Check {@link PagedResourcesAssembler}.
+     * @return Page of airports belonging to city.
+     */
+    @GetMapping("/{cityId}/airports")
+    public ResponseEntity<PagedModel<EntityModel<AirportModel>>> findAirportsBy(@PathVariable final Long cityId, final Pageable pageable, final PagedResourcesAssembler<AirportModel> pagedResourcesAssembler) {
+        final Page<AirportModel> airports = airportService
+                .findAllByCityId(cityId, pageable)
+                .map(airportModelAssembler::toModel);
+
+        return ResponseEntity.ok(pagedResourcesAssembler.toModel(airports));
+    }
+
+    /**
+     * Adds airport to existing city.
+     *
+     * @param cityId  City id.
+     * @param airport Airport to be created and added to city.
+     * @return 200 with model in request body; otherwise one of (404, 400) with exception message.
+     * @see ControllerAdvice#handle(BusinessValidationException)
+     * @see ControllerAdvice#handle(ConstraintViolationException)
+     * @see ControllerAdvice#handle(NotFoundException)
+     */
+    @PostMapping("/{cityId}/airports")
+    public ResponseEntity<AirportModel> createAndAssignTo(@PathVariable final Long cityId, @RequestBody final AirportDto airport) {
+        airport.setCityId(cityId);
+
+        final AirportDto createdAirport = airportService.createFrom(airport);
+        final AirportModel model = airportModelAssembler.toModel(createdAirport);
 
         return ResponseEntity.ok(model);
     }

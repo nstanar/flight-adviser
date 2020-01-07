@@ -8,16 +8,16 @@ import org.springframework.hateoas.server.core.Relation;
 /**
  * @author Nikola Stanar
  * <p>
- * Representation model for country.
+ * Representation model for airline.
  */
 @Getter
 @Builder
-@Relation(itemRelation = "country", collectionRelation = "countries")
-public class CountryModel extends RepresentationModel<CountryModel> {
+@Relation(itemRelation = "airline", collectionRelation = "airlines")
+public class AirlineModel extends RepresentationModel<AirlineModel> {
 
     /**
-     * Name of the country.
+     * Airline code.
      */
-    private final String name;
+    private final String code;
 
 }

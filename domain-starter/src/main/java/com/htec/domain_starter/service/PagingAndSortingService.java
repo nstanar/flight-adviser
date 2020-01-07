@@ -152,7 +152,7 @@ public interface PagingAndSortingService<D extends BaseDto<ID>, E extends BaseEn
     Optional<BusinessValidatorChain<D, ID>> getBusinessValidatorChain();
 
     /**
-     * Gets jpa repository.
+     * Gets repository.
      *
      * @return Check {@link PagingAndSortingRepository}.
      */

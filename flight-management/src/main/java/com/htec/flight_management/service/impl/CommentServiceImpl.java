@@ -30,7 +30,7 @@ import java.util.Optional;
 public class CommentServiceImpl implements CommentService {
 
     /**
-     * Jpa repository for comment.
+     * Repository for comment.
      */
     private final CommentRepository repository;
 
@@ -71,9 +71,9 @@ public class CommentServiceImpl implements CommentService {
     }
 
     /**
-     * Gets jpa repository.
+     * Gets repository.
      *
-     * @return Jpa repository.
+     * @return Repository.
      * @see CommentService#getRepository()
      */
     @Override

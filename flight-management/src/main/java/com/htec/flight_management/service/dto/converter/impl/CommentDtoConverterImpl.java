@@ -28,7 +28,7 @@ import static com.htec.domain_starter.common.constants.MessageSourceKeys.RESOURC
 public class CommentDtoConverterImpl implements CommentDtoConverter {
 
     /**
-     * Jpa repository for city.
+     * Repository for city.
      */
     private final CityRepository cityRepository;
 

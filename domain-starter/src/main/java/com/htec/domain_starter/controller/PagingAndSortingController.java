@@ -106,9 +106,9 @@ public interface PagingAndSortingController<M extends RepresentationModel<M>, D 
     }
 
     /**
-     * Gets crud service.
+     * Gets paging and sorting service.
      *
-     * @return Crud service.
+     * @return Paging and sorting service.
      */
     PagingAndSortingService<D, E, ID> getService();
 

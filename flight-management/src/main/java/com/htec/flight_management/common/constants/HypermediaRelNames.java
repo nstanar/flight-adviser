@@ -17,11 +17,6 @@ public final class HypermediaRelNames {
     public static final String HAVING_CITIES = "havingCities";
 
     /**
-     * Defines "of country' relation.
-     */
-    public static final String OF_COUNTRY = "ofCountry";
-
-    /**
      * Defines "for city" relation.
      */
     public static final String FOR_CITY = "forCity";
@@ -30,4 +25,9 @@ public final class HypermediaRelNames {
      * Defines "having comments" relation.
      */
     public static final String HAVING_COMMENTS = "havingComments";
+
+    /**
+     * Defines "having airports" relation.
+     */
+    public static final String HAVING_AIRPORTS = "havingAirports";
 }

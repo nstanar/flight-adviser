@@ -6,6 +6,7 @@ import com.htec.flight_management.repository.entity.City;
 import com.htec.flight_management.repository.entity.Country;
 import com.htec.flight_management.service.dto.CityDto;
 import com.htec.flight_management.service.dto.converter.CityDtoConverter;
+import com.htec.flight_management.service.dto.converter.CountryDtoConverter;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,9 +27,14 @@ import static com.htec.domain_starter.common.constants.MessageSourceKeys.RESOURC
 public class CityDtoConverterImpl implements CityDtoConverter {
 
     /**
-     * Jpa repository for country.
+     * Repository for country.
      */
     private final CountryRepository countryRepository;
+
+    /**
+     * Country dto converter.
+     */
+    private final CountryDtoConverter countryDtoConverter;
 
     /**
      * Exception util.
@@ -48,7 +54,7 @@ public class CityDtoConverterImpl implements CityDtoConverter {
         dto.setName(entity.getName());
         dto.setDescription(entity.getDescription());
         dto.setCountryId(entity.getCountry().getId());
-        dto.setCountryName(entity.getCountry().getName());
+        dto.setCountry(countryDtoConverter.from(entity.getCountry()));
         return dto;
     }
 

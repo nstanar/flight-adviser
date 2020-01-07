@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -46,6 +47,9 @@ public class OAuth2ResourceServerConfiguration extends ResourceServerConfigurerA
     public void configure(final HttpSecurity http) throws Exception {
         http
                 .antMatcher("/**")
+                .authorizeRequests()
+                .antMatchers(HttpMethod.POST, "/cities", "/comments", "/airports").denyAll()
+                .and()
                 .authorizeRequests()
                 .antMatchers("/actuator**").hasRole("ADMIN");
     }

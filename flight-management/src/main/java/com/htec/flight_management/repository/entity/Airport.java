@@ -28,14 +28,9 @@ public class Airport extends Neo4jBaseEntity<Long> {
     private String name;
 
     /**
-     * 3-letter IATA code. Null if not assigned/unknown.
+     * 3 letter or 4 letter code.
      */
-    private String iataCode;
-
-    /**
-     * 4-letter ICAO code. Null if not assigned.
-     */
-    private String icaoCode;
+    private String code;
 
     /**
      * City airport belongs to.

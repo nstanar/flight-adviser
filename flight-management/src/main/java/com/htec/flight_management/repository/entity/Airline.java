@@ -24,7 +24,7 @@ public class Airline extends Neo4jBaseEntity<Long> {
     /**
      * 2-letter (IATA) or 3-letter (ICAO) code of the airline.
      */
-    private String name;
+    private String code;
 
     /**
      * Flights hosted by airline.

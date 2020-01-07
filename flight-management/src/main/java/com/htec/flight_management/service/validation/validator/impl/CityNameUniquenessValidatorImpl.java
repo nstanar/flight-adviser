@@ -1,11 +1,11 @@
 package com.htec.flight_management.service.validation.validator.impl;
 
+import com.htec.domain_starter.service.dto.BaseDto;
+import com.htec.domain_starter.service.validation.util.ExceptionUtil;
 import com.htec.flight_management.repository.CityRepository;
 import com.htec.flight_management.repository.entity.City;
 import com.htec.flight_management.service.dto.CityDto;
 import com.htec.flight_management.service.validation.CityNameUniquenessValidator;
-import com.htec.domain_starter.service.dto.BaseDto;
-import com.htec.domain_starter.service.validation.util.ExceptionUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +26,7 @@ import java.util.Optional;
 public class CityNameUniquenessValidatorImpl implements CityNameUniquenessValidator {
 
     /**
-     * Jpa repository for city.
+     * Repository for city.
      */
     private final CityRepository cityRepository;
 
@@ -56,7 +56,7 @@ public class CityNameUniquenessValidatorImpl implements CityNameUniquenessValida
         optionalCity.ifPresent(city ->
                 CityNameUniquenessValidator
                         .super
-                        .validate(id, optionalCity.get(), CITY_NAME_ALREADY_EXISTS, new Object[]{name, countryId})
+                        .validate(id, city, CITY_NAME_ALREADY_EXISTS, new Object[]{name, countryId})
         );
     }
 

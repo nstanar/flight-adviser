@@ -1,6 +1,11 @@
 package com.htec.flight_management.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.htec.domain_starter.service.dto.BaseDto;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
@@ -12,6 +17,10 @@ import java.math.BigDecimal;
  * <p>
  * Dto class representing flight.
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
 public class FlightDto extends BaseDto<Long> {
 
     /**
@@ -21,16 +30,34 @@ public class FlightDto extends BaseDto<Long> {
     private Long sourceAirportId;
 
     /**
+     * Source airport.
+     */
+    @JsonIgnore
+    private AirportDto source;
+
+    /**
      * Id of the destination airport.
      */
     @NotNull
     private Long destinationAirportId;
 
     /**
+     * Destination airport.
+     */
+    @JsonIgnore
+    private AirportDto destination;
+
+    /**
      * Id of the airline.
      */
     @NotNull
     private Long airlineId;
+
+    /**
+     * Airline.
+     */
+    @JsonIgnore
+    private AirlineDto airline;
 
     /**
      * Number of stops.

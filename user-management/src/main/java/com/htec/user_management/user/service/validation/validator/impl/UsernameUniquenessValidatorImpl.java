@@ -25,7 +25,7 @@ import java.util.Optional;
 public class UsernameUniquenessValidatorImpl implements UsernameUniquenessValidator {
 
     /**
-     * Jpa repository for user.
+     * Repository for user.
      */
     private final UserRepository userRepository;
 

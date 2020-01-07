@@ -1,11 +1,11 @@
 package com.htec.flight_management.service.validation.validator.impl;
 
+import com.htec.domain_starter.service.dto.BaseDto;
+import com.htec.domain_starter.service.validation.util.ExceptionUtil;
 import com.htec.flight_management.repository.CountryRepository;
 import com.htec.flight_management.repository.entity.Country;
 import com.htec.flight_management.service.dto.CountryDto;
 import com.htec.flight_management.service.validation.CountryNameUniquenessValidator;
-import com.htec.domain_starter.service.dto.BaseDto;
-import com.htec.domain_starter.service.validation.util.ExceptionUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +25,7 @@ import java.util.Optional;
 public class CountryNameUniquenessValidatorImpl implements CountryNameUniquenessValidator {
 
     /**
-     * Jpa repository for country.
+     * Repository for country.
      */
     private final CountryRepository countryRepository;
 

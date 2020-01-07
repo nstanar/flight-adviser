@@ -25,7 +25,6 @@ import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServic
         "com.htec.domain_starter.controller",
         "com.htec.domain_starter.service"}
 )
-//TODO: if time left use HAL+FORMS to make self documented api
 public class Application {
 
     /**

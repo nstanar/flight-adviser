@@ -2,7 +2,6 @@ package com.htec.flight_management.controller.model;
 
 import com.htec.domain_starter.controller.model.AuditAwareModel;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.springframework.hateoas.server.core.Relation;
 
@@ -12,8 +11,7 @@ import org.springframework.hateoas.server.core.Relation;
  * Representation model for comment.
  */
 @Getter
-@Relation("comments")
-@EqualsAndHashCode
+@Relation(itemRelation = "comment", collectionRelation = "comments")
 public class CommentModel extends AuditAwareModel<CommentModel> {
 
     /**

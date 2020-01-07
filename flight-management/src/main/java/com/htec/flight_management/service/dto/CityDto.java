@@ -42,9 +42,9 @@ public class CityDto extends BaseDto<Long> {
     private Long countryId;
 
     /**
-     * Name of the country city resides in.
+     * Country city resides in.
      */
     @JsonIgnore
-    private String countryName;
+    private CountryDto country;
 
 }

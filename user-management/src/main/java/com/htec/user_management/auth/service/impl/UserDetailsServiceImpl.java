@@ -29,7 +29,7 @@ import static org.springframework.context.i18n.LocaleContextHolder.getLocale;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     /**
-     * Jpa repository for user.
+     * Repository for user.
      */
     private final UserRepository userRepository;
 

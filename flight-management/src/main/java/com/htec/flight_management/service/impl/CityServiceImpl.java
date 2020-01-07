@@ -30,7 +30,7 @@ import java.util.Optional;
 public class CityServiceImpl implements CityService {
 
     /**
-     * Jpa repository for city.
+     * Repository for city.
      */
     private final CityRepository repository;
 

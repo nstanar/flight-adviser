@@ -30,20 +30,29 @@ public class AirportDto extends BaseDto<Long> {
 
     /**
      * 3-letter IATA code. Null if not assigned/unknown.
+     * OR
+     * 4-letter ICAO code. Null if not assigned/unknown.
      */
     @Size(min = 2, max = 2)
-    private String iataCode;
-
-    /**
-     * 4-letter ICAO code. Null if not assigned.
-     */
-    @Size(min = 3, max = 3)
-    private String icaoCode;
+    private String code;
 
     /**
      * Id of the city airport belongs to.
      */
     @JsonIgnore
     private Long cityId;
+
+
+    /**
+     * Name of the city airport belongs to.
+     */
+    @JsonIgnore
+    private String cityName;
+
+    /**
+     * Name of the country airport belongs to.
+     */
+    @JsonIgnore
+    private String countryName;
 
 }

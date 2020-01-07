@@ -63,7 +63,7 @@ public class CountryController implements SearchableController<CountryModel, Cou
      * @return Page of cities belonging to country.
      */
     @GetMapping("/{countryId}/cities")
-    public ResponseEntity<PagedModel<EntityModel<CityModel>>> findBy(@PathVariable final Long countryId, final Pageable pageable, final PagedResourcesAssembler<CityModel> pagedResourcesAssembler) {
+    public ResponseEntity<PagedModel<EntityModel<CityModel>>> findCitiesBy(@PathVariable final Long countryId, final Pageable pageable, final PagedResourcesAssembler<CityModel> pagedResourcesAssembler) {
         final Page<CityModel> cities = cityService
                 .findAllByCountryId(countryId, pageable)
                 .map(cityModelAssembler::toModel);
