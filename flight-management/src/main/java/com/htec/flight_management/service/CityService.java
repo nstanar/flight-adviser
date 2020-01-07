@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
  * <p>
  * Service for operations over city.
  */
-public interface CityService extends SearchableService<CityDto, City, Long> {
+public interface CityService extends SearchableService<CityDto, City> {
 
     /**
      * Finds page of cities belonging to country of id.

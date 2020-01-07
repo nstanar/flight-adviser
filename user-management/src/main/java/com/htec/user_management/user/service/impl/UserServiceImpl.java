@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
     /**
      * Business validator chain for user.
      */
-    private final BusinessValidatorChain<UserDto, Long> businessValidatorChain;
+    private final BusinessValidatorChain<UserDto> businessValidatorChain;
 
     /**
      * Role repository.
@@ -253,7 +253,7 @@ public class UserServiceImpl implements UserService {
      * @see UserService#getBusinessValidatorChain()
      */
     @Override
-    public Optional<BusinessValidatorChain<UserDto, Long>> getBusinessValidatorChain() {
+    public Optional<BusinessValidatorChain<UserDto>> getBusinessValidatorChain() {
         return Optional.ofNullable(businessValidatorChain);
     }
 
@@ -264,7 +264,7 @@ public class UserServiceImpl implements UserService {
      * @see Convertible#getDtoConverter()
      */
     @Override
-    public DtoConverter<UserDto, User, Long> getDtoConverter() {
+    public DtoConverter<UserDto, User> getDtoConverter() {
         return userDtoConverter;
     }
 

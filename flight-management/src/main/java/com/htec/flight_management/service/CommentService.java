@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
  * <p>
  * Service exposing operations over comment.
  */
-public interface CommentService extends PagingAndSortingService<CommentDto, Comment, Long> {
+public interface CommentService extends PagingAndSortingService<CommentDto, Comment> {
 
     /**
      * Finds page of comments belonging to city.
@@ -51,7 +51,7 @@ public interface CommentService extends PagingAndSortingService<CommentDto, Comm
      * @param id  Id of the dto.
      * @param dto DTO holding update content.
      * @return Optional updated DTO if id exist, else empty.
-     * @see PagingAndSortingService#updateFrom(Object, BaseDto)
+     * @see PagingAndSortingService#updateFrom(Long, BaseDto)
      */
     @PostAuthorize("hasRole('ADMIN') or returnObject.createdBy==authentication.principal")
     @Override
@@ -64,7 +64,7 @@ public interface CommentService extends PagingAndSortingService<CommentDto, Comm
      *
      * @param id Id of the DTO.
      * @return Optionally deleted DTO if existed.
-     * @see PagingAndSortingService#deleteById(Object)
+     * @see PagingAndSortingService#deleteById(Long)
      */
     @PostAuthorize("hasRole('ADMIN') or returnObject.createdBy==authentication.principal")
     @Override

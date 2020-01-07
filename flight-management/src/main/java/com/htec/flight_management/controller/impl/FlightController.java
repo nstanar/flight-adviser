@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/flights")
 @AllArgsConstructor
-public class FlightController implements PagingAndSortingController<FlightModel, FlightDto, Flight, Long> {
+public class FlightController implements PagingAndSortingController<FlightModel, FlightDto, Flight> {
 
     /**
      * Flight service.
@@ -40,7 +40,7 @@ public class FlightController implements PagingAndSortingController<FlightModel,
      * @see PagingAndSortingController#getService()
      */
     @Override
-    public PagingAndSortingService<FlightDto, Flight, Long> getService() {
+    public PagingAndSortingService<FlightDto, Flight> getService() {
         return service;
     }
 

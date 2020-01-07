@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.ConstraintViolationException;
+import java.util.Optional;
 
 import static com.htec.domain_starter.common.constants.MessageSourceKeys.RESOURCE_DOES_NOT_EXIST;
 
@@ -26,7 +27,7 @@ import static com.htec.domain_starter.common.constants.MessageSourceKeys.RESOURC
  * <p>
  * Paging and sorting controller exposing API operations over MODEl.
  */
-public interface PagingAndSortingController<M extends RepresentationModel<M>, D extends BaseDto<ID>, E extends BaseEntity<ID>, ID> {
+public interface PagingAndSortingController<M extends RepresentationModel<M>, D extends BaseDto, E extends BaseEntity> {
 
     /**
      * Finds page of model entities matching name prefix (if present).
@@ -52,7 +53,7 @@ public interface PagingAndSortingController<M extends RepresentationModel<M>, D 
      * @see ControllerAdvice#handle(NotFoundException)
      */
     @GetMapping("/{id}")
-    default ResponseEntity<M> findBy(@PathVariable final ID id) {
+    default ResponseEntity<M> findBy(@PathVariable final Long id) {
         return getService()
                 .findById(id)
                 .map(getModelAssembler()::toModel)
@@ -86,7 +87,7 @@ public interface PagingAndSortingController<M extends RepresentationModel<M>, D 
      * @see ControllerAdvice#handle(NotFoundException)
      */
     @PutMapping("/{id}")
-    default ResponseEntity<M> updateFrom(@PathVariable final ID id, @RequestBody final D d) {
+    default ResponseEntity<M> updateFrom(@PathVariable final Long id, @RequestBody final D d) {
         final D updatedDto = getService().updateFrom(id, d);
         final M model = getModelAssembler().toModel(updatedDto);
         return ResponseEntity.ok(model);
@@ -100,9 +101,21 @@ public interface PagingAndSortingController<M extends RepresentationModel<M>, D 
      * @see ControllerAdvice#handle(NotFoundException)
      */
     @DeleteMapping("/{id}")
-    default ResponseEntity<Void> deleteBy(@PathVariable final ID id) {
+    default ResponseEntity<Void> deleteBy(@PathVariable final Long id) {
         getService().deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * Checks model entity existence by id.
+     *
+     * @param id Id.
+     */
+    default void validateExistence(final Long id) {
+        final Optional<D> optionalDto = getService().findById(id);
+        if (optionalDto.isEmpty()) {
+            throw getExceptionUtil().createNotFoundExceptionFrom(RESOURCE_DOES_NOT_EXIST, new Object[]{id});
+        }
     }
 
     /**
@@ -110,7 +123,7 @@ public interface PagingAndSortingController<M extends RepresentationModel<M>, D 
      *
      * @return Paging and sorting service.
      */
-    PagingAndSortingService<D, E, ID> getService();
+    PagingAndSortingService<D, E> getService();
 
     /**
      * Gets model assembler.

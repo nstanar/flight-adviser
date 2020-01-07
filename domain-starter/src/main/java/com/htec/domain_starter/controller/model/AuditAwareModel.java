@@ -1,7 +1,8 @@
 package com.htec.domain_starter.controller.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.hateoas.RepresentationModel;
 
 /**
@@ -10,7 +11,8 @@ import org.springframework.hateoas.RepresentationModel;
  * Representation model for audit content.
  */
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 public abstract class AuditAwareModel<T extends AuditAwareModel<T>> extends RepresentationModel<T> {
 
     /**

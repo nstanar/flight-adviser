@@ -26,7 +26,7 @@ import java.util.Set;
 @Data
 @EqualsAndHashCode(exclude = "password")
 @ToString(exclude = "password")
-public class User extends JpaAuditedEntity<Long> implements UserDetails {
+public class User extends JpaAuditedEntity implements UserDetails {
 
     /**
      * User's first name.

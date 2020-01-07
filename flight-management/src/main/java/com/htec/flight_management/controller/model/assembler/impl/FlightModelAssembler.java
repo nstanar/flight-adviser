@@ -40,7 +40,6 @@ public class FlightModelAssembler implements RepresentationModelAssembler<Flight
     @Override
     public FlightModel toModel(final FlightDto dto) {
         final FlightModel model = FlightModel.builder()
-                .source(airportModelAssembler.toModel(dto.getSource()))
                 .destination(airportModelAssembler.toModel(dto.getDestination()))
                 .airline(airlineModelAssembler.toModel(dto.getAirline()))
                 .stops(dto.getStops())

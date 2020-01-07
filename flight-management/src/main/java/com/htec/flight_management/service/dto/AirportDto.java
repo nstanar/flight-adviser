@@ -19,7 +19,7 @@ import javax.validation.constraints.Size;
 @Setter
 @NoArgsConstructor
 @ToString
-public class AirportDto extends BaseDto<Long> {
+public class AirportDto extends BaseDto {
 
     /**
      * Name.
@@ -33,7 +33,7 @@ public class AirportDto extends BaseDto<Long> {
      * OR
      * 4-letter ICAO code. Null if not assigned/unknown.
      */
-    @Size(min = 2, max = 2)
+    @Size(min = 3, max = 4)
     private String code;
 
     /**
@@ -41,7 +41,6 @@ public class AirportDto extends BaseDto<Long> {
      */
     @JsonIgnore
     private Long cityId;
-
 
     /**
      * Name of the city airport belongs to.

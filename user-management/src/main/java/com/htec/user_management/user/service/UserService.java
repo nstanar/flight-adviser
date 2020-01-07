@@ -20,7 +20,7 @@ import java.util.Set;
  * <p>
  * Service exposing operations over {@link UserDto}.
  */
-public interface UserService extends PagingAndSortingService<UserDto, User, Long> {
+public interface UserService extends PagingAndSortingService<UserDto, User> {
 
     @Override
     @PreAuthorize("isAnonymous() or hasRole('ADMIN')")
@@ -32,7 +32,7 @@ public interface UserService extends PagingAndSortingService<UserDto, User, Long
      * @param id  Id of the dto.
      * @param dto DTO holding update content.
      * @return Updated user.
-     * @see PagingAndSortingService#updateFrom(Object, BaseDto)
+     * @see PagingAndSortingService#updateFrom(Long, BaseDto)
      */
     @Override
     @PostAuthorize("hasRole('ADMIN')")
@@ -45,7 +45,7 @@ public interface UserService extends PagingAndSortingService<UserDto, User, Long
      *
      * @param id Id of the DTO.
      * @return Deleted user.
-     * @see PagingAndSortingService#deleteById(Object)
+     * @see PagingAndSortingService#deleteById(Long)
      */
     @Override
     @PostAuthorize("hasRole('ADMIN')")
@@ -68,7 +68,7 @@ public interface UserService extends PagingAndSortingService<UserDto, User, Long
      * @param dto      Update content.
      * @return Updated user.
      */
-    @PostAuthorize("hasRole('ADMIN') or returnObject.username==authentication.principal.username")
+    @PreAuthorize("hasRole('ADMIN') or #username==authentication.principal.username")
     UserDto updateByUsername(@NotBlank final String username, @NotNull @Valid UserDto dto);
 
     /**
@@ -77,7 +77,7 @@ public interface UserService extends PagingAndSortingService<UserDto, User, Long
      * @param username User's username.
      * @return Deleted user.
      */
-    @PostAuthorize("hasRole('ADMIN') or returnObject.username==authentication.principal.username")
+    @PreAuthorize("hasRole('ADMIN') or #username==authentication.principal.username")
     UserDto deleteByUsername(@NotBlank final String username);
 
     /**

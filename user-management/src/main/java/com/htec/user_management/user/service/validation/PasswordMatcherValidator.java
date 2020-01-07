@@ -10,6 +10,6 @@ import com.htec.user_management.user.service.dto.UserDto;
  * @see BusinessValidator
  */
 @FunctionalInterface
-public interface PasswordMatcherValidator extends BusinessValidator<UserDto, Long> {
+public interface PasswordMatcherValidator extends BusinessValidator<UserDto> {
 
 }

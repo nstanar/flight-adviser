@@ -21,19 +21,14 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @ToString
-public class FlightDto extends BaseDto<Long> {
+//TODO: validate source and destination are not the same.
+public class FlightDto extends BaseDto {
 
     /**
      * Id of the source airport.
      */
-    @NotNull
-    private Long sourceAirportId;
-
-    /**
-     * Source airport.
-     */
     @JsonIgnore
-    private AirportDto source;
+    private Long sourceAirportId;
 
     /**
      * Id of the destination airport.

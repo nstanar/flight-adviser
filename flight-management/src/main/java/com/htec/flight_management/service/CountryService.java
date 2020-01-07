@@ -9,6 +9,6 @@ import com.htec.flight_management.service.dto.CountryDto;
  * <p>
  * Service for operations over country.
  */
-public interface CountryService extends SearchableService<CountryDto, Country, Long> {
+public interface CountryService extends SearchableService<CountryDto, Country> {
 
 }

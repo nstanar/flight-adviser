@@ -22,7 +22,7 @@ import java.util.Map;
  */
 @Component
 @AllArgsConstructor
-public class CityBusinessValidatorChainImpl implements BusinessValidatorChain<CityDto, Long> {
+public class CityBusinessValidatorChainImpl implements BusinessValidatorChain<CityDto> {
 
     /**
      * Validates uniqueness of country name.
@@ -32,7 +32,7 @@ public class CityBusinessValidatorChainImpl implements BusinessValidatorChain<Ci
     /**
      * Decision cache.
      */
-    protected final Map<Class<?>, List<BusinessValidator<CityDto, Long>>> decisionCache = new HashMap<>();
+    protected final Map<Class<?>, List<BusinessValidator<CityDto>>> decisionCache = new HashMap<>();
 
     /**
      * Decouples validators.
@@ -50,7 +50,7 @@ public class CityBusinessValidatorChainImpl implements BusinessValidatorChain<Ci
      * @see BusinessValidatorChain#getDecisionCache()
      */
     @Override
-    public Map<Class<?>, List<BusinessValidator<CityDto, Long>>> getDecisionCache() {
+    public Map<Class<?>, List<BusinessValidator<CityDto>>> getDecisionCache() {
         return decisionCache;
     }
 

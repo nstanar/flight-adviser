@@ -18,11 +18,6 @@ import java.math.BigDecimal;
 public class FlightModel extends RepresentationModel<FlightModel> {
 
     /**
-     * Source airport.
-     */
-    private final AirportModel source;
-
-    /**
      * Destination airport.
      */
     private final AirportModel destination;

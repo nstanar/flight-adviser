@@ -18,7 +18,7 @@ import javax.validation.constraints.Size;
  * <p>
  * Searchable service exposing operation over DTO.
  */
-public interface SearchableService<D extends BaseDto<ID>, E extends BaseEntity<ID>, ID> extends Convertible<D, E, ID>, PagingAndSortingService<D, E, ID> {
+public interface SearchableService<D extends BaseDto, E extends BaseEntity> extends Convertible<D, E>, PagingAndSortingService<D, E> {
 
     /**
      * Finds page of DTOs matching name filter.
@@ -41,6 +41,6 @@ public interface SearchableService<D extends BaseDto<ID>, E extends BaseEntity<I
      * @return Check {@link SearchableRepository}.
      */
     @Override
-    SearchableRepository<E, ID> getRepository();
+    SearchableRepository<E> getRepository();
 
 }

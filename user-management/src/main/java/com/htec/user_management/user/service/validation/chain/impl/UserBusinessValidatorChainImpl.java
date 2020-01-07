@@ -22,7 +22,7 @@ import java.util.Map;
  */
 @Component
 @AllArgsConstructor
-public class UserBusinessValidatorChainImpl implements BusinessValidatorChain<UserDto, Long> {
+public class UserBusinessValidatorChainImpl implements BusinessValidatorChain<UserDto> {
 
     /**
      * Validates uniqueness of user's the username.
@@ -37,7 +37,7 @@ public class UserBusinessValidatorChainImpl implements BusinessValidatorChain<Us
     /**
      * Decision cache.
      */
-    protected final Map<Class<?>, List<BusinessValidator<UserDto, Long>>> decisionCache = new HashMap<>();
+    protected final Map<Class<?>, List<BusinessValidator<UserDto>>> decisionCache = new HashMap<>();
 
     /**
      * Decouples validators.
@@ -55,7 +55,7 @@ public class UserBusinessValidatorChainImpl implements BusinessValidatorChain<Us
      * @see BusinessValidatorChain#getDecisionCache()
      */
     @Override
-    public Map<Class<?>, List<BusinessValidator<UserDto, Long>>> getDecisionCache() {
+    public Map<Class<?>, List<BusinessValidator<UserDto>>> getDecisionCache() {
         return decisionCache;
     }
 

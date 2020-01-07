@@ -2,7 +2,7 @@ package com.htec.domain_starter.repository.entity.jpa;
 
 import com.htec.domain_starter.repository.BaseEntity;
 import lombok.AccessLevel;
-import lombok.Data;
+import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.GeneratedValue;
@@ -16,14 +16,14 @@ import javax.persistence.MappedSuperclass;
  * Jpa base entity class.
  */
 @MappedSuperclass
-@Data
+@Getter
 @Setter(value = AccessLevel.PRIVATE)
-public class JpaBaseEntity<ID> implements BaseEntity<ID> {
+public class JpaBaseEntity implements BaseEntity {
 
     /**
      * Id.
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private ID id;
+    private Long id;
 }

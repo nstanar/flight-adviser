@@ -37,7 +37,7 @@ import static com.htec.domain_starter.common.constants.MessageSourceKeys.RESOURC
 @RestController
 @RequestMapping(value = "/users")
 @AllArgsConstructor
-public class UserController implements PagingAndSortingController<UserModel, UserDto, User, Long> {
+public class UserController implements PagingAndSortingController<UserModel, UserDto, User> {
 
     /**
      * Service for user.
@@ -116,6 +116,8 @@ public class UserController implements PagingAndSortingController<UserModel, Use
      */
     @GetMapping("/{userId}/roles")
     public ResponseEntity<CollectionModel<EntityModel<RoleModel>>> findRolesBy(@PathVariable final Long userId) {
+        PagingAndSortingController.super.validateExistence(userId);
+
         final Set<RoleModel> roles = userService
                 .findRolesBy(userId)
                 .stream()
@@ -147,7 +149,7 @@ public class UserController implements PagingAndSortingController<UserModel, Use
      * @see SearchableController#getService()
      */
     @Override
-    public PagingAndSortingService<UserDto, User, Long> getService() {
+    public PagingAndSortingService<UserDto, User> getService() {
         return userService;
     }
 

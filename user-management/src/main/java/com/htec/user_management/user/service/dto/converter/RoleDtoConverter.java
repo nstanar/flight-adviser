@@ -9,6 +9,6 @@ import com.htec.user_management.user.service.dto.RoleDto;
  * <p>
  * Dto converter for {@link RoleDto} to {@link Role} and vice-versa.
  */
-public interface RoleDtoConverter extends DtoConverter<RoleDto, Role, Long> {
+public interface RoleDtoConverter extends DtoConverter<RoleDto, Role> {
 
 }

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * <p>
  * Searchable controller expsoing API operations over MODEL.
  */
-public interface SearchableController<M extends RepresentationModel<M>, D extends BaseDto<ID>, E extends BaseEntity<ID>, ID> extends PagingAndSortingController<M, D, E, ID> {
+public interface SearchableController<M extends RepresentationModel<M>, D extends BaseDto, E extends BaseEntity> extends PagingAndSortingController<M, D, E> {
 
     /**
      * Finds page of model entities matching name filter (if present).
@@ -44,6 +44,6 @@ public interface SearchableController<M extends RepresentationModel<M>, D extend
      * @return Searchable service.
      */
     @Override
-    SearchableService<D, E, ID> getService();
+    SearchableService<D, E> getService();
 
 }

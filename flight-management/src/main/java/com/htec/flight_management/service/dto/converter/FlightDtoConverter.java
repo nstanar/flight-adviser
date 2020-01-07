@@ -9,6 +9,6 @@ import com.htec.flight_management.service.dto.FlightDto;
  * <p>
  * Dto converter for {@link FlightDto} to {@link Flight} and vice-versa.
  */
-public interface FlightDtoConverter extends DtoConverter<FlightDto, Flight, Long> {
+public interface FlightDtoConverter extends DtoConverter<FlightDto, Flight> {
 
 }

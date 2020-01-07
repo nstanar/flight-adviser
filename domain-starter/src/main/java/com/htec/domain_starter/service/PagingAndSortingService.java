@@ -33,7 +33,7 @@ import static com.htec.domain_starter.common.constants.MessageSourceKeys.RESOURC
 //TODO: AOP logging if time left
 @Transactional
 @Validated
-public interface PagingAndSortingService<D extends BaseDto<ID>, E extends BaseEntity<ID>, ID> extends Convertible<D, E, ID> {
+public interface PagingAndSortingService<D extends BaseDto, E extends BaseEntity> extends Convertible<D, E> {
 
     /**
      * Finds page of DTOs.
@@ -57,7 +57,7 @@ public interface PagingAndSortingService<D extends BaseDto<ID>, E extends BaseEn
      */
     @PreAuthorize("isAuthenticated()")
     @Transactional(readOnly = true)
-    default Optional<D> findById(@NotNull final ID id) {
+    default Optional<D> findById(@NotNull final Long id) {
         return getRepository()
                 .findById(id)
                 .map(getDtoConverter()::from);
@@ -87,7 +87,7 @@ public interface PagingAndSortingService<D extends BaseDto<ID>, E extends BaseEn
      * @return Optional updated DTO if id exist, else empty.
      */
     @PostAuthorize("hasRole('ADMIN')")
-    default D updateFrom(@NotNull final ID id, @NotNull @Valid final D dto) {
+    default D updateFrom(@NotNull final Long id, @NotNull @Valid final D dto) {
         dto.setId(id);
         getBusinessValidatorChain().ifPresent(businessValidatorChain -> businessValidatorChain.validateFor(Update.class, dto));
 
@@ -105,7 +105,7 @@ public interface PagingAndSortingService<D extends BaseDto<ID>, E extends BaseEn
      * @return Optionally deleted DTO if existed.
      */
     @PostAuthorize("hasRole('ADMIN')")
-    default D deleteById(final ID id) {
+    default D deleteById(final Long id) {
         return getRepository()
                 .findById(id)
                 .map(entity -> {
@@ -149,14 +149,14 @@ public interface PagingAndSortingService<D extends BaseDto<ID>, E extends BaseEn
      *
      * @return Optional validator chain.
      */
-    Optional<BusinessValidatorChain<D, ID>> getBusinessValidatorChain();
+    Optional<BusinessValidatorChain<D>> getBusinessValidatorChain();
 
     /**
      * Gets repository.
      *
      * @return Check {@link PagingAndSortingRepository}.
      */
-    PagingAndSortingRepository<E, ID> getRepository();
+    PagingAndSortingRepository<E, Long> getRepository();
 
     /**
      * Gets exception util.

@@ -18,7 +18,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @Data
 @ToString(exclude = {"countryName"})
-public class CityDto extends BaseDto<Long> {
+public class CityDto extends BaseDto {
 
     /**
      * City name.
@@ -42,9 +42,9 @@ public class CityDto extends BaseDto<Long> {
     private Long countryId;
 
     /**
-     * Country city resides in.
+     * Name of the country city resides in.
      */
     @JsonIgnore
-    private CountryDto country;
+    private String countryName;
 
 }

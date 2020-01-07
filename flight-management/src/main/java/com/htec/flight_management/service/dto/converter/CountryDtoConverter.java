@@ -9,6 +9,6 @@ import com.htec.flight_management.service.dto.CountryDto;
  * <p>
  * Dto converter for {@link CountryDto} to {@link Country} and vice-versa.
  */
-public interface CountryDtoConverter extends DtoConverter<CountryDto, Country, Long> {
+public interface CountryDtoConverter extends DtoConverter<CountryDto, Country> {
 
 }

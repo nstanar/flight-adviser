@@ -27,7 +27,7 @@ public class AirlineServiceImpl implements AirlineService {
     /**
      * Business validator chain for airline.
      */
-    private final BusinessValidatorChain<AirlineDto, Long> businessValidatorChain;
+    private final BusinessValidatorChain<AirlineDto> businessValidatorChain;
 
     /**
      * Airline repository.
@@ -51,7 +51,7 @@ public class AirlineServiceImpl implements AirlineService {
      * @see AirlineService#getBusinessValidatorChain()
      */
     @Override
-    public Optional<BusinessValidatorChain<AirlineDto, Long>> getBusinessValidatorChain() {
+    public Optional<BusinessValidatorChain<AirlineDto>> getBusinessValidatorChain() {
         return Optional.ofNullable(businessValidatorChain);
     }
 
@@ -84,7 +84,7 @@ public class AirlineServiceImpl implements AirlineService {
      * @see AirlineService#getDtoConverter()
      */
     @Override
-    public DtoConverter<AirlineDto, Airline, Long> getDtoConverter() {
+    public DtoConverter<AirlineDto, Airline> getDtoConverter() {
         return airlineDtoConverter;
     }
 

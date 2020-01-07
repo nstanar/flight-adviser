@@ -9,6 +9,9 @@ import com.htec.flight_management.service.FlightService;
 import com.htec.flight_management.service.dto.FlightDto;
 import com.htec.flight_management.service.dto.converter.FlightDtoConverter;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +24,7 @@ import java.util.Optional;
  * @see FlightService
  */
 @Service
+@Slf4j
 @AllArgsConstructor
 public class FlightServiceImpl implements FlightService {
 
@@ -40,13 +44,29 @@ public class FlightServiceImpl implements FlightService {
     private final ExceptionUtil exceptionUtil;
 
     /**
+     * Finds page of flights matching source airport id.
+     *
+     * @param sourceId Source airport id.
+     * @param pageable Check pageable.
+     * @return Page of flights.
+     * @see FlightService#findAllBySourceId(Long, Pageable)
+     */
+    @Override
+    public Page<FlightDto> findAllBySourceId(final Long sourceId, final Pageable pageable) {
+        log.info("Fetching {} of flights matching source airport id {}.", pageable, sourceId);
+        return repository
+                .findAllBySourceId(sourceId, pageable)
+                .map(dtoConverter::from);
+    }
+
+    /**
      * Gets business validator chain.
      *
      * @return Business validator chain.
      * @see FlightService#getBusinessValidatorChain()
      */
     @Override
-    public Optional<BusinessValidatorChain<FlightDto, Long>> getBusinessValidatorChain() {
+    public Optional<BusinessValidatorChain<FlightDto>> getBusinessValidatorChain() {
         return Optional.empty();
     }
 
@@ -77,7 +97,7 @@ public class FlightServiceImpl implements FlightService {
      * @return Dto converter.
      */
     @Override
-    public DtoConverter<FlightDto, Flight, Long> getDtoConverter() {
+    public DtoConverter<FlightDto, Flight> getDtoConverter() {
         return dtoConverter;
     }
 

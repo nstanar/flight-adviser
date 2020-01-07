@@ -18,7 +18,7 @@ import static org.neo4j.ogm.annotation.Relationship.INCOMING;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Comment extends Neo4jAuditedEntity<Long> {
+public class Comment extends Neo4jAuditedEntity {
 
     /**
      * Title of the comment;

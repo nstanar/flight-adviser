@@ -42,7 +42,7 @@ public class CityServiceImpl implements CityService {
     /**
      * Business validator chain for city.
      */
-    private final BusinessValidatorChain<CityDto, Long> businessValidatorChain;
+    private final BusinessValidatorChain<CityDto> businessValidatorChain;
 
     /**
      * Exception util.
@@ -71,7 +71,7 @@ public class CityServiceImpl implements CityService {
      * @see CityService#getDtoConverter()
      */
     @Override
-    public DtoConverter<CityDto, City, Long> getDtoConverter() {
+    public DtoConverter<CityDto, City> getDtoConverter() {
         return dtoConverter;
     }
 
@@ -82,7 +82,7 @@ public class CityServiceImpl implements CityService {
      * @see CityService#getBusinessValidatorChain()
      */
     @Override
-    public Optional<BusinessValidatorChain<CityDto, Long>> getBusinessValidatorChain() {
+    public Optional<BusinessValidatorChain<CityDto>> getBusinessValidatorChain() {
         return Optional.ofNullable(businessValidatorChain);
     }
 
@@ -104,7 +104,7 @@ public class CityServiceImpl implements CityService {
      * @see CityService#getRepository()
      */
     @Override
-    public SearchableRepository<City, Long> getRepository() {
+    public SearchableRepository<City> getRepository() {
         return repository;
     }
 }

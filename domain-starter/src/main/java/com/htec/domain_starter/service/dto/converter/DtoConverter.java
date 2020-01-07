@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
  * Interface for DTO converters.
  */
 @Validated
-public interface DtoConverter<D extends BaseDto<ID>, E extends BaseEntity<ID>, ID> {
+public interface DtoConverter<D extends BaseDto, E extends BaseEntity> {
 
     /**
      * From ENTITY to DTO.

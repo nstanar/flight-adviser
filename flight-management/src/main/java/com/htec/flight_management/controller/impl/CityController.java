@@ -38,7 +38,7 @@ import javax.validation.ConstraintViolationException;
 @RestController
 @RequestMapping("/cities")
 @AllArgsConstructor
-public class CityController implements SearchableController<CityModel, CityDto, City, Long> {
+public class CityController implements SearchableController<CityModel, CityDto, City> {
 
     /**
      * City service.
@@ -80,6 +80,8 @@ public class CityController implements SearchableController<CityModel, CityDto, 
      */
     @GetMapping("/{cityId}/comments")
     public ResponseEntity<PagedModel<EntityModel<CommentModel>>> findCommentsBy(@PathVariable final Long cityId, final Pageable pageable, final PagedResourcesAssembler<CommentModel> pagedResourcesAssembler) {
+        SearchableController.super.validateExistence(cityId);
+
         final Page<CommentModel> comments = commentService
                 .findAllByCityId(cityId, pageable)
                 .map(commentModelAssembler::toModel);
@@ -117,6 +119,8 @@ public class CityController implements SearchableController<CityModel, CityDto, 
      */
     @GetMapping("/{cityId}/airports")
     public ResponseEntity<PagedModel<EntityModel<AirportModel>>> findAirportsBy(@PathVariable final Long cityId, final Pageable pageable, final PagedResourcesAssembler<AirportModel> pagedResourcesAssembler) {
+        SearchableController.super.validateExistence(cityId);
+
         final Page<AirportModel> airports = airportService
                 .findAllByCityId(cityId, pageable)
                 .map(airportModelAssembler::toModel);
@@ -151,7 +155,7 @@ public class CityController implements SearchableController<CityModel, CityDto, 
      * @see SearchableController#getService()
      */
     @Override
-    public SearchableService<CityDto, City, Long> getService() {
+    public SearchableService<CityDto, City> getService() {
         return cityService;
     }
 

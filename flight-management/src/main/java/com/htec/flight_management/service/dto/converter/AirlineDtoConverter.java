@@ -9,6 +9,6 @@ import com.htec.flight_management.service.dto.AirlineDto;
  * <p>
  * Dto converter for {@link AirlineDto} to {@link Airline} and vice-versa.
  */
-public interface AirlineDtoConverter extends DtoConverter<AirlineDto, Airline, Long> {
+public interface AirlineDtoConverter extends DtoConverter<AirlineDto, Airline> {
 
 }

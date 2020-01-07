@@ -28,11 +28,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class CityModelAssembler implements RepresentationModelAssembler<CityDto, CityModel> {
 
     /**
-     * Country model assembler.
-     */
-    private final CountryModelAssembler countryModelAssembler;
-
-    /**
      * Assembles city model from dto.
      *
      * @param dto City dto used in assembly process.
@@ -43,7 +38,7 @@ public class CityModelAssembler implements RepresentationModelAssembler<CityDto,
         final CityModel cityModel = CityModel.builder()
                 .name(dto.getName())
                 .description(dto.getDescription())
-                .country(countryModelAssembler.toModel(dto.getCountry()))
+                .countryName(dto.getCountryName())
                 .build();
 
         final Long id = dto.getId();

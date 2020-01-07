@@ -9,6 +9,6 @@ import com.htec.flight_management.service.dto.AirlineDto;
  * <p>
  * Validates that airline code is unique.
  */
-public interface AirlineCodeUniquenessValidator extends UniquenessValidatorTemplate<AirlineDto, Airline, Long> {
+public interface AirlineCodeUniquenessValidator extends UniquenessValidatorTemplate<AirlineDto, Airline> {
 
 }

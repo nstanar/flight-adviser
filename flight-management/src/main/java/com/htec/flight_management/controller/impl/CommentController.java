@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/comments")
 @AllArgsConstructor
-public class CommentController implements PagingAndSortingController<CommentModel, CommentDto, Comment, Long> {
+public class CommentController implements PagingAndSortingController<CommentModel, CommentDto, Comment> {
 
     /**
      * Service for comment.
@@ -39,7 +39,7 @@ public class CommentController implements PagingAndSortingController<CommentMode
      * @see PagingAndSortingController#getService()
      */
     @Override
-    public PagingAndSortingService<CommentDto, Comment, Long> getService() {
+    public PagingAndSortingService<CommentDto, Comment> getService() {
         return commentService;
     }
 

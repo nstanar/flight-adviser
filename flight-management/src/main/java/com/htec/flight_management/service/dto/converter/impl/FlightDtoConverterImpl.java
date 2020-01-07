@@ -68,7 +68,6 @@ public class FlightDtoConverterImpl implements FlightDtoConverter {
         final FlightDto dto = new FlightDto();
         dto.setId(entity.getId());
         dto.setSourceAirportId(entity.getSource().getId());
-        dto.setSource(airportDtoConverter.from(entity.getSource()));
         dto.setDestinationAirportId(entity.getDestination().getId());
         dto.setDestination(airportDtoConverter.from(entity.getDestination()));
         dto.setAirlineId(entity.getAirline().getId());

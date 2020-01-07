@@ -4,8 +4,11 @@ import com.htec.domain_starter.repository.entity.neo4j.Neo4jBaseEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.neo4j.ogm.annotation.Index;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
+
+import java.util.Set;
 
 import static org.neo4j.ogm.annotation.Relationship.INCOMING;
 
@@ -20,16 +23,18 @@ import static org.neo4j.ogm.annotation.Relationship.INCOMING;
 @Setter
 @NoArgsConstructor
 @NodeEntity
-public class Airport extends Neo4jBaseEntity<Long> {
+public class Airport extends Neo4jBaseEntity {
 
     /**
      * Name.
      */
+    @Index
     private String name;
 
     /**
      * 3 letter or 4 letter code.
      */
+    @Index(unique = true)
     private String code;
 
     /**
@@ -37,5 +42,11 @@ public class Airport extends Neo4jBaseEntity<Long> {
      */
     @Relationship(type = "HAS_AIRPORT", direction = INCOMING)
     private City city;
+
+    /**
+     * Flights airport have.
+     */
+    @Relationship(value = "HAS_FLIGHT")
+    private Set<Flight> flights;
 
 }

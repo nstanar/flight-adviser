@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
  */
 @NoArgsConstructor
 @Data
-public class RoleDto extends BaseDto<Long> {
+public class RoleDto extends BaseDto {
 
     /**
      * Role name.

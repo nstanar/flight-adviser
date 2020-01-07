@@ -66,7 +66,7 @@ public class CommentServiceImpl implements CommentService {
      * @return Business validator chain.
      */
     @Override
-    public Optional<BusinessValidatorChain<CommentDto, Long>> getBusinessValidatorChain() {
+    public Optional<BusinessValidatorChain<CommentDto>> getBusinessValidatorChain() {
         return Optional.empty();
     }
 
@@ -99,7 +99,7 @@ public class CommentServiceImpl implements CommentService {
      * @see CommentService#getDtoConverter()
      */
     @Override
-    public DtoConverter<CommentDto, Comment, Long> getDtoConverter() {
+    public DtoConverter<CommentDto, Comment> getDtoConverter() {
         return dtoConverter;
     }
 }

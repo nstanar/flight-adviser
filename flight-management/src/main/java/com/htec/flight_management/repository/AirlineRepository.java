@@ -1,11 +1,9 @@
 package com.htec.flight_management.repository;
 
 import com.htec.flight_management.repository.entity.Airline;
-import com.htec.flight_management.repository.entity.City;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 /**

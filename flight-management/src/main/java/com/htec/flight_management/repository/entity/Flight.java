@@ -20,24 +20,24 @@ import static org.neo4j.ogm.annotation.Relationship.INCOMING;
 @Setter
 @NoArgsConstructor
 @NodeEntity
-public class Flight extends Neo4jBaseEntity<Long> {
+public class Flight extends Neo4jBaseEntity {
 
     /**
      * Source airport.
      */
-    @Relationship(type = "SOURCE")
+    @Relationship(type = "HAS_FLIGHT", direction = INCOMING)
     private Airport source;
 
     /**
      * Destination airport.
      */
-    @Relationship(type = "DESTINATION")
+    @Relationship(type = "FLIES_TO")
     private Airport destination;
 
     /**
      * Airline that hosts the flight.
      */
-    @Relationship(type = "HOSTS", direction = INCOMING)
+    @Relationship(type = "PROVIDES_FLIGHT", direction = INCOMING)
     private Airline airline;
 
     /**

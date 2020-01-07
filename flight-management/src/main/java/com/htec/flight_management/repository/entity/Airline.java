@@ -4,6 +4,7 @@ import com.htec.domain_starter.repository.entity.neo4j.Neo4jBaseEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.neo4j.ogm.annotation.Index;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
@@ -19,16 +20,17 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @NodeEntity
-public class Airline extends Neo4jBaseEntity<Long> {
+public class Airline extends Neo4jBaseEntity {
 
     /**
      * 2-letter (IATA) or 3-letter (ICAO) code of the airline.
      */
+    @Index(unique = true)
     private String code;
 
     /**
      * Flights hosted by airline.
      */
-    @Relationship(type = "HOSTS")
+    @Relationship(type = "PROVIDES_FLIGHT")
     private Set<Flight> flights = new HashSet<>();
 }

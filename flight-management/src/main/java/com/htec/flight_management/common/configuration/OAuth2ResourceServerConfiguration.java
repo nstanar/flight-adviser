@@ -48,7 +48,8 @@ public class OAuth2ResourceServerConfiguration extends ResourceServerConfigurerA
         http
                 .antMatcher("/**")
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/cities", "/comments", "/airports").denyAll()
+                .antMatchers(HttpMethod.POST, "/cities", "/comments", "/airports", "/flights").denyAll()
+                .antMatchers(HttpMethod.GET, "/cities", "/comments", "/airports", "/flights").denyAll()
                 .and()
                 .authorizeRequests()
                 .antMatchers("/actuator**").hasRole("ADMIN");

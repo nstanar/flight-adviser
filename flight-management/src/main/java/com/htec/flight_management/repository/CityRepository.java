@@ -13,7 +13,7 @@ import java.util.List;
  * <p>
  * Repository for {@link City}.
  */
-public interface CityRepository extends SearchableRepository<City, Long> {
+public interface CityRepository extends SearchableRepository<City> {
 
     /**
      * Finds page of cities by country id.

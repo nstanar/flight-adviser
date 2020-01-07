@@ -13,7 +13,7 @@ import java.util.Optional;
  * <p>
  * Repository for airport.
  */
-public interface AirportRepository extends SearchableRepository<Airport, Long> {
+public interface AirportRepository extends SearchableRepository<Airport> {
 
     /**
      * Finds page of airports by city id.

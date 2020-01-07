@@ -2,7 +2,7 @@ package com.htec.domain_starter.repository.entity.jpa;
 
 import com.htec.domain_starter.repository.AuditedEntity;
 import lombok.AccessLevel;
-import lombok.Data;
+import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -17,8 +17,9 @@ import javax.persistence.*;
  * Entity class representing jpa audit content.
  */
 @MappedSuperclass
-@Data
-public abstract class JpaAuditedEntity<ID> implements AuditedEntity<ID> {
+@Getter
+@Setter
+public abstract class JpaAuditedEntity implements AuditedEntity {
 
     /**
      * Id.
@@ -26,7 +27,7 @@ public abstract class JpaAuditedEntity<ID> implements AuditedEntity<ID> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(value = AccessLevel.PRIVATE)
-    private ID id;
+    private Long id;
 
     /**
      * Designates creation date of the record.

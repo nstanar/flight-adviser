@@ -1,8 +1,9 @@
 package com.htec.domain_starter.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * @author Nikola Stanar
@@ -10,8 +11,9 @@ import lombok.NoArgsConstructor;
  * Dto class representing audit content.
  */
 @NoArgsConstructor
-@Data
-public abstract class AuditAwareDto extends BaseDto<Long> {
+@Getter
+@Setter
+public abstract class AuditAwareDto extends BaseDto {
 
     /**
      * Designates creation date of the record.

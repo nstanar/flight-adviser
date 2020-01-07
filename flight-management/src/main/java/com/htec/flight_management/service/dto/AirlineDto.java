@@ -17,7 +17,7 @@ import javax.validation.constraints.Size;
 @Setter
 @NoArgsConstructor
 @ToString
-public class AirlineDto extends BaseDto<Long> {
+public class AirlineDto extends BaseDto {
 
     /**
      * 2-letter (IATA) or 3-letter (ICAO) code of the airline.

@@ -5,7 +5,7 @@ package com.htec.domain_starter.repository;
  * <p>
  * Entity class representing audit content.
  */
-public interface AuditedEntity<ID> extends BaseEntity<ID> {
+public interface AuditedEntity extends BaseEntity {
 
     /**
      * Getter for created date.

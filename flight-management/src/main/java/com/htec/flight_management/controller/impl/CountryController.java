@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/countries")
 @AllArgsConstructor
-public class CountryController implements SearchableController<CountryModel, CountryDto, Country, Long> {
+public class CountryController implements SearchableController<CountryModel, CountryDto, Country> {
 
     /**
      * Country service.
@@ -64,6 +64,8 @@ public class CountryController implements SearchableController<CountryModel, Cou
      */
     @GetMapping("/{countryId}/cities")
     public ResponseEntity<PagedModel<EntityModel<CityModel>>> findCitiesBy(@PathVariable final Long countryId, final Pageable pageable, final PagedResourcesAssembler<CityModel> pagedResourcesAssembler) {
+        SearchableController.super.validateExistence(countryId);
+
         final Page<CityModel> cities = cityService
                 .findAllByCountryId(countryId, pageable)
                 .map(cityModelAssembler::toModel);
@@ -96,7 +98,7 @@ public class CountryController implements SearchableController<CountryModel, Cou
      * @see SearchableController#getService()
      */
     @Override
-    public SearchableService<CountryDto, Country, Long> getService() {
+    public SearchableService<CountryDto, Country> getService() {
         return countryService;
     }
 

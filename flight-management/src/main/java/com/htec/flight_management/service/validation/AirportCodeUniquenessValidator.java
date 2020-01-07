@@ -9,6 +9,6 @@ import com.htec.flight_management.service.dto.AirportDto;
  * <p>
  * Validates that airport code is unique.
  */
-public interface AirportCodeUniquenessValidator extends UniquenessValidatorTemplate<AirportDto, Airport, Long> {
+public interface AirportCodeUniquenessValidator extends UniquenessValidatorTemplate<AirportDto, Airport> {
 
 }

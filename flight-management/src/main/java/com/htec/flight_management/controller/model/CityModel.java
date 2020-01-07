@@ -26,8 +26,8 @@ public class CityModel extends RepresentationModel<CityModel> {
     private final String description;
 
     /**
-     * Country city resides in.
+     * Name of the country city resides in.
      */
-    private final CountryModel country;
+    private final String countryName;
 
 }

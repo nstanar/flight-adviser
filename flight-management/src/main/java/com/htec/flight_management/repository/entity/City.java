@@ -24,7 +24,7 @@ import static org.neo4j.ogm.annotation.Relationship.INCOMING;
 @NoArgsConstructor
 @Getter
 @Setter
-public class City extends Neo4jBaseEntity<Long> {
+public class City extends Neo4jBaseEntity {
 
     /**
      * Name of the city.

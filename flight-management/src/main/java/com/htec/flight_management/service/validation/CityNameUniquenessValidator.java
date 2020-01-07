@@ -9,6 +9,6 @@ import com.htec.flight_management.service.dto.CityDto;
  * <p>
  * Validates that city name is unique within country boundaries.
  */
-public interface CityNameUniquenessValidator extends UniquenessValidatorTemplate<CityDto, City, Long> {
+public interface CityNameUniquenessValidator extends UniquenessValidatorTemplate<CityDto, City> {
 
 }

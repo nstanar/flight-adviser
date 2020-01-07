@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/airlines")
 @AllArgsConstructor
-public class AirlineController implements PagingAndSortingController<AirlineModel, AirlineDto, Airline, Long> {
+public class AirlineController implements PagingAndSortingController<AirlineModel, AirlineDto, Airline> {
 
     /**
      * Airline service.
@@ -39,7 +39,7 @@ public class AirlineController implements PagingAndSortingController<AirlineMode
      * @see PagingAndSortingController#getService()
      */
     @Override
-    public PagingAndSortingService<AirlineDto, Airline, Long> getService() {
+    public PagingAndSortingService<AirlineDto, Airline> getService() {
         return airlineService;
     }
 

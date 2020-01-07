@@ -37,7 +37,7 @@ public class CountryServiceImpl implements CountryService {
     /**
      * Business validator chain for country.
      */
-    private final BusinessValidatorChain<CountryDto, Long> businessValidatorChain;
+    private final BusinessValidatorChain<CountryDto> businessValidatorChain;
 
     /**
      * Exception util.
@@ -51,7 +51,7 @@ public class CountryServiceImpl implements CountryService {
      * @see CountryService#getDtoConverter()
      */
     @Override
-    public DtoConverter<CountryDto, Country, Long> getDtoConverter() {
+    public DtoConverter<CountryDto, Country> getDtoConverter() {
         return dtoConverter;
     }
 
@@ -72,7 +72,7 @@ public class CountryServiceImpl implements CountryService {
      * @return Business validator chain.
      */
     @Override
-    public Optional<BusinessValidatorChain<CountryDto, Long>> getBusinessValidatorChain() {
+    public Optional<BusinessValidatorChain<CountryDto>> getBusinessValidatorChain() {
         return Optional.ofNullable(businessValidatorChain);
     }
 
@@ -83,7 +83,7 @@ public class CountryServiceImpl implements CountryService {
      * @see CountryService#getRepository()
      */
     @Override
-    public SearchableRepository<Country, Long> getRepository() {
+    public SearchableRepository<Country> getRepository() {
         return repository;
     }
 }

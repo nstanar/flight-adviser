@@ -12,6 +12,6 @@ import com.htec.flight_management.service.dto.CountryDto;
  * Validates that country name is unique.
  * @see BusinessValidator#validate(BaseDto)
  */
-public interface CountryNameUniquenessValidator extends UniquenessValidatorTemplate<CountryDto, Country, Long> {
+public interface CountryNameUniquenessValidator extends UniquenessValidatorTemplate<CountryDto, Country> {
 
 }

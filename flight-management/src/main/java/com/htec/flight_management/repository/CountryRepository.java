@@ -11,7 +11,7 @@ import java.util.Optional;
  * <p>
  * Repository for {@link Country}.
  */
-public interface CountryRepository extends SearchableRepository<Country, Long> {
+public interface CountryRepository extends SearchableRepository<Country> {
 
     /**
      * Finds country with given name.

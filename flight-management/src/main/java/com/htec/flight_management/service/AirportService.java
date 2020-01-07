@@ -1,6 +1,6 @@
 package com.htec.flight_management.service;
 
-import com.htec.domain_starter.service.PagingAndSortingService;
+import com.htec.domain_starter.service.SearchableService;
 import com.htec.flight_management.repository.entity.Airport;
 import com.htec.flight_management.service.dto.AirportDto;
 import org.springframework.data.domain.Page;
@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
  * <p>
  * Service exposing operations over airport.
  */
-public interface AirportService extends PagingAndSortingService<AirportDto, Airport, Long> {
+public interface AirportService extends SearchableService<AirportDto, Airport> {
 
     /**
      * Finds page of airports belonging to city of certain id.

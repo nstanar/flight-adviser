@@ -9,6 +9,6 @@ import com.htec.flight_management.service.dto.AirlineDto;
  * <p>
  * Service exposing operations over airline.
  */
-public interface AirlineService extends PagingAndSortingService<AirlineDto, Airline, Long> {
+public interface AirlineService extends PagingAndSortingService<AirlineDto, Airline> {
 
 }

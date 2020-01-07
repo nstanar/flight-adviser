@@ -10,6 +10,6 @@ import com.htec.user_management.user.service.dto.UserDto;
  * Dto converter for {@link UserDto} to {@link User} and vice-versa.
  * @see DtoConverter
  */
-public interface UserDtoConverter extends DtoConverter<UserDto, User, Long> {
+public interface UserDtoConverter extends DtoConverter<UserDto, User> {
 
 }

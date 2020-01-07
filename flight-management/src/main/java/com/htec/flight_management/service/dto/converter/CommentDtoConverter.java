@@ -9,6 +9,6 @@ import com.htec.flight_management.service.dto.CommentDto;
  * <p>
  * Dto converter for {@link CommentDto} to {@link Comment} and vice-versa.
  */
-public interface CommentDtoConverter extends DtoConverter<CommentDto, Comment, Long> {
+public interface CommentDtoConverter extends DtoConverter<CommentDto, Comment> {
 
 }

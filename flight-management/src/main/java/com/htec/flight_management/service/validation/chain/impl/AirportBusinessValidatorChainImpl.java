@@ -23,7 +23,7 @@ import java.util.Map;
  */
 @Component
 @AllArgsConstructor
-public class AirportBusinessValidatorChainImpl implements BusinessValidatorChain<AirportDto, Long> {
+public class AirportBusinessValidatorChainImpl implements BusinessValidatorChain<AirportDto> {
 
 
     /**
@@ -34,7 +34,7 @@ public class AirportBusinessValidatorChainImpl implements BusinessValidatorChain
     /**
      * Decision cache.
      */
-    protected final Map<Class<?>, List<BusinessValidator<AirportDto, Long>>> decisionCache = new HashMap<>();
+    protected final Map<Class<?>, List<BusinessValidator<AirportDto>>> decisionCache = new HashMap<>();
 
     /**
      * Decouples validators.
@@ -52,7 +52,7 @@ public class AirportBusinessValidatorChainImpl implements BusinessValidatorChain
      * @see BusinessValidatorChain#getDecisionCache()
      */
     @Override
-    public Map<Class<?>, List<BusinessValidator<AirportDto, Long>>> getDecisionCache() {
+    public Map<Class<?>, List<BusinessValidator<AirportDto>>> getDecisionCache() {
         return decisionCache;
     }
 

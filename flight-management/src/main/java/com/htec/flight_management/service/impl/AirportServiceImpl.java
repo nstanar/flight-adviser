@@ -1,5 +1,6 @@
 package com.htec.flight_management.service.impl;
 
+import com.htec.domain_starter.repository.SearchableRepository;
 import com.htec.domain_starter.service.dto.converter.DtoConverter;
 import com.htec.domain_starter.service.validation.chain.BusinessValidatorChain;
 import com.htec.domain_starter.service.validation.util.ExceptionUtil;
@@ -12,7 +13,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
@@ -32,7 +32,7 @@ public class AirportServiceImpl implements AirportService {
     /**
      * Business validator chain.
      */
-    private final BusinessValidatorChain<AirportDto, Long> businessValidatorChain;
+    private final BusinessValidatorChain<AirportDto> businessValidatorChain;
 
     /**
      * Repository for airport.
@@ -72,7 +72,7 @@ public class AirportServiceImpl implements AirportService {
      * @see AirportService#getBusinessValidatorChain()
      */
     @Override
-    public Optional<BusinessValidatorChain<AirportDto, Long>> getBusinessValidatorChain() {
+    public Optional<BusinessValidatorChain<AirportDto>> getBusinessValidatorChain() {
         return Optional.ofNullable(businessValidatorChain);
     }
 
@@ -83,7 +83,7 @@ public class AirportServiceImpl implements AirportService {
      * @see AirportService#getRepository()
      */
     @Override
-    public PagingAndSortingRepository<Airport, Long> getRepository() {
+    public SearchableRepository<Airport> getRepository() {
         return repository;
     }
 
@@ -105,7 +105,7 @@ public class AirportServiceImpl implements AirportService {
      * @see AirportService#getDtoConverter()
      */
     @Override
-    public DtoConverter<AirportDto, Airport, Long> getDtoConverter() {
+    public DtoConverter<AirportDto, Airport> getDtoConverter() {
         return dtoConverter;
     }
 }

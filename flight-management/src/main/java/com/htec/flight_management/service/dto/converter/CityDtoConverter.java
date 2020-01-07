@@ -9,6 +9,6 @@ import com.htec.flight_management.service.dto.CityDto;
  * <p>
  * Dto converter for {@link CityDto} to {@link City} and vice-versa.
  */
-public interface CityDtoConverter extends DtoConverter<CityDto, City, Long> {
+public interface CityDtoConverter extends DtoConverter<CityDto, City> {
 
 }
