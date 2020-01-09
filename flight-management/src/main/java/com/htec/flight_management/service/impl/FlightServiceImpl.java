@@ -39,6 +39,11 @@ public class FlightServiceImpl implements FlightService {
     private final FlightDtoConverter dtoConverter;
 
     /**
+     * Business validator chain for flight.
+     */
+    private final BusinessValidatorChain<FlightDto> businessValidatorChain;
+
+    /**
      * Exception util.
      */
     private final ExceptionUtil exceptionUtil;
@@ -67,7 +72,7 @@ public class FlightServiceImpl implements FlightService {
      */
     @Override
     public Optional<BusinessValidatorChain<FlightDto>> getBusinessValidatorChain() {
-        return Optional.empty();
+        return Optional.ofNullable(businessValidatorChain);
     }
 
     /**

@@ -1,20 +1,20 @@
 package com.htec.user_management.user.service.dto;
 
 import com.htec.domain_starter.service.dto.BaseDto;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.NotNull;
+
 
 /**
  * @author Nikola Stanar
  * <p>
  * Enum representing user role.
  */
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
-@Data
 public class RoleDto extends BaseDto {
 
     /**

@@ -34,6 +34,7 @@ public class FlightModelAssembler implements RepresentationModelAssembler<Flight
                 .airlineCode(dto.getAirlineCode())
                 .stops(dto.getStops())
                 .price(dto.getPrice())
+                .distanceInKm(dto.getDistanceInKm())
                 .build();
 
         // Add self link.

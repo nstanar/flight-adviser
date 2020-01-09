@@ -10,6 +10,7 @@ import lombok.ToString;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * @author Nikola Stanar
@@ -20,7 +21,6 @@ import javax.validation.constraints.NotNull;
 @Setter
 @NoArgsConstructor
 @ToString
-//TODO: validate source and destination are not the same.
 public class FlightDto extends BaseDto {
 
     /**
@@ -39,6 +39,7 @@ public class FlightDto extends BaseDto {
      * 2-letter (IATA) or 3-letter (ICAO) code of the airline.
      */
     @NotNull
+    @Size(min = 2, max = 3)
     private String airlineCode;
 
     /**
@@ -55,5 +56,11 @@ public class FlightDto extends BaseDto {
     @NotNull
     @DecimalMin("0")
     private Double price;
+
+    /**
+     * Distance between source and destination airports.
+     */
+    @JsonIgnore
+    private double distanceInKm;
 
 }

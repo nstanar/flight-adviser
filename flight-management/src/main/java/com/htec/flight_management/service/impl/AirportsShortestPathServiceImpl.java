@@ -34,14 +34,14 @@ public class AirportsShortestPathServiceImpl implements AirportsShortestPathServ
     /**
      * Query template.
      */
-    private final String QUERY_TEMPLATE = "MATCH (start:Airport), (end:Airport) " +
+    private static final String QUERY_TEMPLATE = "MATCH (start:Airport), (end:Airport) " +
             "WHERE id(start)={startId} AND id(end)={endId} " +
             "CALL algo.shortestPath(start, end, \"price\", {prop}) " +
             "YIELD totalCost " +
             "MATCH (airport:Airport) " +
             "MATCH (airport)<-[:HAS_AIRPORT]-(city:City) " +
             "MATCH (city)<-[:HAS_CITY]-(country:Country) " +
-            "RETURN id(airport) AS id, airport.name AS name, airport.code AS code, city.name AS city, country.name AS country, totalCost";
+            "RETURN id(airport) AS id, airport.name AS name, airport.iataCode AS iataCode, airport.icaoCode AS icaoCode, city.name AS city, country.name AS country, totalCost";
 
     /**
      * Finds che path between airports.
@@ -70,14 +70,16 @@ public class AirportsShortestPathServiceImpl implements AirportsShortestPathServ
         queryResults.forEach(stringObjectMap -> {
             final Long id = (Long) stringObjectMap.get("id");
             final String name = (String) stringObjectMap.get("name");
-            final String code = (String) stringObjectMap.get("code");
+            final String iataCode = (String) stringObjectMap.get("iataCode");
+            final String icaoCode = (String) stringObjectMap.get("icaoCode");
             final String city = (String) stringObjectMap.get("city");
             final String country = (String) stringObjectMap.get("country");
             final double totalPrice = (double) stringObjectMap.get("totalCost");
             result.add(AirportShortestPathRecordDto.builder()
                     .id(id)
                     .name(name)
-                    .code(code)
+                    .iataCode(iataCode)
+                    .icaoCode(icaoCode)
                     .city(city)
                     .country(country)
                     .totalCost(totalPrice)

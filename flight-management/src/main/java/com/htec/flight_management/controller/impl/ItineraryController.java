@@ -34,10 +34,15 @@ public class ItineraryController {
      * @return 200 with optional itinerary if successful; 400 if source or destination do not exist.
      */
     @GetMapping("/cheapest/from/{sourceCityId}/to/{destinationCityId}")
-    public ResponseEntity<Optional<ItineraryDto>> findCheapestBetween(@PathVariable final Long sourceCityId, @PathVariable final Long destinationCityId) {
-        final Optional<ItineraryDto> optionalItinerary = service.findCheapestBetweenCities(sourceCityId, destinationCityId);
+    public ResponseEntity<ItineraryDto> findCheapestBetween(@PathVariable final Long sourceCityId, @PathVariable final Long destinationCityId) {
+        ItineraryDto result = ItineraryDto.builder().build();
 
-        return ResponseEntity.ok(optionalItinerary);
+        final Optional<ItineraryDto> optionalItinerary = service.findCheapestBetweenCities(sourceCityId, destinationCityId);
+        if (optionalItinerary.isPresent()) {
+            result = optionalItinerary.get();
+        }
+
+        return ResponseEntity.ok(result);
     }
 
 }

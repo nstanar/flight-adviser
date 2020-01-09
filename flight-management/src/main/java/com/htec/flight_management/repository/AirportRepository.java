@@ -38,12 +38,21 @@ public interface AirportRepository extends SearchableRepository<Airport> {
     Page<Airport> findAllByCityId(final Long cityId, final Pageable pageable);
 
     /**
-     * Finds airport with given code.
+     * Finds airport with given iataCode.
      *
-     * @param code Airport code.
+     * @param iataCode Airport iataCode.
      * @return Optional airport.
      */
     @Transactional(readOnly = true)
-    Optional<Airport> findByCodeIgnoreCase(final String code);
+    Optional<Airport> findByIataCodeIgnoreCase(final String iataCode);
+
+    /**
+     * Finds airport with given icaoCode.
+     *
+     * @param icaoCode Airport icaoCode.
+     * @return Optional airport.
+     */
+    @Transactional(readOnly = true)
+    Optional<Airport> findByIcaoCodeIgnoreCase(final String icaoCode);
 
 }

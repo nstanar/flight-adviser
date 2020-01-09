@@ -2,7 +2,6 @@ package com.htec.user_management.user.controller.model;
 
 import com.htec.domain_starter.controller.model.AuditAwareModel;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.springframework.hateoas.server.core.Relation;
 
@@ -13,7 +12,6 @@ import org.springframework.hateoas.server.core.Relation;
  */
 @Getter
 @Relation(collectionRelation = "users")
-@EqualsAndHashCode
 public class UserModel extends AuditAwareModel<UserModel> {
 
     /**

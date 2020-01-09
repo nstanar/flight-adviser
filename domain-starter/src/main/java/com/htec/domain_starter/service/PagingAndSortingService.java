@@ -130,20 +130,6 @@ public interface PagingAndSortingService<D extends BaseDto, E extends BaseEntity
     }
 
     /**
-     * Creates DTOs from method argument.
-     *
-     * @param dtoS DTOs holding content that is about to be created.
-     */
-    @PreAuthorize("hasRole('ADMIN')")
-    default void createFrom(final @NotEmpty Collection<@NotNull @Valid D> dtoS) {
-        final Set<E> entities = dtoS
-                .parallelStream()
-                .map(getDtoConverter()::from)
-                .collect(Collectors.toSet());
-        getRepository().saveAll(entities);
-    }
-
-    /**
      * Deletes DTOs from method argument.
      *
      * @param dtoS DTOs holding content that is about to be created.

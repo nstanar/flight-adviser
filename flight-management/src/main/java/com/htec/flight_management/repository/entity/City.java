@@ -1,9 +1,14 @@
 package com.htec.flight_management.repository.entity;
 
 import com.htec.domain_starter.repository.entity.neo4j.Neo4jBaseEntity;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.neo4j.ogm.annotation.Index;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
@@ -17,8 +22,6 @@ import static org.neo4j.ogm.annotation.Relationship.INCOMING;
  * @author Nikola Stanar
  * <p>
  * Entity class representing city.
- * <p>
- * Composite indexes and required fields are supported only in Neo4 Enterprise!
  */
 @NodeEntity
 @NoArgsConstructor
@@ -38,6 +41,15 @@ public class City extends Neo4jBaseEntity {
     private Country country;
 
     /**
+     * Composite indexes and required fields are supported only in Neo4 Enterprise!
+     * Thus defining uniqueness this way.
+     */
+    @Index(unique = true)
+    @Getter(AccessLevel.PRIVATE)
+    @Setter(AccessLevel.PRIVATE)
+    private String cityNameCountryName;
+
+    /**
      * Description of the city.
      */
     private String description;
@@ -53,5 +65,66 @@ public class City extends Neo4jBaseEntity {
      */
     @Relationship(type = "HAS_AIRPORT")
     private final Set<Airport> airports = new HashSet<>();
+
+    /**
+     * Setter for composite unique constraint.
+     */
+    public void setCityNameCountryName() {
+        this.cityNameCountryName = StringUtils.strip(name + country.getName()).toUpperCase();
+    }
+
+    /**
+     * Setter for country.
+     *
+     * @param country Country.
+     */
+    public void setCountry(final Country country) {
+        this.country = country;
+        setCityNameCountryName();
+    }
+
+    /**
+     * Setter for name.
+     *
+     * @param name Name.
+     */
+    public void setName(final String name) {
+        this.name = StringUtils.strip(name);
+    }
+
+    /**
+     * Checks if cities are equal to one another.
+     *
+     * @param o Object to be compared.
+     * @return True if equal.
+     */
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        final City city = (City) o;
+
+        return new EqualsBuilder()
+                .append(cityNameCountryName, city.getCityNameCountryName())
+                .isEquals();
+    }
+
+    /**
+     * Calculates hash code for city.
+     *
+     * @return Hash code.
+     */
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(cityNameCountryName)
+                .toHashCode();
+    }
 
 }

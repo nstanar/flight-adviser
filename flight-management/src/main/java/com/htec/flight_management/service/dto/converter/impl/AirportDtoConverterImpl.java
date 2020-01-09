@@ -50,7 +50,10 @@ public class AirportDtoConverterImpl implements AirportDtoConverter {
         final AirportDto dto = new AirportDto();
         dto.setId(entity.getId());
         dto.setName(entity.getName());
-        dto.setCode(entity.getCode());
+        dto.setIataCode(entity.getIataCode());
+        dto.setIcaoCode(entity.getIcaoCode());
+        dto.setLatitude(entity.getLatitude());
+        dto.setLongitude(entity.getLongitude());
         dto.setCityId(entity.getCity().getId());
         return dto;
     }
@@ -67,7 +70,10 @@ public class AirportDtoConverterImpl implements AirportDtoConverter {
         final Airport entity = new Airport();
         entity.setName(dto.getName());
         entity.setName(dto.getName());
-        entity.setCode(dto.getCode());
+        entity.setIataCode(dto.getIataCode());
+        entity.setIcaoCode(dto.getIcaoCode());
+        entity.setLatitude(dto.getLatitude());
+        entity.setLongitude(dto.getLongitude());
         final Long cityId = dto.getCityId();
         final Optional<City> optionalCity = cityRepository.findById(cityId);
 
@@ -93,7 +99,10 @@ public class AirportDtoConverterImpl implements AirportDtoConverter {
     public Airport from(@NotNull final AirportDto dto, @NotNull final Airport existingEntity) {
         existingEntity.setName(dto.getName());
         existingEntity.setName(dto.getName());
-        existingEntity.setCode(dto.getCode());
+        existingEntity.setIataCode(dto.getIataCode());
+        existingEntity.setIcaoCode(dto.getIcaoCode());
+        existingEntity.setLatitude(dto.getLatitude());
+        existingEntity.setLongitude(dto.getLongitude());
         return existingEntity;
     }
 

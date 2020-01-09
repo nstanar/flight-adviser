@@ -23,9 +23,14 @@ public class AirportShortestPathRecordDto {
     private final String name;
 
     /**
-     * Airport code.
+     * Airport IATA code.
      */
-    private final String code;
+    private final String iataCode;
+
+    /**
+     * Airport ICAO code;
+     */
+    private final String icaoCode;
 
     /**
      * City name.

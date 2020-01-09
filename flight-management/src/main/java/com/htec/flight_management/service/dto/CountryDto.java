@@ -1,8 +1,10 @@
 package com.htec.flight_management.service.dto;
 
 import com.htec.domain_starter.service.dto.BaseDto;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -14,7 +16,9 @@ import javax.validation.constraints.Size;
  * Dto representing country.
  */
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
+@ToString
 public class CountryDto extends BaseDto {
 
     /**

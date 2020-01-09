@@ -6,9 +6,9 @@
     </appender>
 
     <logger name="com.htec" level="INFO"/>
-    <!-- Switch this to info -->
-    <logger name="org.springframework.data.neo4j" level="DEBUG"/>
-    <logger name="org.springframework.data.neo4j.support.query" level="DEBUG"/>
+
+    <logger name="org.springframework.data.neo4j" level="INFO"/>
+    <logger name="org.springframework.data.neo4j.support.query" level="INFO"/>
 
 
     <root level="INFO">

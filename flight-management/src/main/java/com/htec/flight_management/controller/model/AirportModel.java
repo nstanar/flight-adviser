@@ -21,10 +21,25 @@ public class AirportModel extends RepresentationModel<AirportModel> {
     private final String name;
 
     /**
-     * 3-letter IATA code. Null if not assigned/unknown.
-     * OR
-     * 4-letter ICAO code. Null if not assigned/unknown.
+     * 3 letter IATA code.
+     * Null if not assigned.
      */
-    private final String code;
+    private final String iataCode;
+
+    /**
+     * 4 letter ICAO code.
+     * Null if not assigned.
+     */
+    private final String icaoCode;
+
+    /**
+     * Latitude.
+     */
+    private final double latitude;
+
+    /**
+     * Longitude.
+     */
+    private final double longitude;
 
 }

@@ -15,9 +15,9 @@ import static org.neo4j.ogm.annotation.Relationship.INCOMING;
  * Entity class representing comment.
  */
 @NodeEntity
-@NoArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
 public class Comment extends Neo4jAuditedEntity {
 
     /**

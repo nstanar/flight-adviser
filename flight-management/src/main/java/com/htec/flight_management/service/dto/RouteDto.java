@@ -29,4 +29,9 @@ public class RouteDto {
      */
     private double price;
 
+    /**
+     * Distance in km between source and destination airport.
+     */
+    private double distanceInKm;
+
 }

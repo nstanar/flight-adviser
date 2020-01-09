@@ -94,10 +94,8 @@ public class ItineraryServiceImpl implements ItineraryService {
 
         final Map<String, List<AirportShortestPathRecordDto>> allOptionsForGivenCities = new HashMap<>();
 
-        for (int i = 0; i < sourceAirportIds.length; i++) {
-            for (final int j = 0; i < destinationAirportIds.length; i++) {
-                final long sourceAirportId = sourceAirportIds[i];
-                final long destinationAirportId = destinationAirportIds[j];
+        for (final long sourceAirportId : sourceAirportIds) {
+            for (final long destinationAirportId : destinationAirportIds) {
                 final List<AirportShortestPathRecordDto> shortestPath = airportsShortestPathRepository.findCheapestBetween(sourceAirportId, destinationAirportId);
                 if (CollectionUtils.isNotEmpty(shortestPath)) {
                     final String key = sourceAirportId + "" + destinationAirportId;

@@ -36,4 +36,9 @@ public class FlightModel extends RepresentationModel<FlightModel> {
      */
     private final Double price;
 
+    /**
+     * Distance between source and destination airports.
+     */
+    private final double distanceInKm;
+
 }

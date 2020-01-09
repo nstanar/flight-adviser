@@ -60,20 +60,21 @@ public class CityDtoConverterImpl implements CityDtoConverter {
      */
     @Override
     public City from(@NotNull final CityDto dto) {
-        final City entity = new City();
-        entity.setName(dto.getName());
-        entity.setDescription(dto.getDescription());
+        final City city = new City();
+        city.setName(dto.getName());
+        city.setDescription(dto.getDescription());
         final Long countryId = dto.getCountryId();
         final Optional<Country> optionalCountry = countryRepository.findById(countryId);
 
+        final Country country;
         if (optionalCountry.isPresent()) {
-            final Country country = optionalCountry.get();
-            entity.setCountry(country);
+            country = optionalCountry.get();
+            city.setCountry(country);
         } else {
             throw exceptionUtil.createNotFoundExceptionFrom(RESOURCE_DOES_NOT_EXIST, new Object[]{countryId});
         }
 
-        return entity;
+        return city;
     }
 
     /**
@@ -87,6 +88,7 @@ public class CityDtoConverterImpl implements CityDtoConverter {
     public City from(@NotNull final CityDto dto, @NotNull final City existingEntity) {
         existingEntity.setName(dto.getName());
         existingEntity.setDescription(dto.getDescription());
+        existingEntity.setCityNameCountryName();
         return existingEntity;
     }
 

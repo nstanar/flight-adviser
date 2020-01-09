@@ -18,7 +18,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
         "com.htec.domain_starter.controller",
         "com.htec.domain_starter.service",
 })
-//TODO: fix equals and hashcode everywhere
 public class Application {
 
     /**

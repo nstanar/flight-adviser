@@ -2,8 +2,9 @@ package com.htec.flight_management.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.htec.domain_starter.service.dto.AuditAwareDto;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
@@ -14,8 +15,9 @@ import javax.validation.constraints.Size;
  * <p>
  * Dto class representing comment.
  */
+@Getter
+@Setter
 @NoArgsConstructor
-@Data
 @ToString(exclude = {"cityId"})
 public class CommentDto extends AuditAwareDto {
 

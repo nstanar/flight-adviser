@@ -1,9 +1,9 @@
 package com.htec.user_management.user.repository.entity;
 
 import com.htec.domain_starter.repository.entity.jpa.JpaAuditedEntity;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,8 +23,8 @@ import java.util.Set;
 @Table(name = "fa_user", uniqueConstraints = @UniqueConstraint(name = "sys_user_username", columnNames = "username"))
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
-@Data
-@EqualsAndHashCode(exclude = "password")
+@Getter
+@Setter
 @ToString(exclude = "password")
 public class User extends JpaAuditedEntity implements UserDetails {
 

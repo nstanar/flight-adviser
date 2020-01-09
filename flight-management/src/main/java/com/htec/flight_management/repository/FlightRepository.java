@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
  * <p>
  * Repository for flight.
  */
+@Transactional
 public interface FlightRepository extends PagingAndSortingRepository<Flight, Long> {
 
     /**
@@ -39,5 +40,11 @@ public interface FlightRepository extends PagingAndSortingRepository<Flight, Lon
             "WHERE id(source) = {sourceId} AND id(destination) = {destinationId} " +
             "RETURN source, destination, r")
     Flight findBySourceIdAndDestinationId(final Long sourceId, final Long destinationId);
+
+    @Query(value = "MATCH (source:Airport),(destination:Airport) " +
+            "WHERE id(source) = {sourceId} AND id(destination) = {destinationId} " +
+            "CREATE (source)-[r:FLIES_TO{ airlineCode: {airlineCode}, stops: {stops}, price: {price} }]->(destination) " +
+            "RETURN type(r)")
+    Flight createWith(final Long sourceId, final Long destinationId, final String airlineCode, final int stops, final double price);
 
 }

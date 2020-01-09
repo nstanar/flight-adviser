@@ -22,7 +22,7 @@ public class ItineraryDto {
     /**
      * Length.
      */
-    private final double length;
+    private final double totalDistanceInKm;
 
     /**
      * Routes.

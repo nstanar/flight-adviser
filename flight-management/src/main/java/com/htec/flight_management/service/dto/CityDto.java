@@ -2,8 +2,9 @@ package com.htec.flight_management.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.htec.domain_starter.service.dto.BaseDto;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
@@ -16,7 +17,8 @@ import javax.validation.constraints.Size;
  * Dto representing city.
  */
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @ToString(exclude = {"countryName"})
 public class CityDto extends BaseDto {
 

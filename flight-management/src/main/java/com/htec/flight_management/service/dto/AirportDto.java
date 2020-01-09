@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -29,12 +30,32 @@ public class AirportDto extends BaseDto {
     private String name;
 
     /**
-     * 3-letter IATA code. Null if not assigned/unknown.
-     * OR
-     * 4-letter ICAO code. Null if not assigned/unknown.
+     * 3 letter IATA code.
+     * Null if not assigned.
      */
-    @Size(min = 3, max = 4)
-    private String code;
+    @NotNull
+    @Size(min = 3, max = 3)
+    private String iataCode;
+
+    /**
+     * 4 letter ICAO code.
+     * Null if not assigned.
+     */
+    @NotNull
+    @Size(min = 4, max = 4)
+    private String icaoCode;
+
+    /**
+     * Latitude.
+     */
+    @NotNull
+    private Double latitude;
+
+    /**
+     * Longitude.
+     */
+    @NotNull
+    private Double longitude;
 
     /**
      * Id of the city airport belongs to.

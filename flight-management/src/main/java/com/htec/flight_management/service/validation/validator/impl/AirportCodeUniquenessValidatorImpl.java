@@ -48,12 +48,23 @@ public class AirportCodeUniquenessValidatorImpl implements AirportCodeUniqueness
     @Override
     public void validate(final @NotNull AirportDto dto) {
         final Long id = dto.getId();
-        final String code = dto.getCode();
-        final Optional<Airport> optionalAirport = airportRepository.findByCodeIgnoreCase(code);
-        optionalAirport.ifPresent(airport ->
+
+        // Iata.
+        final String iataCode = dto.getIataCode();
+        final Optional<Airport> optionalAirportByIata = airportRepository.findByIataCodeIgnoreCase(iataCode);
+        optionalAirportByIata.ifPresent(airport ->
                 AirportCodeUniquenessValidator
                         .super
-                        .validate(id, airport, AIRPORT_CODE_ALREADY_EXISTS, new Object[]{code})
+                        .validate(id, airport, AIRPORT_CODE_ALREADY_EXISTS, new Object[]{iataCode})
+        );
+
+        // Icao.
+        final String icaoCode = dto.getIataCode();
+        final Optional<Airport> optionalAirportByIcao = airportRepository.findByIcaoCodeIgnoreCase(icaoCode);
+        optionalAirportByIcao.ifPresent(airport ->
+                AirportCodeUniquenessValidator
+                        .super
+                        .validate(id, airport, AIRPORT_CODE_ALREADY_EXISTS, new Object[]{icaoCode})
         );
     }
 

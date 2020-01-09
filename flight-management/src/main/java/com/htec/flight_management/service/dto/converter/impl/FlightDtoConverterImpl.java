@@ -7,7 +7,9 @@ import com.htec.flight_management.repository.entity.Airport;
 import com.htec.flight_management.repository.entity.Flight;
 import com.htec.flight_management.service.dto.FlightDto;
 import com.htec.flight_management.service.dto.converter.FlightDtoConverter;
+import com.htec.flight_management.service.util.DistanceCalculator;
 import lombok.AllArgsConstructor;
+import org.gavaghan.geodesy.GlobalPosition;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +35,11 @@ public class FlightDtoConverterImpl implements FlightDtoConverter {
     private final AirportRepository airportRepository;
 
     /**
+     * Distance calculator.
+     */
+    private final DistanceCalculator distanceCalculator;
+
+    /**
      * Exception util.
      */
     private final ExceptionUtil exceptionUtil;
@@ -46,7 +53,6 @@ public class FlightDtoConverterImpl implements FlightDtoConverter {
      */
     @Override
     public FlightDto from(@NotNull final Flight entity) {
-        //TODO: calculate distance
         final FlightDto dto = new FlightDto();
         dto.setId(entity.getId());
 
@@ -57,6 +63,11 @@ public class FlightDtoConverterImpl implements FlightDtoConverter {
         //Set destination.
         final Airport destination = entity.getDestination();
         dto.setDestinationAirportId(destination.getId());
+
+        // Set distance.
+        final GlobalPosition sourcePosition = new GlobalPosition(source.getLatitude(), source.getLongitude(), 0.0);
+        final GlobalPosition destinationPosition = new GlobalPosition(destination.getLatitude(), destination.getLongitude(), 0.0);
+        dto.setDistanceInKm(distanceCalculator.calculateBetween(sourcePosition, destinationPosition));
 
         dto.setAirlineCode(entity.getAirlineCode());
         dto.setPrice(entity.getPrice());
@@ -81,10 +92,13 @@ public class FlightDtoConverterImpl implements FlightDtoConverter {
         final Long sourceId = dto.getSourceAirportId();
         final Optional<Airport> optionalSourceAirport = airportRepository.findById(sourceId);
 
+        final Airport source;
+        final Airport destination;
+
         // Set source.
         if (optionalSourceAirport.isPresent()) {
-            final Airport airport = optionalSourceAirport.get();
-            entity.setSource(airport);
+            source = optionalSourceAirport.get();
+            entity.setSource(source);
         } else {
             throw exceptionUtil.createNotFoundExceptionFrom(RESOURCE_DOES_NOT_EXIST, new Object[]{sourceId});
         }
@@ -94,12 +108,11 @@ public class FlightDtoConverterImpl implements FlightDtoConverter {
         final Optional<Airport> optionalDestinationAirport = airportRepository.findById(destinationId);
 
         if (optionalDestinationAirport.isPresent()) {
-            final Airport airport = optionalDestinationAirport.get();
-            entity.setDestination(airport);
+            destination = optionalDestinationAirport.get();
+            entity.setDestination(destination);
         } else {
             throw exceptionUtil.createNotFoundExceptionFrom(RESOURCE_DOES_NOT_EXIST, new Object[]{destinationId});
         }
-
 
         return entity;
     }
@@ -116,6 +129,14 @@ public class FlightDtoConverterImpl implements FlightDtoConverter {
         existingEntity.setAirlineCode(dto.getAirlineCode());
         existingEntity.setStops(dto.getStops());
         existingEntity.setPrice(dto.getPrice());
+
+        final Airport source = existingEntity.getSource();
+        final Airport destination = existingEntity.getDestination();
+
+        // Set distance.
+        final GlobalPosition sourcePosition = new GlobalPosition(source.getLatitude(), source.getLongitude(), 0.0);
+        final GlobalPosition destinationPosition = new GlobalPosition(destination.getLatitude(), destination.getLongitude(), 0.0);
+
         return existingEntity;
     }
 

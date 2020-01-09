@@ -46,7 +46,8 @@ public class Flight extends Neo4jBaseEntity {
 
     /**
      * Price.
+     * <p>
+     * Neo4j does not support {@link java.math.BigDecimal}.
      */
     private Double price;
-
 }
