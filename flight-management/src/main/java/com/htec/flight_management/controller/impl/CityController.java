@@ -83,7 +83,7 @@ public class CityController implements SearchableController<CityModel, CityDto, 
         SearchableController.super.validateExistence(cityId);
 
         final Page<CommentModel> comments = commentService
-                .findAllByCityId(cityId, pageable)
+                .findByCityId(cityId, pageable)
                 .map(commentModelAssembler::toModel);
 
         return ResponseEntity.ok(pagedResourcesAssembler.toModel(comments));
@@ -122,7 +122,7 @@ public class CityController implements SearchableController<CityModel, CityDto, 
         SearchableController.super.validateExistence(cityId);
 
         final Page<AirportModel> airports = airportService
-                .findAllByCityId(cityId, pageable)
+                .findByCityId(cityId, pageable)
                 .map(airportModelAssembler::toModel);
 
         return ResponseEntity.ok(pagedResourcesAssembler.toModel(airports));

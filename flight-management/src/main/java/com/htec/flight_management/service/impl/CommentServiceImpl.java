@@ -50,10 +50,10 @@ public class CommentServiceImpl implements CommentService {
      * @param cityId   City id.
      * @param pageable Check pageable.
      * @return Page of comments belonging to city;
-     * @see CommentService#findAllByCityId(Long, Pageable)
+     * @see CommentService#findByCityId(Long, Pageable)
      */
     @Override
-    public Page<CommentDto> findAllByCityId(final @NotNull Long cityId, final @NotNull Pageable pageable) {
+    public Page<CommentDto> findByCityId(final @NotNull Long cityId, final @NotNull Pageable pageable) {
         log.info("Fetching {} of comments belonging to city {}. ", pageable, cityId);
         return repository
                 .findAllByCityId(cityId, pageable)

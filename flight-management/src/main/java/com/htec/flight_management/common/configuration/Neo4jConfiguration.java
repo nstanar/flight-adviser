@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableTransactionManagement
 @EnableNeo4jAuditing
-@EnableNeo4jRepositories(basePackages = {"com.htec.flight_management.repository"})
+@EnableNeo4jRepositories(basePackages = {"com.htec.flight_management.repository", "com.htec.flight_management.repository.impl"})
 @EntityScan(basePackages = {"com.htec.flight_management.repository.entity"})
 public class Neo4jConfiguration {
 

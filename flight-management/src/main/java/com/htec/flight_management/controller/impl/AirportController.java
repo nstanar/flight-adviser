@@ -71,7 +71,7 @@ public class AirportController implements SearchableController<AirportModel, Air
         SearchableController.super.validateExistence(sourceAirportId);
 
         final Page<FlightModel> flights = flightService
-                .findAllBySourceId(sourceAirportId, pageable)
+                .findBySourceId(sourceAirportId, pageable)
                 .map(flightModelAssembler::toModel);
 
         return ResponseEntity.ok(pagedResourcesAssembler.toModel(flights));

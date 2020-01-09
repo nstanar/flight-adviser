@@ -52,8 +52,6 @@ public class AirportDtoConverterImpl implements AirportDtoConverter {
         dto.setName(entity.getName());
         dto.setCode(entity.getCode());
         dto.setCityId(entity.getCity().getId());
-        dto.setCityName(entity.getCity().getName());
-        dto.setCountryName(entity.getCity().getCountry().getName());
         return dto;
     }
 

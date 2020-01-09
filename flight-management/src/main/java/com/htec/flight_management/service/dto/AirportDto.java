@@ -42,16 +42,4 @@ public class AirportDto extends BaseDto {
     @JsonIgnore
     private Long cityId;
 
-    /**
-     * Name of the city airport belongs to.
-     */
-    @JsonIgnore
-    private String cityName;
-
-    /**
-     * Name of the country airport belongs to.
-     */
-    @JsonIgnore
-    private String countryName;
-
 }

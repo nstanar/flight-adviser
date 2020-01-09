@@ -55,10 +55,10 @@ public class AirportServiceImpl implements AirportService {
      * @param cityId   Id of the city.
      * @param pageable Check {@link Pageable}.
      * @return Page of airports.
-     * @see AirportService#findAllByCityId(Long, Pageable)
+     * @see AirportService#findByCityId(Long, Pageable)
      */
     @Override
-    public Page<AirportDto> findAllByCityId(final @NotNull Long cityId, final @NotNull Pageable pageable) {
+    public Page<AirportDto> findByCityId(final @NotNull Long cityId, final @NotNull Pageable pageable) {
         log.info("Fetching {} of airports for city of id {}.", pageable, cityId);
         return repository
                 .findAllByCityId(cityId, pageable)

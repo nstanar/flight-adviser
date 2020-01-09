@@ -18,7 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.ConstraintViolationException;
-import java.util.Optional;
 
 import static com.htec.domain_starter.common.constants.MessageSourceKeys.RESOURCE_DOES_NOT_EXIST;
 
@@ -112,8 +111,8 @@ public interface PagingAndSortingController<M extends RepresentationModel<M>, D 
      * @param id Id.
      */
     default void validateExistence(final Long id) {
-        final Optional<D> optionalDto = getService().findById(id);
-        if (optionalDto.isEmpty()) {
+        final boolean exists = getService().existsById(id);
+        if (!exists) {
             throw getExceptionUtil().createNotFoundExceptionFrom(RESOURCE_DOES_NOT_EXIST, new Object[]{id});
         }
     }

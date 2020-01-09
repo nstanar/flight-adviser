@@ -5,8 +5,6 @@ import lombok.Getter;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
-import java.math.BigDecimal;
-
 /**
  * @author Nikola Stanar
  * <p>
@@ -18,14 +16,14 @@ import java.math.BigDecimal;
 public class FlightModel extends RepresentationModel<FlightModel> {
 
     /**
-     * Destination airport.
+     * Destination airport id.
      */
-    private final AirportModel destination;
+    private final Long destinationAirportId;
 
     /**
-     * Airline.
+     * 2-letter (IATA) or 3-letter (ICAO) code of the airline.
      */
-    private final AirlineModel airline;
+    private final String airlineCode;
 
     /**
      * Number of stops.
@@ -36,6 +34,6 @@ public class FlightModel extends RepresentationModel<FlightModel> {
     /**
      * Price.
      */
-    private final BigDecimal price;
+    private final Double price;
 
 }

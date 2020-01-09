@@ -32,8 +32,6 @@ public class AirportModelAssembler implements RepresentationModelAssembler<Airpo
         final AirportModel model = AirportModel.builder()
                 .name(dto.getName())
                 .code(dto.getCode())
-                .cityName(dto.getCityName())
-                .countryName(dto.getCountryName())
                 .build();
 
         // Add self link.

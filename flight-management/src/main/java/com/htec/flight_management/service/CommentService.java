@@ -29,7 +29,7 @@ public interface CommentService extends PagingAndSortingService<CommentDto, Comm
      */
     @PreAuthorize("isAuthenticated()")
     @Transactional(readOnly = true)
-    Page<CommentDto> findAllByCityId(@NotNull final Long cityId, @NotNull final Pageable pageable);
+    Page<CommentDto> findByCityId(@NotNull final Long cityId, @NotNull final Pageable pageable);
 
 
     /**

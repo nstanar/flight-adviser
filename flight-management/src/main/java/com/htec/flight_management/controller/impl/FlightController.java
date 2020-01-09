@@ -40,6 +40,7 @@ public class FlightController implements PagingAndSortingController<FlightModel,
      * @see PagingAndSortingController#getService()
      */
     @Override
+
     public PagingAndSortingService<FlightDto, Flight> getService() {
         return service;
     }

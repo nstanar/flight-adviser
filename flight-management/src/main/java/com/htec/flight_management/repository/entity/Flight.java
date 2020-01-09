@@ -4,12 +4,10 @@ import com.htec.domain_starter.repository.entity.neo4j.Neo4jBaseEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.neo4j.ogm.annotation.NodeEntity;
-import org.neo4j.ogm.annotation.Relationship;
-
-import java.math.BigDecimal;
-
-import static org.neo4j.ogm.annotation.Relationship.INCOMING;
+import org.neo4j.ogm.annotation.EndNode;
+import org.neo4j.ogm.annotation.Index;
+import org.neo4j.ogm.annotation.RelationshipEntity;
+import org.neo4j.ogm.annotation.StartNode;
 
 /**
  * @author Nikola Stanar
@@ -19,26 +17,26 @@ import static org.neo4j.ogm.annotation.Relationship.INCOMING;
 @Getter
 @Setter
 @NoArgsConstructor
-@NodeEntity
+@RelationshipEntity("FLIES_TO")
 public class Flight extends Neo4jBaseEntity {
 
     /**
      * Source airport.
      */
-    @Relationship(type = "HAS_FLIGHT", direction = INCOMING)
+    @StartNode
     private Airport source;
 
     /**
      * Destination airport.
      */
-    @Relationship(type = "FLIES_TO")
+    @EndNode
     private Airport destination;
 
     /**
-     * Airline that hosts the flight.
+     * 2-letter (IATA) or 3-letter (ICAO) code of the airline.
      */
-    @Relationship(type = "PROVIDES_FLIGHT", direction = INCOMING)
-    private Airline airline;
+    @Index
+    private String airlineCode;
 
     /**
      * Number of stops.
@@ -49,6 +47,6 @@ public class Flight extends Neo4jBaseEntity {
     /**
      * Price.
      */
-    private BigDecimal price;
+    private Double price;
 
 }

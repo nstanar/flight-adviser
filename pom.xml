@@ -30,6 +30,7 @@
         <apache-commons.version>3.9</apache-commons.version>
         <apache-commons-collections.version>4.4</apache-commons-collections.version>
         <spring-security-oauth2.version>2.3.8.RELEASE</spring-security-oauth2.version>
+        <streamx.version>0.7.2</streamx.version>
         <git-commit.version>2.2.6</git-commit.version>
     </properties>
 
@@ -66,6 +67,12 @@
                 <groupId>org.springframework.security.oauth</groupId>
                 <artifactId>spring-security-oauth2</artifactId>
                 <version>${spring-security-oauth2.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>one.util</groupId>
+                <artifactId>streamex</artifactId>
+                <version>${streamx.version}</version>
             </dependency>
 
         </dependencies>

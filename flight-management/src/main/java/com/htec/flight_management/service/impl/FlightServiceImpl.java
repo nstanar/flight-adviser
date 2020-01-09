@@ -49,10 +49,10 @@ public class FlightServiceImpl implements FlightService {
      * @param sourceId Source airport id.
      * @param pageable Check pageable.
      * @return Page of flights.
-     * @see FlightService#findAllBySourceId(Long, Pageable)
+     * @see FlightService#findBySourceId(Long, Pageable)
      */
     @Override
-    public Page<FlightDto> findAllBySourceId(final Long sourceId, final Pageable pageable) {
+    public Page<FlightDto> findBySourceId(final Long sourceId, final Pageable pageable) {
         log.info("Fetching {} of flights matching source airport id {}.", pageable, sourceId);
         return repository
                 .findAllBySourceId(sourceId, pageable)

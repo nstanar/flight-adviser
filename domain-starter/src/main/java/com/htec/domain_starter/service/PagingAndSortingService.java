@@ -64,6 +64,19 @@ public interface PagingAndSortingService<D extends BaseDto, E extends BaseEntity
     }
 
     /**
+     * Checks if dto exists by id.
+     *
+     * @param id ID of the DTO.
+     * @return True if exists.
+     */
+    @PreAuthorize("isAuthenticated()")
+    @Transactional(readOnly = true)
+    default boolean existsById(@NotNull final Long id) {
+        return getRepository()
+                .existsById(id);
+    }
+
+    /**
      * Creates DTO from method argument.
      *
      * @param dto Dto holding content that is about to be created.

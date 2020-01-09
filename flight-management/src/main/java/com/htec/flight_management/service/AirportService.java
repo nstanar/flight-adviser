@@ -26,6 +26,6 @@ public interface AirportService extends SearchableService<AirportDto, Airport> {
      */
     @PreAuthorize("isAuthenticated()")
     @Transactional(readOnly = true)
-    Page<AirportDto> findAllByCityId(@NotNull final Long cityId, @NotNull final Pageable pageable);
+    Page<AirportDto> findByCityId(@NotNull final Long cityId, @NotNull final Pageable pageable);
 
 }

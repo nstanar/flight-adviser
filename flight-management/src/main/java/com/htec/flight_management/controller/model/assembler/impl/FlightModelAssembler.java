@@ -21,16 +21,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class FlightModelAssembler implements RepresentationModelAssembler<FlightDto, FlightModel> {
 
     /**
-     * Airport model assembler.
-     */
-    private final AirportModelAssembler airportModelAssembler;
-
-    /**
-     * Airline model assembler.
-     */
-    private final AirlineModelAssembler airlineModelAssembler;
-
-    /**
      * Assembles flight model from flight dto.
      *
      * @param dto Dto.
@@ -40,8 +30,8 @@ public class FlightModelAssembler implements RepresentationModelAssembler<Flight
     @Override
     public FlightModel toModel(final FlightDto dto) {
         final FlightModel model = FlightModel.builder()
-                .destination(airportModelAssembler.toModel(dto.getDestination()))
-                .airline(airlineModelAssembler.toModel(dto.getAirline()))
+                .destinationAirportId(dto.getDestinationAirportId())
+                .airlineCode(dto.getAirlineCode())
                 .stops(dto.getStops())
                 .price(dto.getPrice())
                 .build();

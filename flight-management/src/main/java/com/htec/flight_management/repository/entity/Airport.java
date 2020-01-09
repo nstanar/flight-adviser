@@ -8,8 +8,6 @@ import org.neo4j.ogm.annotation.Index;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
-import java.util.Set;
-
 import static org.neo4j.ogm.annotation.Relationship.INCOMING;
 
 /**
@@ -42,11 +40,5 @@ public class Airport extends Neo4jBaseEntity {
      */
     @Relationship(type = "HAS_AIRPORT", direction = INCOMING)
     private City city;
-
-    /**
-     * Flights airport have.
-     */
-    @Relationship(value = "HAS_FLIGHT")
-    private Set<Flight> flights;
 
 }

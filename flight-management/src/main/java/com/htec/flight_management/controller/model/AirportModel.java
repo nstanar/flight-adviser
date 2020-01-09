@@ -27,14 +27,4 @@ public class AirportModel extends RepresentationModel<AirportModel> {
      */
     private final String code;
 
-    /**
-     * Name of the city airport belongs to.
-     */
-    private final String cityName;
-
-    /**
-     * Name of the country airport belongs to.
-     */
-    private final String countryName;
-
 }

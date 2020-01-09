@@ -22,6 +22,6 @@ public interface FlightService extends PagingAndSortingService<FlightDto, Flight
      * @return Page of flights matching source airport id.
      */
     @Transactional(readOnly = true)
-    Page<FlightDto> findAllBySourceId(final Long sourceId, final Pageable pageable);
+    Page<FlightDto> findBySourceId(final Long sourceId, final Pageable pageable);
 
 }

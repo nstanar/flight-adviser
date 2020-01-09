@@ -6,8 +6,12 @@
     </appender>
 
     <logger name="com.htec" level="INFO"/>
+    <!-- Switch this to info -->
+    <logger name="org.springframework.data.neo4j" level="DEBUG"/>
+    <logger name="org.springframework.data.neo4j.support.query" level="DEBUG"/>
 
-    <root level="info">
+
+    <root level="INFO">
         <appender-ref ref="STDOUT"/>
     </root>
 </configuration>

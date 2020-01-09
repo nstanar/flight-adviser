@@ -10,7 +10,6 @@ import lombok.ToString;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
 
 /**
  * @author Nikola Stanar
@@ -37,22 +36,10 @@ public class FlightDto extends BaseDto {
     private Long destinationAirportId;
 
     /**
-     * Destination airport.
-     */
-    @JsonIgnore
-    private AirportDto destination;
-
-    /**
-     * Id of the airline.
+     * 2-letter (IATA) or 3-letter (ICAO) code of the airline.
      */
     @NotNull
-    private Long airlineId;
-
-    /**
-     * Airline.
-     */
-    @JsonIgnore
-    private AirlineDto airline;
+    private String airlineCode;
 
     /**
      * Number of stops.
@@ -67,6 +54,6 @@ public class FlightDto extends BaseDto {
      */
     @NotNull
     @DecimalMin("0")
-    private BigDecimal price;
+    private Double price;
 
 }

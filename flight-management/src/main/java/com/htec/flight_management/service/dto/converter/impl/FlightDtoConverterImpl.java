@@ -2,14 +2,10 @@ package com.htec.flight_management.service.dto.converter.impl;
 
 import com.htec.domain_starter.repository.BaseEntity;
 import com.htec.domain_starter.service.validation.util.ExceptionUtil;
-import com.htec.flight_management.repository.AirlineRepository;
 import com.htec.flight_management.repository.AirportRepository;
-import com.htec.flight_management.repository.entity.Airline;
 import com.htec.flight_management.repository.entity.Airport;
 import com.htec.flight_management.repository.entity.Flight;
 import com.htec.flight_management.service.dto.FlightDto;
-import com.htec.flight_management.service.dto.converter.AirlineDtoConverter;
-import com.htec.flight_management.service.dto.converter.AirportDtoConverter;
 import com.htec.flight_management.service.dto.converter.FlightDtoConverter;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,21 +33,6 @@ public class FlightDtoConverterImpl implements FlightDtoConverter {
     private final AirportRepository airportRepository;
 
     /**
-     * Airport dto converter.
-     */
-    private final AirportDtoConverter airportDtoConverter;
-
-    /**
-     * Repository for airline.
-     */
-    private final AirlineRepository airlineRepository;
-
-    /**
-     * Airline dto converter.
-     */
-    private final AirlineDtoConverter airlineDtoConverter;
-
-    /**
      * Exception util.
      */
     private final ExceptionUtil exceptionUtil;
@@ -65,15 +46,22 @@ public class FlightDtoConverterImpl implements FlightDtoConverter {
      */
     @Override
     public FlightDto from(@NotNull final Flight entity) {
+        //TODO: calculate distance
         final FlightDto dto = new FlightDto();
         dto.setId(entity.getId());
-        dto.setSourceAirportId(entity.getSource().getId());
-        dto.setDestinationAirportId(entity.getDestination().getId());
-        dto.setDestination(airportDtoConverter.from(entity.getDestination()));
-        dto.setAirlineId(entity.getAirline().getId());
-        dto.setAirline(airlineDtoConverter.from(entity.getAirline()));
+
+        // Set source.
+        final Airport source = entity.getSource();
+        dto.setSourceAirportId(source.getId());
+
+        //Set destination.
+        final Airport destination = entity.getDestination();
+        dto.setDestinationAirportId(destination.getId());
+
+        dto.setAirlineCode(entity.getAirlineCode());
         dto.setPrice(entity.getPrice());
         dto.setStops(entity.getStops());
+
         return dto;
     }
 
@@ -86,6 +74,7 @@ public class FlightDtoConverterImpl implements FlightDtoConverter {
     @Override
     public Flight from(@NotNull final FlightDto dto) {
         final Flight entity = new Flight();
+        entity.setAirlineCode(dto.getAirlineCode());
         entity.setStops(dto.getStops());
         entity.setPrice(dto.getPrice());
 
@@ -108,18 +97,7 @@ public class FlightDtoConverterImpl implements FlightDtoConverter {
             final Airport airport = optionalDestinationAirport.get();
             entity.setDestination(airport);
         } else {
-            throw exceptionUtil.createNotFoundExceptionFrom(RESOURCE_DOES_NOT_EXIST, new Object[]{sourceId});
-        }
-
-        // Set airline.
-        final Long airlineId = dto.getAirlineId();
-        final Optional<Airline> optionalAirline = airlineRepository.findById(airlineId);
-
-        if (optionalAirline.isPresent()) {
-            final Airline airline = optionalAirline.get();
-            entity.setAirline(airline);
-        } else {
-            throw exceptionUtil.createNotFoundExceptionFrom(RESOURCE_DOES_NOT_EXIST, new Object[]{sourceId});
+            throw exceptionUtil.createNotFoundExceptionFrom(RESOURCE_DOES_NOT_EXIST, new Object[]{destinationId});
         }
 
 
@@ -135,6 +113,7 @@ public class FlightDtoConverterImpl implements FlightDtoConverter {
      */
     @Override
     public Flight from(@NotNull final FlightDto dto, @NotNull final Flight existingEntity) {
+        existingEntity.setAirlineCode(dto.getAirlineCode());
         existingEntity.setStops(dto.getStops());
         existingEntity.setPrice(dto.getPrice());
         return existingEntity;
