@@ -20,6 +20,16 @@ import java.util.regex.Pattern;
 public class AirportRecordsConverterImpl implements AirportRecordsConverter {
 
     /**
+     * Iata pattern.
+     */
+    private final Pattern iataPattern = Pattern.compile("[a-zA-Z]{3}");
+
+    /**
+     * Icao pattern.
+     */
+    private final Pattern icaoPattern = Pattern.compile("[a-zA-Z]{4}");
+
+    /**
      * Converts from airports data structure
      * to list of airport records.
      *
@@ -51,9 +61,6 @@ public class AirportRecordsConverterImpl implements AirportRecordsConverter {
                         .latitude(Double.parseDouble(latitude))
                         .longitude(Double.parseDouble(longitude))
                         .build();
-
-                final Pattern iataPattern = Pattern.compile("[a-zA-Z]{3}");
-                final Pattern icaoPattern = Pattern.compile("[a-zA-Z]{4}");
 
                 if (StringUtils.isNotBlank(airportRecord.getIataCode()) && iataPattern.matcher(airportRecord.getIataCode()).matches() &&
                         StringUtils.isNotBlank(airportRecord.getIcaoCode()) && icaoPattern.matcher(airportRecord.getIcaoCode()).matches()

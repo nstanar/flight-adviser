@@ -51,7 +51,7 @@ public class City extends Neo4jBaseEntity {
     /**
      * Description of the city.
      */
-    private String description;
+    private String description = "Description will be provided in near future.";
 
     /**
      * Comments for the city.

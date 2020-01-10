@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "f312c91a-ed70-4ef1-8ec4-1f1a4e769a42",
-		"name": "Countries",
+		"_postman_id": "fda194c1-5a31-4971-89e9-ab54f5f1a851",
+		"name": "Flights",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -155,7 +155,7 @@
 			"response": []
 		},
 		{
-			"name": "Get Countries (Authenticated)",
+			"name": "Get Flight By Id (Authenticated)",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -170,221 +170,22 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8081/countries?sort=name,asc",
+					"raw": "http://localhost:8081/flights/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8081",
 					"path": [
-						"countries"
-					],
-					"query": [
-						{
-							"key": "sort",
-							"value": "name,asc"
-						}
+						"flights",
+						"1"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Get Cities Of The Country (Authenticated)",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{user_access_token}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8081/countries/83042/cities?sort=city.name,asc",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8081",
-					"path": [
-						"countries",
-						"83042",
-						"cities"
-					],
-					"query": [
-						{
-							"key": "sort",
-							"value": "city.name,asc"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get Country By Id (Authenticated)",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{user_access_token}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8081/countries/83042",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8081",
-					"path": [
-						"countries",
-						"83042"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Search Countries By Name  (Authenticated)",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{user_access_token}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8081/countries/search?nameFilter=zealand",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8081",
-					"path": [
-						"countries",
-						"search"
-					],
-					"query": [
-						{
-							"key": "nameFilter",
-							"value": "zealand"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Create Country (Only Admin)",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{user_access_token}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"name": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"name\": \"NEW COUNTRY\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8081/countries",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8081",
-					"path": [
-						"countries"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Update Country By Id (Only Admin)",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{user_access_token}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "PUT",
-				"header": [
-					{
-						"key": "Content-Type",
-						"name": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"name\": \"New Country Edited\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8081/countries/83042",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8081",
-					"path": [
-						"countries",
-						"83042"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Delete Country By Id (Only Admin)",
+			"name": "Delete Flight By Id (Only Admin)",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -401,8 +202,8 @@
 					{
 						"key": "Content-Type",
 						"name": "Content-Type",
-						"value": "application/json",
-						"type": "text"
+						"type": "text",
+						"value": "application/json"
 					}
 				],
 				"body": {
@@ -415,22 +216,22 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8081/countries/83042",
+					"raw": "http://localhost:8081/flights/2",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8081",
 					"path": [
-						"countries",
-						"83042"
+						"flights",
+						"2"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Create City In Country (Only Admin)",
+			"name": "Update Flight By Id (Only Admin)",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -442,7 +243,7 @@
 						}
 					]
 				},
-				"method": "POST",
+				"method": "PUT",
 				"header": [
 					{
 						"key": "Content-Type",
@@ -453,7 +254,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Amsterdam\",\n\t\"description\": \"Some dummy description.\"\n}",
+					"raw": "{\n\t\"sourceAirportId\": 1,\n\t\"destinationAirportId\": 2,\n\t\"airlineId\": 1,\n\t\"stops\": 0,\n\t\"price\": 400\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -461,16 +262,15 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8081/countries/1/cities",
+					"raw": "http://localhost:8081/flights/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8081",
 					"path": [
-						"countries",
-						"1",
-						"cities"
+						"flights",
+						"1"
 					]
 				}
 			},

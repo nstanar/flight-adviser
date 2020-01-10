@@ -9,6 +9,7 @@ import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 /**
@@ -35,6 +36,7 @@ public class AirportDto extends BaseDto {
      */
     @NotNull
     @Size(min = 3, max = 3)
+    @Pattern(regexp = "[a-zA-Z]{3}`")
     private String iataCode;
 
     /**
@@ -43,6 +45,7 @@ public class AirportDto extends BaseDto {
      */
     @NotNull
     @Size(min = 4, max = 4)
+    @Pattern(regexp = "[a-zA-Z]{4}")
     private String icaoCode;
 
     /**

@@ -1,0 +1,61 @@
+{
+	"info": {
+		"_postman_id": "0e87fefd-25b0-4eb2-8606-1e9868ef230f",
+		"name": "Import",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Import airports and routes (Only Admin)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "airports",
+							"type": "file",
+							"src": "/Users/stanari/Desktop/FYI/airports.txt"
+						},
+						{
+							"key": "routes",
+							"type": "file",
+							"src": "/Users/stanari/Desktop/FYI/routes.txt"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/import",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"import"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

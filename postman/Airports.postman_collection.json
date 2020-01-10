@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "d52e55bc-e646-4d7e-859c-9c9d0893ed50",
-		"name": "Cities",
+		"_postman_id": "55b3d566-144f-47bf-89aa-3a04a8ccc975",
+		"name": "Airports",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -155,7 +155,7 @@
 			"response": []
 		},
 		{
-			"name": "Get City By Id (Authenticated)",
+			"name": "Get Airport By Id (Authenticated)",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -170,14 +170,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8081/cities/1",
+					"raw": "http://localhost:8081/airports/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8081",
 					"path": [
-						"cities",
+						"airports",
 						"1"
 					]
 				}
@@ -185,47 +185,7 @@
 			"response": []
 		},
 		{
-			"name": "Search Cities By Name  (Authenticated)",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{user_access_token}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8081/cities/search?sort=name,asc&nameFilter=Lon",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8081",
-					"path": [
-						"cities",
-						"search"
-					],
-					"query": [
-						{
-							"key": "sort",
-							"value": "name,asc"
-						},
-						{
-							"key": "nameFilter",
-							"value": "Lon"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Update City By Id (Only Admin)",
+			"name": "Update Airport By Id (Only Admin)",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -248,7 +208,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"EDITED\",\n\t\"description\": \"EDITED\"\n}",
+					"raw": "{\n\t\"name\": \"New Airport\",\n    \"iataCode\": \"ZZZ\",\n    \"icaoCode\": \"ZZZZ\",\n    \"latitude\": 49.20,\n    \"longitude\": 51.20\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -256,22 +216,22 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8081/cities/2",
+					"raw": "http://localhost:8081/airports/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8081",
 					"path": [
-						"cities",
-						"2"
+						"airports",
+						"1"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Delete City By Id (Only Admin)",
+			"name": "Delete Airport By Id (Only Admin)",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -288,8 +248,8 @@
 					{
 						"key": "Content-Type",
 						"name": "Content-Type",
-						"value": "application/json",
-						"type": "text"
+						"type": "text",
+						"value": "application/json"
 					}
 				],
 				"body": {
@@ -302,69 +262,22 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8081/cities/3",
+					"raw": "http://localhost:8081/airports/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8081",
 					"path": [
-						"cities",
-						"3"
+						"airports",
+						"1"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Create Comment For City (Authenticated)",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{user_access_token}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"name": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"title\": \"NEW COMMENT\",\n    \"description\": \"Description for the new comment.\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8081/cities/1/comments",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8081",
-					"path": [
-						"cities",
-						"1",
-						"comments"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get Comments For City (Authenticated)",
+			"name": "Search Airports By Name  (Authenticated)",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -377,34 +290,26 @@
 					]
 				},
 				"method": "GET",
-				"header": [
-					{
-						"key": "Content-Type",
-						"name": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"url": {
-					"raw": "http://localhost:8081/cities/32/comments?size=20&sort=comment.createdDate,desc",
+					"raw": "http://localhost:8081/airports/search?sort=name,asc&nameFilter=London",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8081",
 					"path": [
-						"cities",
-						"32",
-						"comments"
+						"airports",
+						"search"
 					],
 					"query": [
 						{
-							"key": "size",
-							"value": "20"
+							"key": "sort",
+							"value": "name,asc"
 						},
 						{
-							"key": "sort",
-							"value": "comment.createdDate,desc"
+							"key": "nameFilter",
+							"value": "London"
 						}
 					]
 				}
@@ -412,7 +317,10 @@
 			"response": []
 		},
 		{
-			"name": "Get Airports In City (Authenticated)",
+			"name": "Create Flight For Airport (Only Admin)",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -429,57 +337,13 @@
 					{
 						"key": "Content-Type",
 						"name": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8081/cities/144415/airports?sort=airport.name",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8081",
-					"path": [
-						"cities",
-						"144415",
-						"airports"
-					],
-					"query": [
-						{
-							"key": "sort",
-							"value": "airport.name"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Create Airport In City (Only Admin)",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{user_access_token}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"name": "Content-Type",
 						"type": "text",
 						"value": "application/json"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Nikola Tesla\",\n    \"iataCode\": \"ZZZ\",\n    \"icaoCode\": \"ZZZZ\",\n    \"latitude\": 49.20,\n    \"longitude\": 51.20\n}",
+					"raw": "{\n\n   \"destinationAirportId\": 49,\n   \n   \"airlineCode\": \"GER\",\n\n   \"stops\": 0,\n   \n   \"price\": 300.76\n\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -487,16 +351,16 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8081/cities/144415/airports",
+					"raw": "http://localhost:8081/airports/46/flights",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8081",
 					"path": [
-						"cities",
-						"144415",
-						"airports"
+						"airports",
+						"46",
+						"flights"
 					]
 				}
 			},
