@@ -88,7 +88,6 @@ public class CityDtoConverterImpl implements CityDtoConverter {
     public City from(@NotNull final CityDto dto, @NotNull final City existingEntity) {
         existingEntity.setName(dto.getName());
         existingEntity.setDescription(dto.getDescription());
-        existingEntity.setCityNameCountryName();
         return existingEntity;
     }
 

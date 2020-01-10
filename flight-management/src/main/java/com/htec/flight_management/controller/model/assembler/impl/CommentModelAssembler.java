@@ -1,5 +1,6 @@
 package com.htec.flight_management.controller.model.assembler.impl;
 
+import com.htec.flight_management.controller.impl.CityController;
 import com.htec.flight_management.controller.impl.CommentController;
 import com.htec.flight_management.controller.model.CommentModel;
 import com.htec.flight_management.service.dto.CommentDto;
@@ -8,6 +9,7 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
+import static com.htec.flight_management.common.constants.HypermediaRelNames.FOR_CITY;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -43,6 +45,13 @@ public class CommentModelAssembler implements RepresentationModelAssembler<Comme
         ).withSelfRel();
 
         commentModel.add(selfLink);
+
+        // Add city link.
+        final Link cityLink = linkTo(methodOn
+                (CityController.class).findBy(dto.getCityId())
+        ).withRel(FOR_CITY);
+
+        commentModel.add(cityLink);
 
         return commentModel;
     }

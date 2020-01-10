@@ -17,6 +17,11 @@ public final class HypermediaRelNames {
     public static final String HAVING_CITIES = "havingCities";
 
     /**
+     * Defines "in city" relation.
+     */
+    public static final String IN_CITY = "inCity";
+
+    /**
      * Defines "for city" relation.
      */
     public static final String FOR_CITY = "forCity";

@@ -31,9 +31,6 @@ public class RouteRecordsConverterImpl implements RouteRecordsConverter {
         final List<RouteRecord> routeRecords = new ArrayList<>();
 
         for (final List<String> route : routes) {
-
-            final String sourceAirportId = route.get(3);
-            final String destinationAirportId = route.get(5);
             final String stops = route.get(7);
             final String price = route.get(9);
 

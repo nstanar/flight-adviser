@@ -4,9 +4,9 @@ import com.htec.domain_starter.service.validation.util.ExceptionUtil;
 import com.htec.flight_management.repository.CityRepository;
 import com.htec.flight_management.repository.entity.Airport;
 import com.htec.flight_management.repository.entity.City;
-import com.htec.flight_management.service.AirportsShortestPathService;
 import com.htec.flight_management.service.ItineraryService;
-import com.htec.flight_management.service.dto.AirportShortestPathRecordDto;
+import com.htec.flight_management.service.client.Neo4jClient;
+import com.htec.flight_management.service.client.dto.CheapestRouteDto;
 import com.htec.flight_management.service.dto.ItineraryDto;
 import com.htec.flight_management.service.dto.converter.ItineraryDtoConverter;
 import lombok.AllArgsConstructor;
@@ -15,6 +15,7 @@ import org.apache.commons.collections4.IterableUtils;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,9 +34,9 @@ import static com.htec.domain_starter.common.constants.MessageSourceKeys.RESOURC
 public class ItineraryServiceImpl implements ItineraryService {
 
     /**
-     * Dijkstra repository.
+     * Neo4j client.
      */
-    private final AirportsShortestPathService airportsShortestPathRepository;
+    private final Neo4jClient neo4jClient;
 
     /**
      * City repository.
@@ -92,14 +93,14 @@ public class ItineraryServiceImpl implements ItineraryService {
                 .toArray();
 
 
-        final Map<String, List<AirportShortestPathRecordDto>> allOptionsForGivenCities = new HashMap<>();
+        final Map<String, List<CheapestRouteDto>> allOptionsForGivenCities = new HashMap<>();
 
         for (final long sourceAirportId : sourceAirportIds) {
             for (final long destinationAirportId : destinationAirportIds) {
-                final List<AirportShortestPathRecordDto> shortestPath = airportsShortestPathRepository.findCheapestBetween(sourceAirportId, destinationAirportId);
-                if (CollectionUtils.isNotEmpty(shortestPath)) {
+                final List<CheapestRouteDto> cheapestPath = neo4jClient.findCheapestPathBetween(sourceAirportId, destinationAirportId);
+                if (CollectionUtils.isNotEmpty(cheapestPath)) {
                     final String key = sourceAirportId + "" + destinationAirportId;
-                    allOptionsForGivenCities.put(key, IterableUtils.toList(shortestPath));
+                    allOptionsForGivenCities.put(key, IterableUtils.toList(cheapestPath));
                 }
             }
         }
@@ -108,15 +109,15 @@ public class ItineraryServiceImpl implements ItineraryService {
                 .keySet()
                 .stream()
                 .min((key1, key2) -> {
-                    final List<AirportShortestPathRecordDto> option1 = allOptionsForGivenCities.get(key1);
-                    final List<AirportShortestPathRecordDto> option2 = allOptionsForGivenCities.get(key2);
-                    final double totalPrice1 = option1.get(0).getTotalCost();
-                    final double totalPrice2 = option2.get(0).getTotalCost();
-                    return Double.compare(totalPrice1, totalPrice2);
+                    final List<CheapestRouteDto> option1 = allOptionsForGivenCities.get(key1);
+                    final List<CheapestRouteDto> option2 = allOptionsForGivenCities.get(key2);
+                    final BigDecimal totalPrice1 = option1.stream().map(CheapestRouteDto::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+                    final BigDecimal totalPrice2 = option2.stream().map(CheapestRouteDto::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+                    return totalPrice1.compareTo(totalPrice2);
                 });
 
         if (optionalBest.isPresent()) {
-            final List<AirportShortestPathRecordDto> bestOption = allOptionsForGivenCities.get(optionalBest.get());
+            final List<CheapestRouteDto> bestOption = allOptionsForGivenCities.get(optionalBest.get());
             final ItineraryDto itinerary = itineraryDtoConverter.from(bestOption);
             result = Optional.of(itinerary);
         }

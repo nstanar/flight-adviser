@@ -81,10 +81,10 @@ public class DataImporterImpl implements DataImporter {
         final List<AirportRecord> airportRecords = airportRecordsConverter.from(airports);
         final List<RouteRecord> filteredRouteRecords = routeRecordsSecondLevelFilter.filterFrom(airportRecords, routeRecordsConverter.from(routes));
 
-        // Create countries, cities, airports.
         final Set<Country> countries = new HashSet<>();
         final Set<City> cities = new HashSet<>();
         final Set<Airport> airportSet = new HashSet<>();
+        final Set<Flight> flights = new HashSet<>();
 
         airportRecords.forEach(airportRecord -> {
             final Country country = new Country();
@@ -93,7 +93,7 @@ public class DataImporterImpl implements DataImporter {
 
             final City city = new City();
             city.setName(airportRecord.getCityName());
-            country.getCities().add(city);
+            city.setCountry(country);
             cities.add(city);
 
             final Airport airport = new Airport();
@@ -104,13 +104,33 @@ public class DataImporterImpl implements DataImporter {
             airport.setIcaoCode(icaoCode);
             airport.setLatitude(airportRecord.getLatitude());
             airport.setLongitude(airportRecord.getLongitude());
-            city.getAirports().add(airport);
+            airport.setCity(city);
             airportSet.add(airport);
         });
 
+        // Create countries.
+        final Iterable<Country> createdCountries = countryRepository.saveAll(countries);
+        final Map<String, Country> countriesByName = new HashMap<>();
+        createdCountries.forEach(country -> countriesByName.put(country.getName(), country));
+
+        // Create cities.
+        cities.forEach(city -> {
+            final Country country = countriesByName.get(city.getCountry().getName());
+            city.setCountry(country);
+            country.getCities().add(city);
+        });
+        final Iterable<City> createdCities = cityRepository.saveAll(cities);
+
+        final Map<String, City> citiesByCityCountryName = new HashMap<>();
+        createdCities.forEach(city -> citiesByCityCountryName.put(city.getCityNameCountryName(), city));
+
+        // Create airports.
+        airportSet.forEach(airport -> {
+            final City city = citiesByCityCountryName.get(airport.getCity().getCityNameCountryName());
+            airport.setCity(city);
+            city.getAirports().add(airport);
+        });
         final Iterable<Airport> createdAirports = airportRepository.saveAll(airportSet);
-        cityRepository.saveAll(cities);
-        countryRepository.saveAll(countries);
 
         final Map<String, Airport> airportsByIataCode = new HashMap<>();
         final Map<String, Airport> airportsByIcaoCode = new HashMap<>();
@@ -120,7 +140,6 @@ public class DataImporterImpl implements DataImporter {
         });
 
         // Create flights.
-        final Set<Flight> flights = new HashSet<>();
         filteredRouteRecords.forEach(routeRecord -> {
 
             // Source.
@@ -146,17 +165,15 @@ public class DataImporterImpl implements DataImporter {
                 flight.getDestination().setInc(flight);
 
                 flights.add(flight);
-
-                // Workaround because saving set of flights didn't work.
-                flightRepository.createWith(flight.getSource().getId(), flight.getDestination().getId(), flight.getAirlineCode(), flight.getStops(), flight.getPrice());
             }
 
         });
 
-        //flightRepository.saveAll(flights);
+        flightRepository.saveAll(flights);
 
         final Long endTime = System.currentTimeMillis();
-        log.info("After filtering imported {} airports and {} routes in {} ms.", airportRecords.size(), flights.size(), endTime - startTime);
+        log.info("After filtering imported {} countries, {} cities, {} airports and {} routes in {} ms.", countries.size(), cities.size(), airportRecords.size(), flights.size(), endTime - startTime);
+
     }
 
 }

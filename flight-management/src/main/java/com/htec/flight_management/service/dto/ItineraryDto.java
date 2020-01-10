@@ -3,6 +3,7 @@ package com.htec.flight_management.service.dto;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ public class ItineraryDto {
     /**
      * Total price.
      */
-    private final double totalPrice;
+    private final BigDecimal totalPrice;
 
     /**
      * Length.

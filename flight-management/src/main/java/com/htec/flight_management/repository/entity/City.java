@@ -45,7 +45,6 @@ public class City extends Neo4jBaseEntity {
      * Thus defining uniqueness this way.
      */
     @Index(unique = true)
-    @Getter(AccessLevel.PRIVATE)
     @Setter(AccessLevel.PRIVATE)
     private String cityNameCountryName;
 
@@ -69,7 +68,7 @@ public class City extends Neo4jBaseEntity {
     /**
      * Setter for composite unique constraint.
      */
-    public void setCityNameCountryName() {
+    private void setCityNameCountryName() {
         this.cityNameCountryName = StringUtils.strip(name + country.getName()).toUpperCase();
     }
 
@@ -80,7 +79,9 @@ public class City extends Neo4jBaseEntity {
      */
     public void setCountry(final Country country) {
         this.country = country;
-        setCityNameCountryName();
+        if (name != null) {
+            setCityNameCountryName();
+        }
     }
 
     /**
@@ -90,6 +91,9 @@ public class City extends Neo4jBaseEntity {
      */
     public void setName(final String name) {
         this.name = StringUtils.strip(name);
+        if (country != null) {
+            setCityNameCountryName();
+        }
     }
 
     /**

@@ -28,23 +28,4 @@ public interface FlightRepository extends PagingAndSortingRepository<Flight, Lon
             "RETURN source, destination, r")
     Page<Flight> findAllBySourceId(final Long sourceId, final Pageable pageable);
 
-    /**
-     * Finds flight by source and destination id.
-     *
-     * @param sourceId      Id of the source airport.
-     * @param destinationId Id of the destination airport.
-     * @return Flight.
-     */
-    @Transactional(readOnly = true)
-    @Query(value = "MATCH (source:Airport)-[r:FLIES_TO]->(destination:Airport) " +
-            "WHERE id(source) = {sourceId} AND id(destination) = {destinationId} " +
-            "RETURN source, destination, r")
-    Flight findBySourceIdAndDestinationId(final Long sourceId, final Long destinationId);
-
-    @Query(value = "MATCH (source:Airport),(destination:Airport) " +
-            "WHERE id(source) = {sourceId} AND id(destination) = {destinationId} " +
-            "CREATE (source)-[r:FLIES_TO{ airlineCode: {airlineCode}, stops: {stops}, price: {price} }]->(destination) " +
-            "RETURN type(r)")
-    Flight createWith(final Long sourceId, final Long destinationId, final String airlineCode, final int stops, final double price);
-
 }

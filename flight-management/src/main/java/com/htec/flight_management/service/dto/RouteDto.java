@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 /**
  * @author Nikola Stanar
  * <p>
@@ -25,9 +27,14 @@ public class RouteDto {
     private String destination;
 
     /**
+     * Airline code.
+     */
+    private String airlineCode;
+
+    /**
      * Price for this route.
      */
-    private double price;
+    private BigDecimal price;
 
     /**
      * Distance in km between source and destination airport.

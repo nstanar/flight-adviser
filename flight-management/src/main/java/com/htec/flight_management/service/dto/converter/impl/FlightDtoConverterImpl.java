@@ -129,14 +129,6 @@ public class FlightDtoConverterImpl implements FlightDtoConverter {
         existingEntity.setAirlineCode(dto.getAirlineCode());
         existingEntity.setStops(dto.getStops());
         existingEntity.setPrice(dto.getPrice());
-
-        final Airport source = existingEntity.getSource();
-        final Airport destination = existingEntity.getDestination();
-
-        // Set distance.
-        final GlobalPosition sourcePosition = new GlobalPosition(source.getLatitude(), source.getLongitude(), 0.0);
-        final GlobalPosition destinationPosition = new GlobalPosition(destination.getLatitude(), destination.getLongitude(), 0.0);
-
         return existingEntity;
     }
 
